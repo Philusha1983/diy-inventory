@@ -385,39 +385,53 @@ The app is fully responsive and optimised for phones and tablets:
 
 ## 🌐 Deployment to a Live Server
 
-To host the app on a public domain (e.g., a VPS or shared hosting):
+Full deployment instructions are in **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
-**1. Export your local database**
-```bash
-mysqldump -u root diy_lab_db > diy_lab_backup.sql
-```
+Two complete paths are covered:
 
-**2. Upload files via FTP / SCP**
-```bash
-scp -r ./diy-inventory user@yourserver.com:/var/www/html/
-```
+### 🆕 Path A — Fresh Install on a Web Server
+Set up a brand-new Ubuntu VPS from scratch:
+1. Install Apache, MySQL, PHP
+2. Create database and dedicated app user
+3. Upload app files via SCP or GitHub clone
+4. Configure Apache Virtual Host
+5. Enable HTTPS with Let’s Encrypt (free)
+6. Raise PHP upload limits
+7. Save your API key via the UI
 
-**3. Import the database on the server**
-```bash
-mysql -u root -p diy_lab_db < diy_lab_backup.sql
-```
+### 🚚 Path B — Migrate from Local to Web Server
+Move your existing local instance (with all data and photos) to a live server:
+1. Export local MySQL database with `mysqldump`
+2. Archive `uploads/` with `tar`
+3. Transfer files via `rsync` / `scp`
+4. Import data and photos on the server
+5. Update `db.php` with server credentials
+6. Set file permissions for Apache
+7. Configure Virtual Host + HTTPS
 
-**4. Update `db.php`** with your live server's MySQL credentials.
+### 🖥 Path C — Shared Hosting (DirectAdmin / cPanel)
+Deploy on a regular hosting account — no root access, everything via panel UI and FTP:
+1. **Set PHP to 8.1+** via "PHP Settings" in DirectAdmin (⚠️ PHP 7.x is not supported)
+2. Create a MySQL database via "MySQL Management" — note the prefixed DB name
+3. Import `schema.sql` via **phpMyAdmin**
+4. Upload files via **FTP** (FileZilla / Cyberduck) to `public_html/`
+5. Edit `db.php` with the prefixed database name and credentials
+6. Verify `.htaccess` overrides PHP upload limits to 25M
+7. Enable free **Let's Encrypt SSL** from the panel
+8. Save your API key via `settings.php`
 
-**5. Set folder permissions**
-```bash
-chmod 755 uploads/
-```
+> ⚠️ **DirectAdmin note:** The database name and username are automatically prefixed with your account name (e.g. `myaccount_diy_lab_db`). Always copy the exact values from the panel.
 
-**6. Enable HTTPS** — use Let's Encrypt / Certbot for a free SSL certificate. This is critical to protect your API key in transit.
+### Recommended VPS Providers
 
-**7. Protect sensitive files** — add an `.htaccess` to deny direct access to PHP helper files:
-```apache
-<FilesMatch "^(db|ai_helper|chat_api|identify_api|delete_item)\.php$">
-  Order Allow,Deny
-  Deny from all
-</FilesMatch>
-```
+| Provider | Entry Price | Notes |
+|----------|------------|-------|
+| [DigitalOcean](https://digitalocean.com) | $6/month | Simple UI, great docs |
+| [Hetzner](https://hetzner.com) | €4/month | Best value in Europe |
+| [Linode](https://linode.com) | $5/month | Reliable, good support |
+| [Vultr](https://vultr.com) | $6/month | Fast global CDN |
+
+> See **[DEPLOYMENT.md](DEPLOYMENT.md)** for the complete step-by-step guide including security hardening, firewall setup, automated backups, and a troubleshooting table.
 
 ---
 
