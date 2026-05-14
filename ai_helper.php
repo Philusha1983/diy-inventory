@@ -24,7 +24,7 @@ function call_ai_api(string $prompt, array $image_paths = []): array {
 
     // ─── GEMINI ────────────────────────────────────────────────────────────
     if ($provider === 'gemini') {
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" . urlencode($api_key);
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . urlencode($api_key);
 
         // Build parts: start with the text prompt
         $parts = [['text' => $prompt]];
