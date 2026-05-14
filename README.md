@@ -90,7 +90,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | **Frontend** | HTML5, Vanilla JavaScript, Tailwind CSS (CDN) |
 | **Fonts** | Google Fonts — Inter, JetBrains Mono |
 | **Markdown** | marked.js (CDN) — for blueprint rendering |
-| **AI Providers** | Google Gemini 1.5 Flash · OpenAI GPT-4o |
+| **AI Providers** | Google Gemini 2.5 Flash · OpenAI GPT-4o |
 | **Image Storage** | Local filesystem (`uploads/` directory) |
 | **HTTP Client** | PHP cURL (built-in) |
 
@@ -114,6 +114,8 @@ diy-inventory/
 ├── ai_helper.php          # Central AI proxy — call_ai_api()
 ├── db.php                 # PDO database connection
 ├── schema.sql             # Database schema + seed data
+├── php.ini                # PHP upload/memory limits for built-in server
+├── .htaccess              # PHP limits for Apache deployments
 ├── uploads/               # Component photos (auto-created)
 └── docs/                  # Original design & phase documentation
 ```
@@ -242,18 +244,36 @@ If you set a MySQL root password during `mysql_secure_installation`, update `$pa
 
 ## 🔑 Getting API Keys
 
-The app needs **one** API key to power all AI features. You can choose between **Google Gemini** (recommended, free tier available) or **OpenAI GPT-4o**.
+The app needs **one** API key to power all AI features. You can choose between **Google Gemini** (recommended) or **OpenAI GPT-4o**.
 
 ### Option A — Google Gemini (Recommended)
 
-Gemini 1.5 Flash is fast, has a generous free tier (1,500 requests/day), and supports vision (image analysis).
+The app uses **Gemini 2.5 Flash**, which supports vision (image analysis) and text.
+
+#### Free Tier (AI Studio key)
+Good for personal use and testing.
 
 1. Go to **[Google AI Studio](https://aistudio.google.com/app/apikey)**
 2. Sign in with your Google account
-3. Click **"Create API Key"**
-4. Copy the key (it starts with `AIza...`)
+3. Click **"Create API Key"** and select your project
+4. Copy the key (starts with `AIza...`)
 
-> **Free Tier:** As of 2025, Gemini 1.5 Flash is free for up to 1,500 requests/day and 1 million tokens/minute. More than enough for a personal lab.
+> **Free limits:** ~1,500 requests/day. Sufficient for personal lab use. Quota resets daily at midnight Pacific time.
+
+#### Paid Tier (Google Cloud Console key)
+Required if you hit free-tier limits or need higher throughput.
+
+1. Go to **[Google Cloud Console → APIs & Services → Credentials](https://console.cloud.google.com/apis/credentials)**
+2. Ensure **billing is enabled** on the project (check via Billing menu)
+3. Enable the **Gemini API** for the project:
+   - Go to **APIs & Services → Library** → search **"Gemini API"** → click **Enable**
+4. Click **`+ Create Credentials` → `API key`**
+5. In the restrictions dropdown, select **Gemini API**
+6. Copy the key
+
+> **Important:** Both free and paid keys look identical (`AIza...`). The difference is the Google Cloud **project** they belong to and whether billing is enabled on it. A key from a project without billing always hits free-tier limits.
+
+> **Model note:** This app uses `gemini-2.5-flash` via the `v1beta` endpoint. Older models (`gemini-1.5-flash`, `gemini-2.0-flash`) may return 404 depending on your project's API access. If you see a 404 error, your key is working but the model isn't available — the app is already configured for the correct model.
 
 ### Option B — OpenAI GPT-4o
 
@@ -262,7 +282,7 @@ GPT-4o also supports vision and text. This is a paid service.
 1. Go to **[OpenAI Platform](https://platform.openai.com/api-keys)**
 2. Create an account or log in
 3. Navigate to **API Keys → Create new secret key**
-4. Copy the key (it starts with `sk-...`)
+4. Copy the key (starts with `sk-...`)
 
 > **Cost:** GPT-4o charges per token. A typical identify + project session costs under $0.05. Add $5–$10 credit to start.
 
@@ -282,12 +302,14 @@ The key is stored in the `settings` database table — never hardcoded in files.
 
 ### Start the PHP built-in server
 
-```bash
-# From the project root
-php -S localhost:8080
+The project includes a `php.ini` that raises upload limits for large phone photos. Always start the server using the `-c` flag to apply it:
 
-# Or specify the path explicitly
-php -S localhost:8080 -t "/path/to/diy-inventory"
+```bash
+# From the project root (recommended — applies php.ini with raised limits)
+php -c php.ini -S localhost:8080
+
+# Make it accessible from phones on the same Wi-Fi network
+php -c php.ini -S 0.0.0.0:8080
 ```
 
 Open your browser at: **`http://localhost:8080`**
@@ -295,6 +317,14 @@ Open your browser at: **`http://localhost:8080`**
 **Default password:** `1234`
 
 > To change the password, edit `index.php` and replace `'1234'` in the authentication check with your chosen password. For a stronger approach, replace with a `password_hash()` / `password_verify()` pair.
+
+### Access from a phone or tablet (same Wi-Fi)
+
+1. Find your Mac's local IP: `ipconfig getifaddr en0`
+2. Start the server bound to all interfaces: `php -c php.ini -S 0.0.0.0:8080`
+3. On your phone's browser, navigate to `http://<YOUR-MAC-IP>:8080`
+
+> If connection is refused, check macOS Firewall (**System Settings → Network → Firewall → Options**) and allow `php`.
 
 ### Stop the server
 Press `Ctrl + C` in the terminal.
@@ -431,6 +461,8 @@ uploads/
 | `chat.php` | Lab Assistant chat UI (WebSocket-free, AJAX polling) |
 | `chat_api.php` | Chat backend — injects inventory context into every AI message |
 | `schema.sql` | Database schema + seed data for `settings` table |
+| `php.ini` | Raises PHP upload limits (`25M`) for built-in server — pass with `-c php.ini` |
+| `.htaccess` | Same limits for Apache-based deployments |
 | `uploads/` | Auto-created directory for component images |
 | `docs/` | Original design documents and phase guides |
 
@@ -443,22 +475,48 @@ uploads/
 - Verify credentials in `db.php` match your MySQL setup
 - Confirm `diy_lab_db` database exists: `SHOW DATABASES;` in MySQL
 
-### AI features return no response
+### AI Auto-Identify shows "❌ Auto-Identify failed"
+
+The error message in the red box tells you exactly what went wrong:
+
+| Error message | Cause | Fix |
+|---------------|-------|-----|
+| *No API key configured* | Key not saved yet | Go to ⚙️ AI Settings → paste key → Save |
+| *Invalid API key* | Wrong or revoked key | Re-create key at aistudio.google.com |
+| *The AI model could not be found* | Key project doesn't have Gemini API enabled | Enable Gemini API in Google Cloud Console for the project |
+| *API rate limit reached / quota exhausted* | Free-tier daily limit hit | Wait until midnight Pacific, or use a paid-tier key |
+| *Photo exceeds server limit* | Image > 25 MB | Compress the photo before uploading |
+| *No images received* | Files weren't attached | Re-select files and try again |
+
+### AI features return no response (general)
 - Check the **AI Settings** page — ensure a provider is selected and the API key is saved
 - Gemini key format: starts with `AIza...`
 - OpenAI key format: starts with `sk-...`
-- Verify your key has quota remaining in the provider's dashboard
+- Verify your key has quota remaining at [aistudio.google.com](https://aistudio.google.com)
 - Check PHP's cURL extension is enabled: `php -m | grep curl`
 
+### "Free tier" quota errors even on a paid account
+Both paid and free Gemini keys look identical (`AIza...`). The tier is determined by the **Google Cloud project**, not the key itself.
+- Log into [console.cloud.google.com](https://console.cloud.google.com)
+- Confirm **billing is enabled** on the project the key belongs to
+- Under **APIs & Services → Library**, confirm **Gemini API** is enabled
+- If in doubt, create a new key from the same billing-enabled project
+
 ### Images not saving
-- Ensure the `uploads/` directory exists in the project root
-- Check permissions: `chmod 755 uploads/`
-- Verify PHP's upload limits in `php.ini`: `upload_max_filesize` and `post_max_size` (default 2MB may be too low for multiple images — set to `20M`)
+- Ensure the `uploads/` directory exists: `mkdir -p uploads && chmod 755 uploads`
+- Always start the server with `php -c php.ini -S ...` to apply the raised 25 MB upload limit
+- Without `-c php.ini`, PHP defaults to 2 MB which silently rejects phone photos
 
 ### PHP server not starting
 - Confirm PHP is installed: `php --version`
-- Check port 8080 is not already in use: `lsof -i :8080`
-- Try a different port: `php -S localhost:9090`
+- Check port 8080 is not in use: `lsof -i :8080`
+- Try a different port: `php -c php.ini -S localhost:9090`
+
+### Can't connect from phone on same Wi-Fi
+- Make sure the server is bound to `0.0.0.0`, not `localhost`
+- Run: `php -c php.ini -S 0.0.0.0:8080`
+- Find your Mac's IP: `ipconfig getifaddr en0`
+- If still blocked, allow PHP through macOS Firewall: **System Settings → Network → Firewall → Options → Add PHP**
 
 ### Blank page / PHP errors
 - Enable error reporting temporarily by adding to the top of `db.php`:
