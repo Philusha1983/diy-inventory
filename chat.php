@@ -21,7 +21,7 @@ if (!isset($_SESSION['authenticated'])) {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     html, body { height:100%; margin:0; }
-    body { font-family:'Inter',sans-serif; background-color:#0a0a1a; display:flex; overflow:hidden; }
+    body { font-family:'Inter',sans-serif; background-color:#0a0a1a; }
 
     .bg-grid { background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px); background-size:40px 40px; }
     .glass { background:rgba(255,255,255,.03); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.07); }
@@ -29,7 +29,8 @@ if (!isset($_SESSION['authenticated'])) {
     .nav-link:hover,.nav-link.active { color:#c4b5fd; }
 
     /* Chat layout */
-    #chat-panel { display:flex; flex-direction:column; flex:1; overflow:hidden; }
+    #chat-panel { position:fixed; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; transition:left .3s ease; }
+    @media(min-width:1024px){ #chat-panel { left:256px; } }
     #chat-window { flex:1; overflow-y:auto; padding:2rem; display:flex; flex-direction:column; gap:1rem; }
     #chat-window::-webkit-scrollbar { width:6px; }
     #chat-window::-webkit-scrollbar-track { background:transparent; }
@@ -67,9 +68,10 @@ if (!isset($_SESSION['authenticated'])) {
 
     /* Input area */
     #input-area {
-      padding:1.25rem 2rem; border-top:1px solid rgba(255,255,255,.06);
+      padding:1rem; border-top:1px solid rgba(255,255,255,.06);
       background:rgba(10,10,26,.9); backdrop-filter:blur(12px);
     }
+    @media(min-width:640px){ #input-area { padding:1.25rem 2rem; } }
     .input-field {
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
       color:#e2e8f0; resize:none; font-family:'Inter',sans-serif;
@@ -102,9 +104,9 @@ if (!isset($_SESSION['authenticated'])) {
   </style>
 </head>
 <body class="bg-grid">
-
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden" onclick="closeSidebar()"></div>
   <!-- Sidebar -->
-  <div class="w-60 glass border-r border-white/5 flex flex-col z-40 flex-shrink-0">
+  <div id="sidebar" class="fixed inset-y-0 left-0 w-64 glass border-r border-white/5 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="p-5 border-b border-white/5">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
@@ -125,8 +127,11 @@ if (!isset($_SESSION['authenticated'])) {
   <!-- Chat Panel -->
   <div id="chat-panel">
     <!-- Header -->
-    <div class="glass border-b border-white/5 px-6 py-3.5 flex items-center justify-between flex-shrink-0">
+    <div class="glass border-b border-white/5 px-4 py-3.5 flex items-center justify-between flex-shrink-0">
       <div class="flex items-center gap-3">
+        <button onclick="openSidebar()" class="lg:hidden p-2 -ml-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors" aria-label="Open menu">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
         <div class="relative">
           <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center">
             <span class="text-sm">🤖</span>
@@ -264,6 +269,8 @@ if (!isset($_SESSION['authenticated'])) {
       scrollBottom();
     }
   }
+  function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
+  function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
   </script>
 </body>
 </html>

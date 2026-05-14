@@ -44,11 +44,13 @@ $badge_class = match($item['status']) {
     .nav-link { color:#94a3b8; transition:color .2s; }
     .nav-link:hover { color:#c4b5fd; }
     .gallery-thumb {
-      width:120px; height:120px; object-fit:cover; border-radius:12px;
+      width:80px; height:80px; object-fit:cover; border-radius:10px;
       border:2px solid transparent; cursor:pointer; transition:all .2s;
     }
+    @media(min-width:768px){.gallery-thumb{width:110px;height:110px;}}
     .gallery-thumb:hover, .gallery-thumb.active { border-color:#7c3aed; box-shadow:0 0 20px rgba(124,58,237,.3); }
-    .main-image { width:100%; max-height:400px; object-fit:contain; border-radius:16px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); }
+    .main-image { width:100%; max-height:320px; object-fit:contain; border-radius:16px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); }
+    @media(min-width:768px){.main-image{max-height:400px;}}
     .spec-block { font-family:'JetBrains Mono',monospace; font-size:.8rem; }
     .btn-primary { background:linear-gradient(135deg,#7c3aed,#06b6d4); transition:all .2s; }
     .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
@@ -60,8 +62,9 @@ $badge_class = match($item['status']) {
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
 
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden" onclick="closeSidebar()"></div>
   <!-- Sidebar -->
-  <div class="fixed inset-y-0 left-0 w-60 glass border-r border-white/5 flex flex-col z-40">
+  <div id="sidebar" class="fixed inset-y-0 left-0 w-64 glass border-r border-white/5 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="p-5 border-b border-white/5">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
@@ -90,32 +93,29 @@ $badge_class = match($item['status']) {
   </div>
 
   <!-- Main -->
-  <main class="ml-60 min-h-screen">
-    <header class="sticky top-0 z-30 glass border-b border-white/5 px-8 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="dashboard.php" class="text-slate-500 hover:text-white transition-colors">
+  <main class="lg:ml-64 min-h-screen">
+    <header class="sticky top-0 z-30 glass border-b border-white/5 px-4 lg:px-8 py-4 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 min-w-0">
+        <button onclick="openSidebar()" class="lg:hidden flex-shrink-0 p-2 -ml-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors" aria-label="Open menu">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <a href="dashboard.php" class="flex-shrink-0 text-slate-500 hover:text-white transition-colors">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         </a>
-        <h1 class="text-xl font-bold text-white truncate"><?= htmlspecialchars($item['name']) ?></h1>
-        <span class="<?= $badge_class ?> text-xs px-2.5 py-1 rounded-full font-medium"><?= htmlspecialchars($item['status']) ?></span>
+        <h1 class="text-base lg:text-xl font-bold text-white truncate"><?= htmlspecialchars($item['name']) ?></h1>
+        <span class="<?= $badge_class ?> flex-shrink-0 text-xs px-2.5 py-1 rounded-full font-medium hidden sm:inline"><?= htmlspecialchars($item['status']) ?></span>
       </div>
-      <div class="flex items-center gap-2">
-        <a href="add_item.php?edit=<?= $item['id'] ?>" class="text-sm text-purple-400 hover:text-purple-300 border border-purple-500/20 hover:border-purple-500/40 px-3 py-1.5 rounded-lg transition-all">
-          ✏️ Edit
-        </a>
-        <a href="delete_item.php?id=<?= $item['id'] ?>"
-           onclick="return confirm('Delete this component and all its images? This cannot be undone.')"
-           class="text-sm text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-500/40 px-3 py-1.5 rounded-lg transition-all">
-          🗑 Delete
-        </a>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <a href="add_item.php?edit=<?= $item['id'] ?>" class="text-xs sm:text-sm text-purple-400 hover:text-purple-300 border border-purple-500/20 hover:border-purple-500/40 px-2 sm:px-3 py-1.5 rounded-lg transition-all">✏️ <span class="hidden sm:inline">Edit</span></a>
+        <a href="delete_item.php?id=<?= $item['id'] ?>" onclick="return confirm('Delete this component and all its images?')" class="text-xs sm:text-sm text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-500/40 px-2 sm:px-3 py-1.5 rounded-lg transition-all">🗑 <span class="hidden sm:inline">Delete</span></a>
       </div>
     </header>
 
-    <div class="p-8">
-      <div class="grid grid-cols-5 gap-8">
+    <div class="p-4 lg:p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
         <!-- Left: Gallery -->
-        <div class="col-span-3 space-y-4">
+        <div class="col-span-1 lg:col-span-3 space-y-4">
           <?php if (!empty($images)): ?>
           <!-- Main viewer -->
           <div class="glass rounded-2xl p-4">
@@ -142,7 +142,7 @@ $badge_class = match($item['status']) {
         </div>
 
         <!-- Right: Details -->
-        <div class="col-span-2 space-y-5">
+        <div class="col-span-1 lg:col-span-2 space-y-5">
           <!-- Core info -->
           <div class="glass rounded-2xl p-5">
             <h2 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Component Info</h2>
@@ -197,6 +197,8 @@ $badge_class = match($item['status']) {
     document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
     thumb.classList.add('active');
   }
+  function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
+  function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
   </script>
 </body>
 </html>

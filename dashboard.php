@@ -93,6 +93,9 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
     .nav-link { color: #94a3b8; transition: color .2s; }
     .nav-link:hover, .nav-link.active { color: #c4b5fd; }
 
+    .mobile-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:1rem; transition:border-color .2s; }
+    .mobile-card:active { border-color:rgba(124,58,237,.4); }
+
     .stat-card {
       background: rgba(255,255,255,.03);
       border: 1px solid rgba(255,255,255,.07);
@@ -124,8 +127,9 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
 
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden" onclick="closeSidebar()"></div>
   <!-- ── Sidebar ─────────────────────────────────────────────────────────── -->
-  <div class="fixed inset-y-0 left-0 w-60 glass border-r border-white/5 flex flex-col z-40">
+  <div id="sidebar" class="fixed inset-y-0 left-0 w-64 glass border-r border-white/5 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-5 border-b border-white/5">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center flex-shrink-0">
@@ -174,7 +178,7 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
   </div>
 
   <!-- ── Main Content ─────────────────────────────────────────────────────── -->
-  <main class="ml-60 min-h-screen">
+  <main class="lg:ml-64 min-h-screen">
     <?php
     // Handle logout
     if (isset($_GET['logout'])) {
@@ -185,23 +189,26 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
     ?>
 
     <!-- Header -->
-    <header class="sticky top-0 z-30 glass border-b border-white/5 px-8 py-4 flex items-center justify-between">
-      <div>
-        <h1 class="text-xl font-bold text-white">Inventory Dashboard</h1>
-        <p class="text-xs text-slate-500 mt-0.5">
-          <?= $total_items ?> components &middot; <?= $total_qty ?> total units
-        </p>
+    <header class="sticky top-0 z-30 glass border-b border-white/5 px-4 lg:px-8 py-4 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 min-w-0">
+        <button onclick="openSidebar()" class="lg:hidden flex-shrink-0 p-2 -ml-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors" aria-label="Open menu">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="min-w-0">
+          <h1 class="text-lg lg:text-xl font-bold text-white truncate">Inventory Dashboard</h1>
+          <p class="text-xs text-slate-500 mt-0.5"><?= $total_items ?> components &middot; <?= $total_qty ?> units</p>
+        </div>
       </div>
-      <a href="add_item.php" class="btn-primary flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-lg shadow-purple-900/30">
+      <a href="add_item.php" class="btn-primary flex-shrink-0 flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg shadow-purple-900/30">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-        Add Component
+        <span class="hidden sm:inline">Add Component</span><span class="sm:hidden">Add</span>
       </a>
     </header>
 
-    <div class="p-8">
+    <div class="p-4 lg:p-8">
 
       <!-- Stats Row -->
-      <div class="grid grid-cols-3 gap-5 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="stat-card purple">
           <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Component Types</p>
           <p class="text-3xl font-bold text-white"><?= $total_items ?></p>
@@ -220,34 +227,68 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       </div>
 
       <!-- Search & Filter Bar -->
-      <form method="GET" action="" class="flex gap-3 mb-6">
+      <form method="GET" action="" class="flex flex-col sm:flex-row gap-3 mb-5">
         <div class="relative flex-1">
           <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input
-            type="text"
-            name="q"
-            id="search-input"
-            value="<?= htmlspecialchars($search) ?>"
-            placeholder="Search by name, model, specs, location…"
-            class="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm"
-          >
+          <input type="text" name="q" id="search-input" value="<?= htmlspecialchars($search) ?>" placeholder="Search name, model, location…" class="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm">
         </div>
-        <select name="cat" id="cat-filter" class="input-field rounded-xl px-4 py-2.5 text-sm min-w-[160px]">
-          <option value="">All Categories</option>
-          <?php foreach ($cats as $c): ?>
-            <option value="<?= htmlspecialchars($c) ?>" <?= $cat_filter === $c ? 'selected' : '' ?>>
-              <?= htmlspecialchars($c) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-        <button type="submit" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all">Filter</button>
-        <?php if ($search || $cat_filter): ?>
-          <a href="dashboard.php" class="px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all">Clear</a>
-        <?php endif; ?>
+        <div class="flex gap-3">
+          <select name="cat" id="cat-filter" class="input-field flex-1 sm:flex-none rounded-xl px-4 py-2.5 text-sm sm:min-w-[150px]">
+            <option value="">All Categories</option>
+            <?php foreach ($cats as $c): ?>
+              <option value="<?= htmlspecialchars($c) ?>" <?= $cat_filter === $c ? 'selected' : '' ?>><?= htmlspecialchars($c) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <button type="submit" class="btn-primary px-4 py-2.5 rounded-xl text-sm font-medium text-white">Filter</button>
+          <?php if ($search || $cat_filter): ?>
+            <a href="dashboard.php" class="px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all">Clear</a>
+          <?php endif; ?>
+        </div>
       </form>
 
-      <!-- Table -->
-      <div class="glass rounded-2xl overflow-hidden">
+      <!-- Mobile Cards (< md) -->
+      <div class="md:hidden space-y-3">
+        <?php if (empty($items)): ?>
+          <div class="glass rounded-2xl p-10 text-center text-slate-600">
+            <svg class="w-10 h-10 mx-auto mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            <?= $search || $cat_filter ? 'No items match.' : 'No inventory yet. <a href="add_item.php" class="text-purple-400">Add first component →</a>' ?>
+          </div>
+        <?php else: foreach ($items as $item):
+          $images = json_decode($item['image_paths'] ?? '[]', true) ?: [];
+          $thumb  = $images[0] ?? null;
+          $badge_class = match($item['status']) { 'New' => 'badge-new', 'Used' => 'badge-used', 'Refurbished' => 'badge-refurbished', default => 'badge-used' };
+        ?>
+          <div class="mobile-card">
+            <div class="flex items-start gap-3">
+              <?php if ($thumb): ?>
+                <img src="<?= htmlspecialchars($thumb) ?>" alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-white/10">
+              <?php else: ?>
+                <div class="w-12 h-12 rounded-lg bg-purple-600/15 border border-purple-600/20 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-purple-500/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+              <?php endif; ?>
+              <div class="flex-1 min-w-0">
+                <a href="item_details.php?id=<?= $item['id'] ?>" class="font-semibold text-white hover:text-purple-300 block truncate text-sm"><?= htmlspecialchars($item['name']) ?></a>
+                <?php if ($item['model']): ?><p class="text-xs text-slate-500 font-mono truncate"><?= htmlspecialchars($item['model']) ?></p><?php endif; ?>
+                <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                  <span class="<?= $badge_class ?> text-xs px-2 py-0.5 rounded-full font-medium"><?= $item['status'] ?></span>
+                  <span class="text-xs text-slate-500">×<?= (int)$item['quantity'] ?></span>
+                  <?php if ($item['category']): ?><span class="text-xs text-slate-600">· <?= htmlspecialchars($item['category']) ?></span><?php endif; ?>
+                </div>
+                <?php if ($item['location']): ?><p class="text-xs text-slate-600 mt-1">📍 <?= htmlspecialchars($item['location']) ?></p><?php endif; ?>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-white/5">
+              <a href="item_details.php?id=<?= $item['id'] ?>" class="text-center text-xs text-cyan-400 border border-cyan-500/20 py-2 rounded-lg hover:bg-cyan-500/10 transition-colors">View</a>
+              <a href="add_item.php?edit=<?= $item['id'] ?>" class="text-center text-xs text-purple-400 border border-purple-500/20 py-2 rounded-lg hover:bg-purple-500/10 transition-colors">Edit</a>
+              <a href="delete_item.php?id=<?= $item['id'] ?>" onclick="return confirm('Delete this item?')" class="text-center text-xs text-red-400 border border-red-500/20 py-2 rounded-lg hover:bg-red-500/10 transition-colors">Delete</a>
+            </div>
+          </div>
+        <?php endforeach; endif; ?>
+      </div>
+
+      <!-- Desktop Table (>= md) -->
+      <div class="glass rounded-2xl overflow-hidden hidden md:block">
         <table class="w-full text-sm">
           <thead>
             <tr class="border-b border-white/5">
@@ -337,5 +378,18 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       </p>
     </div>
   </main>
+
+  <script>
+  function openSidebar(){
+    document.getElementById('sidebar').classList.remove('-translate-x-full');
+    document.getElementById('sidebar-overlay').classList.remove('hidden');
+    document.body.style.overflow='hidden';
+  }
+  function closeSidebar(){
+    document.getElementById('sidebar').classList.add('-translate-x-full');
+    document.getElementById('sidebar-overlay').classList.add('hidden');
+    document.body.style.overflow='';
+  }
+  </script>
 </body>
 </html>

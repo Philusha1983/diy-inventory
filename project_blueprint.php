@@ -113,8 +113,9 @@ $guide_markdown = extract_ai_text($response, $provider);
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
 
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden" onclick="closeSidebar()"></div>
   <!-- Sidebar (compact) -->
-  <div class="fixed inset-y-0 left-0 w-60 glass border-r border-white/5 flex flex-col z-40">
+  <div id="sidebar" class="fixed inset-y-0 left-0 w-64 glass border-r border-white/5 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="p-5 border-b border-white/5">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
@@ -131,24 +132,27 @@ $guide_markdown = extract_ai_text($response, $provider);
   </div>
 
   <!-- Main -->
-  <main class="ml-60 min-h-screen">
-    <header class="sticky top-0 z-30 glass border-b border-white/5 px-8 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="projects.php" class="text-slate-500 hover:text-white transition-colors">
+  <main class="lg:ml-64 min-h-screen">
+    <header class="sticky top-0 z-30 glass border-b border-white/5 px-4 lg:px-8 py-4 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 min-w-0">
+        <button onclick="openSidebar()" class="lg:hidden flex-shrink-0 p-2 -ml-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors" aria-label="Open menu">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <a href="projects.php" class="flex-shrink-0 text-slate-500 hover:text-white transition-colors">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         </a>
-        <div>
-          <h1 class="text-lg font-bold text-white truncate">📐 <?= $project_title ?></h1>
+        <div class="min-w-0">
+          <h1 class="text-base lg:text-lg font-bold text-white truncate">📐 <?= $project_title ?></h1>
           <p class="text-xs text-slate-500">AI-Generated Blueprint</p>
         </div>
       </div>
-      <button onclick="window.print()" class="btn-primary text-sm px-4 py-2 rounded-xl text-white font-medium flex items-center gap-2">
+      <button onclick="window.print()" class="btn-primary flex-shrink-0 text-sm px-3 lg:px-4 py-2 rounded-xl text-white font-medium flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-        Print / Save PDF
+        <span class="hidden sm:inline">Print / Save PDF</span>
       </button>
     </header>
 
-    <div class="p-8 max-w-4xl">
+    <div class="p-4 lg:p-8 max-w-4xl">
       <div class="glass rounded-2xl p-8 markdown-body" id="blueprint-content">
         <p class="text-slate-500 text-sm">Loading blueprint…</p>
       </div>
@@ -167,9 +171,9 @@ $guide_markdown = extract_ai_text($response, $provider);
   <script>
   // Raw markdown from PHP
   const rawMarkdown = <?= json_encode($guide_markdown) ?>;
-
-  // Render with marked.js
   document.getElementById('blueprint-content').innerHTML = marked.parse(rawMarkdown);
+  function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
+  function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
   </script>
 </body>
 </html>

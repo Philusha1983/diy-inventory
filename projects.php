@@ -114,8 +114,9 @@ PROMPT;
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
 
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden" onclick="closeSidebar()"></div>
   <!-- Sidebar -->
-  <div class="fixed inset-y-0 left-0 w-60 glass border-r border-white/5 flex flex-col z-40">
+  <div id="sidebar" class="fixed inset-y-0 left-0 w-64 glass border-r border-white/5 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="p-5 border-b border-white/5">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
@@ -134,22 +135,27 @@ PROMPT;
   </div>
 
   <!-- Main -->
-  <main class="ml-60 min-h-screen">
-    <header class="sticky top-0 z-30 glass border-b border-white/5 px-8 py-4 flex items-center justify-between">
-      <div>
-        <h1 class="text-xl font-bold text-white">Creative Engine</h1>
-        <p class="text-xs text-slate-500 mt-0.5">AI-powered project discovery from your inventory</p>
+  <main class="lg:ml-64 min-h-screen">
+    <header class="sticky top-0 z-30 glass border-b border-white/5 px-4 lg:px-8 py-4 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 min-w-0">
+        <button onclick="openSidebar()" class="lg:hidden flex-shrink-0 p-2 -ml-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors" aria-label="Open menu">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <h1 class="text-lg lg:text-xl font-bold text-white">Creative Engine</h1>
+          <p class="text-xs text-slate-500 mt-0.5">AI-powered project discovery from your inventory</p>
+        </div>
       </div>
       <form method="POST" id="discover-form">
         <button type="submit" name="discover" id="discover-btn"
-          class="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
+          class="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          Brainstorm Projects
+          <span class="hidden sm:inline">Brainstorm Projects</span><span class="sm:hidden">Go</span>
         </button>
       </form>
     </header>
 
-    <div class="p-8">
+    <div class="p-4 lg:p-8">
 
       <?php if ($ai_error): ?>
       <div class="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
@@ -284,8 +290,10 @@ PROMPT;
   document.getElementById('discover-form').addEventListener('submit', function () {
     const btn = document.getElementById('discover-btn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Analysing inventory…';
+    btn.innerHTML = '<span class="spinner"></span> Analysing…';
   });
+  function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
+  function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
   </script>
 </body>
 </html>
