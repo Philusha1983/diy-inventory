@@ -327,7 +327,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   window.removeAIFile = (i) => { aiFiles.splice(i, 1); renderAIPreviews(); };
 
   aiInput.addEventListener('change', () => {
-    aiFiles = [...aiFiles, ...Array.from(aiInput.files)];
+    const newFiles = Array.from(aiInput.files);
+    // Warn if any file is over 20 MB
+    const oversized = newFiles.filter(f => f.size > 20 * 1024 * 1024);
+    if (oversized.length > 0) {
+      alert('⚠️ One or more photos exceed 20 MB. Please compress them before uploading\n\n' + oversized.map(f => f.name + ' (' + (f.size/1024/1024).toFixed(1) + ' MB)').join('\n'));
+      aiInput.value = '';
+      return;
+    }
+    aiFiles = [...aiFiles, ...newFiles];
     aiInput.value = '';
     renderAIPreviews();
   });
@@ -359,6 +367,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
       const res  = await fetch('identify_api.php', { method: 'POST', body: formData });
+      // Guard against non-JSON responses (e.g. PHP fatal errors returning HTML)
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const text = await res.text();
+        throw new Error('Server returned an unexpected response. Check the browser console for details.');
+      }
       const data = await res.json();
 
       if (data.error) throw new Error(data.error);
@@ -374,12 +388,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       aiFiles.forEach(f => dt.items.add(f));
       document.getElementById('form-images').files = dt.files;
 
-      status.textContent = '✅ Identification complete! Review fields and save.';
-      status.style.color = '#4ade80';
+      status.textContent = '✅ Identification complete! Review the fields below and click Save.';
+      status.style.cssText = 'color:#4ade80; display:block; margin-top:8px; font-size:.85rem;';
     } catch (err) {
-      status.textContent = '❌ ' + (err.message || 'Identification failed.');
-      status.style.color = '#f87171';
-      console.error(err);
+      // Show error as a styled readable block
+      const msg = err.message || 'Identification failed. Please try again.';
+      status.innerHTML = '<span style="color:#f87171;font-weight:600;">❌ Auto-Identify failed</span><br>' +
+        '<span style="color:#fca5a5;font-size:.82rem;line-height:1.5;">' + msg.replace(/\n/g,'<br>') + '</span>';
+      status.style.cssText = 'display:block; margin-top:8px; padding:10px 14px; background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.2); border-radius:10px; max-width:480px;';
+      console.error('AI Identify error:', err);
     } finally {
       this.disabled = false;
     }

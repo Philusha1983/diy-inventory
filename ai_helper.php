@@ -24,7 +24,7 @@ function call_ai_api(string $prompt, array $image_paths = []): array {
 
     // ─── GEMINI ────────────────────────────────────────────────────────────
     if ($provider === 'gemini') {
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . urlencode($api_key);
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" . urlencode($api_key);
 
         // Build parts: start with the text prompt
         $parts = [['text' => $prompt]];
@@ -62,7 +62,6 @@ function call_ai_api(string $prompt, array $image_paths = []): array {
         ]);
         $response = curl_exec($ch);
         $err      = curl_error($ch);
-        curl_close($ch);
 
         if ($err) return ['error' => 'cURL error: ' . $err];
 
@@ -105,7 +104,6 @@ function call_ai_api(string $prompt, array $image_paths = []): array {
         ]);
         $response = curl_exec($ch);
         $err      = curl_error($ch);
-        curl_close($ch);
 
         if ($err) return ['error' => 'cURL error: ' . $err];
 
@@ -121,7 +119,14 @@ function call_ai_api(string $prompt, array $image_paths = []): array {
  */
 function extract_ai_text(array $response, string $provider = 'gemini'): string {
     if (isset($response['error'])) {
-        return '[AI Error] ' . $response['error'];
+        $err = $response['error'];
+        // Gemini returns error as a nested array {code, message, status}
+        if (is_array($err)) {
+            $code    = $err['code']    ?? '';
+            $message = $err['message'] ?? json_encode($err);
+            return "[AI Error] {$code}: {$message}";
+        }
+        return '[AI Error] ' . $err;
     }
 
     if ($provider === 'openai') {
