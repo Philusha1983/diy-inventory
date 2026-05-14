@@ -1,0 +1,25 @@
+# Sensitive files — DO NOT commit
+db.php
+
+# Uploaded component images
+uploads/*
+!uploads/.gitkeep
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# PHP logs
+*.log
+error_log
+
+# Environment files
+.env
+.env.local
