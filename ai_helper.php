@@ -49,7 +49,7 @@ function call_ai_api(string $prompt, array $image_paths = []): array {
             ]],
             'generationConfig' => [
                 'temperature'     => 0.4,
-                'maxOutputTokens' => 2048,
+                'maxOutputTokens' => 8192,
             ],
         ];
 
