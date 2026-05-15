@@ -30,10 +30,28 @@ if ($cat_filter !== '') {
     $params[] = $cat_filter;
 }
 
+// Sort
+$allowed_sort = ['name', 'model', 'category', 'quantity', 'status', 'location', 'id'];
+$sort_col = in_array($_GET['sort'] ?? '', $allowed_sort, true) ? $_GET['sort'] : 'id';
+$sort_dir = (strtolower($_GET['dir'] ?? '') === 'asc') ? 'asc' : 'desc';
+
 $where_sql = $where_clauses ? 'WHERE ' . implode(' AND ', $where_clauses) : '';
-$stmt = $pdo->prepare("SELECT * FROM inventory $where_sql ORDER BY id DESC");
+$stmt = $pdo->prepare("SELECT * FROM inventory $where_sql ORDER BY `$sort_col` $sort_dir");
 $stmt->execute($params);
 $items = $stmt->fetchAll();
+
+// Sort link + icon helpers
+$sl = function(string $col) use ($sort_col, $sort_dir, $search, $cat_filter): string {
+    $dir = ($sort_col === $col && $sort_dir === 'asc') ? 'desc' : 'asc';
+    return '?' . http_build_query(array_filter(['q' => $search, 'cat' => $cat_filter, 'sort' => $col, 'dir' => $dir], fn($v) => $v !== ''));
+};
+$si = function(string $col) use ($sort_col, $sort_dir): string {
+    if ($col !== $sort_col) return '<svg class="sort-icon" viewBox="0 0 10 14" fill="currentColor"><path d="M5 1l3 4H2l3-4zM5 13l-3-4h6l-3 4z"/></svg>';
+    return $sort_dir === 'asc'
+        ? '<svg class="sort-icon active" viewBox="0 0 10 14" fill="currentColor"><path d="M5 1l3 4H2l3-4z"/></svg>'
+        : '<svg class="sort-icon active" viewBox="0 0 10 14" fill="currentColor"><path d="M5 13l-3-4h6l-3 4z"/></svg>';
+};
+
 
 // Distinct categories & locations for dropdowns / datalists
 $cats      = $pdo->query("SELECT DISTINCT category FROM inventory WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
@@ -85,7 +103,13 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
     #bulk-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:70; align-items:center; justify-content:center; padding:1rem; }
     #bulk-modal.open { display:flex; }
     .bulk-modal-box { background:#0f0f1e; border:1px solid rgba(124,58,237,.3); border-radius:20px; padding:1.5rem; width:100%; max-width:380px; }
-    /* toast */
+    /* sort icons */
+    .sort-icon { width:10px; height:14px; flex-shrink:0; opacity:.25; vertical-align:middle; transition:opacity .15s; }
+    .sort-icon.active { opacity:1; color:#a78bfa; }
+    th.sortable a { color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:5px; cursor:pointer; }
+    th.sortable a:hover { color:#e2e8f0; }
+    th.sortable a:hover .sort-icon { opacity:.6; }
+    th.sortable.sorted a { color:#c4b5fd; }
     #toast { position:fixed; top:1rem; right:1rem; z-index:80; padding:.65rem 1.1rem; border-radius:12px; font-size:.82rem; font-weight:500; transition:opacity .4s; }
   </style>
 </head>
@@ -280,12 +304,12 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
                 <input type="checkbox" id="cb-all" class="row-cb" title="Select all">
               </th>
               <th class="text-left px-3 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-12">Img</th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Name</th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Model</th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Category</th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-16">Qty</th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Status</th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Location</th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col==='name'     ? 'sorted' : '' ?>"><a href="<?= $sl('name')     ?>"><?= $si('name')     ?> Name</a></th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col==='model'    ? 'sorted' : '' ?>"><a href="<?= $sl('model')    ?>"><?= $si('model')    ?> Model</a></th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col==='category' ? 'sorted' : '' ?>"><a href="<?= $sl('category') ?>"><?= $si('category') ?> Category</a></th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable w-16 <?= $sort_col==='quantity' ? 'sorted' : '' ?>"><a href="<?= $sl('quantity') ?>"><?= $si('quantity') ?> Qty</a></th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col==='status'   ? 'sorted' : '' ?>"><a href="<?= $sl('status')   ?>"><?= $si('status')   ?> Status</a></th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col==='location' ? 'sorted' : '' ?>"><a href="<?= $sl('location') ?>"><?= $si('location') ?> Location</a></th>
               <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
