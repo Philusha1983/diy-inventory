@@ -4,6 +4,7 @@
  * Lists all inventory items with search, filter, and actions.
  */
 require 'db.php';
+require 'image_helper.php';
 session_start();
 if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 
@@ -255,7 +256,7 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
           </div>
         <?php else: foreach ($items as $item):
           $images = json_decode($item['image_paths'] ?? '[]', true) ?: [];
-          $thumb  = $images[0] ?? null;
+          $thumb  = $images[0] ? derive_thumb($images[0]) : null;
           $badge_class = match($item['status']) { 'New' => 'badge-new', 'Used' => 'badge-used', 'Refurbished' => 'badge-refurbished', default => 'badge-used' };
         ?>
           <div class="mobile-card">
@@ -314,7 +315,7 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
             <?php foreach ($items as $item): ?>
             <?php
               $images = json_decode($item['image_paths'] ?? '[]', true) ?: [];
-              $thumb  = $images[0] ?? null;
+              $thumb  = $images[0] ? derive_thumb($images[0]) : null;
               $badge_class = match($item['status']) {
                 'New'         => 'badge-new',
                 'Used'        => 'badge-used',

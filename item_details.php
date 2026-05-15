@@ -3,6 +3,7 @@
  * item_details.php — Component Detail Page with Gallery (Phase 3)
  */
 require 'db.php';
+require 'image_helper.php';
 session_start();
 if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 
@@ -117,18 +118,20 @@ $badge_class = match($item['status']) {
         <!-- Left: Gallery -->
         <div class="col-span-1 lg:col-span-3 space-y-4">
           <?php if (!empty($images)): ?>
-          <!-- Main viewer -->
+          <!-- Main viewer: load the full 1200px version -->
           <div class="glass rounded-2xl p-4">
-            <img id="main-image" src="<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="main-image">
+            <img id="main-image" src="<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="main-image" loading="lazy" decoding="async">
           </div>
-          <!-- Thumbnails -->
+          <!-- Thumbnails strip: load the small 400px thumb -->
           <?php if (count($images) > 1): ?>
           <div class="flex flex-wrap gap-3">
             <?php foreach ($images as $i => $img): ?>
-            <img src="<?= htmlspecialchars($img) ?>"
+            <?php $thumb_src = derive_thumb($img); ?>
+            <img src="<?= htmlspecialchars($thumb_src) ?>"
                  alt="Angle <?= $i+1 ?>"
                  class="gallery-thumb <?= $i === 0 ? 'active' : '' ?>"
-                 onclick="setMainImage(this, '<?= htmlspecialchars($img) ?>')">
+                 onclick="setMainImage(this, '<?= htmlspecialchars($img) ?>')"
+                 loading="lazy" decoding="async">
             <?php endforeach; ?>
           </div>
           <?php endif; ?>

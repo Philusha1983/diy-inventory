@@ -5,6 +5,7 @@
  * Includes multi-angle image upload + AI Auto-Identify button.
  */
 require 'db.php';
+require 'image_helper.php';
 session_start();
 if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 
@@ -56,20 +57,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($name === '') $errors[] = 'Component name is required.';
 
         if (empty($errors)) {
-            // Handle new file uploads
             $upload_dir = 'uploads/';
-            if (!is_dir($upload_dir)) { mkdir($upload_dir, 0777, true); }
+            if (!is_dir($upload_dir)) { mkdir($upload_dir, 0755, true); }
 
-            $new_paths = $existing_images; // Start with whatever is already there
+            $new_paths = $existing_images; // keep existing images
 
             if (!empty($_FILES['images']['name'][0])) {
                 foreach ($_FILES['images']['tmp_name'] as $k => $tmp) {
                     if ($_FILES['images']['error'][$k] !== UPLOAD_ERR_OK) continue;
-                    $ext       = strtolower(pathinfo($_FILES['images']['name'][$k], PATHINFO_EXTENSION));
-                    $safe_name = time() . '_' . uniqid() . '.' . $ext;
-                    $target    = $upload_dir . $safe_name;
-                    if (move_uploaded_file($tmp, $target)) {
-                        $new_paths[] = $target;
+                    $base_name = time() . '_' . uniqid();
+                    $result    = process_image($tmp, $upload_dir, $base_name);
+                    if ($result) {
+                        $new_paths[] = $result['full']; // store the full-res path
                     }
                 }
             }

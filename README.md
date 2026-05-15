@@ -55,7 +55,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 |---------|-------------|
 | 🔐 **Secure Login** | Password-protected gate. No user accounts needed for a personal lab. |
 | 📦 **Inventory CRUD** | Add, edit, delete components with name, model, category, quantity, condition, specs, and physical location. |
-| 📸 **Multi-Angle Image Upload** | Upload several photos per component. First image shows as thumbnail; all angles shown in the detail gallery. |
+| 📸 **Multi-Angle Image Upload** | Upload several photos per component. Images are **automatically resized and compressed** on upload (max 1200px, ~100–200 KB). Two versions are stored: a full-res viewer image and a small thumbnail. Saves ~98% storage vs raw phone photos. |
 | 🤖 **AI Auto-Identify** | Drag-and-drop photos → AI returns a structured JSON with `name`, `model`, `category`, and `specs`. Fields are auto-filled. |
 | 🔍 **Search & Filter** | Full-text search across name, model, specs, and location. Filter by category. |
 | 💡 **Creative Engine** | Feed your whole inventory to the AI and get 5 tailored project ideas with complexity, duration, skill domain, and missing-part shopping links. |
@@ -91,7 +91,8 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | **Fonts** | Google Fonts — Inter, JetBrains Mono |
 | **Markdown** | marked.js (CDN) — for blueprint rendering |
 | **AI Providers** | Google Gemini 2.5 Flash · OpenAI GPT-4o |
-| **Image Storage** | Local filesystem (`uploads/` directory) |
+| **Image Storage** | Local filesystem (`uploads/` directory) — auto-resized to 1200px max |
+| **Image Processing** | PHP GD (built-in) — JPEG, PNG, WebP, GIF input; JPEG output |
 | **HTTP Client** | PHP cURL (built-in) |
 
 ---
@@ -112,6 +113,7 @@ diy-inventory/
 ├── settings.php           # AI provider + API key configuration UI
 ├── identify_api.php       # AI vision endpoint (used by add_item.php)
 ├── ai_helper.php          # Central AI proxy — call_ai_api()
+├── image_helper.php        # Image processing — resize to full (1200px) + thumb (400px)
 ├── db.php                 # PDO database connection
 ├── schema.sql             # Database schema + seed data
 ├── php.ini                # PHP upload/memory limits for built-in server
@@ -441,7 +443,7 @@ Deploy on a regular hosting account — no root access, everything via panel UI 
 |------|-----------|
 | Weak password | Change the default `1234` in `index.php` before sharing the app |
 | API key exposure | Keys are stored in the DB, not in files. Never commit `db.php` with credentials to a public repo. |
-| File upload abuse | Only image MIME types are accepted. Uploads are stored outside the web logic flow. |
+| File upload abuse | Image MIME types verified; all uploads are re-encoded through PHP GD, stripping any embedded malicious data. |
 | SQL injection | All database queries use **PDO prepared statements** throughout. |
 | Session hijacking | Sessions are PHP-native. Use HTTPS in production to prevent interception. |
 
@@ -466,6 +468,7 @@ uploads/
 | `ai_helper.php` | Central AI proxy: `call_ai_api($prompt, $images)` — fetches key from DB, handles Gemini & OpenAI |
 | `dashboard.php` | Inventory list with search, filter, stats, and CRUD links |
 | `add_item.php` | Add/Edit form + AI Auto-Identify drag-drop zone |
+| `image_helper.php` | `process_image()` — resizes uploads to `full_*.jpg` (1200px/q85) + `thumb_*.jpg` (400px/q80) using PHP GD |
 | `item_details.php` | Single component view with interactive image gallery |
 | `delete_item.php` | Deletes DB record + physical image files |
 | `identify_api.php` | API endpoint called by the Auto-Identify button (POST, returns JSON) |
@@ -519,7 +522,13 @@ Both paid and free Gemini keys look identical (`AIza...`). The tier is determine
 ### Images not saving
 - Ensure the `uploads/` directory exists: `mkdir -p uploads && chmod 755 uploads`
 - Always start the server with `php -c php.ini -S ...` to apply the raised 25 MB upload limit
-- Without `-c php.ini`, PHP defaults to 2 MB which silently rejects phone photos
+- Without `-c php.ini`, PHP defaults to 2 MB which silently rejects uploads before GD can process them
+- Verify PHP GD is enabled: `php -m | grep -i gd` — should show `gd`
+
+### Images look blurry or very small after upload
+- This is expected — all uploads are auto-resized to **max 1200px** on the longest side
+- The app stores two files per image: `full_*.jpg` (detail page) and `thumb_*.jpg` (dashboard grid)
+- If you have images from before the optimisation update that still load slowly, simply re-upload them via the **Edit** page — they will be processed automatically
 
 ### PHP server not starting
 - Confirm PHP is installed: `php --version`
