@@ -538,6 +538,28 @@ Both paid and free Gemini keys look identical (`AIza...`). The tier is determine
 - Without `-c php.ini`, PHP defaults to 2 MB which silently rejects uploads before GD can process them
 - Verify PHP GD is enabled: `php -m | grep -i gd` — should show `gd`
 
+### Images fail with "could not be processed (GD error)"
+
+This happens when PHP's GD library can't decode the uploaded image. Common causes:
+
+| Cause | Symptom | Fix |
+|-------|---------|-----|
+| **CMYK color space** | All images from a single product page fail | GD now uses `imagecreatefromstring()` which handles CMYK automatically — ensure you have the latest `image_helper.php` |
+| **HEIC / HEIF format** | iPhone photos named `.jpg` but actually HEIC | The error now says *"HEIC format is not supported"* — convert with macOS Preview: **File → Export → JPEG** |
+| **AVIF format** | Rare; modern Chrome screenshots | Same as above — re-save as JPEG or PNG |
+| **Corrupted file** | Single image fails, others succeed | Re-download or re-export the image |
+| **Memory exhaustion** | All images in a batch fail | Server memory limit is raised to 512 MB automatically; if you're running very large RAW photos, compress them first |
+
+> [!TIP]
+> Product photos copied from AliExpress, Amazon, or Mouser are often in CMYK color space. The app handles these automatically since the `imagecreatefromstring()` upgrade.
+
+### Images fail after using AI Auto-Identify (drag-and-drop then Save)
+
+On macOS, some browsers transfer drag-and-drop files via the DataTransfer API in a way that truncates the image content during multipart form submission. The app now submits images via `fetch(FormData)` instead of relying on the file input, which avoids this entirely. If you still see GD errors:
+
+1. Try clicking **"browse"** in the drop zone instead of dragging to select files
+2. If drag-and-drop is required, select files using the **"Upload photos"** file picker at the bottom of the form as well
+
 ### Images look blurry or very small after upload
 - This is expected — all uploads are auto-resized to **max 1200px** on the longest side
 - The app stores two files per image: `full_*.jpg` (detail page) and `thumb_*.jpg` (dashboard grid)
@@ -553,6 +575,21 @@ Both paid and free Gemini keys look identical (`AIza...`). The tier is determine
 - Run: `php -c php.ini -S 0.0.0.0:8080`
 - Find your Mac's IP: `ipconfig getifaddr en0`
 - If still blocked, allow PHP through macOS Firewall: **System Settings → Network → Firewall → Options → Add PHP**
+
+### AI Enrichment button shows "Network error" or does nothing visible
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| *"No URLs saved for this component"* | No Product URL or Datasheet URL on the item | Edit the item, paste a URL into the Product URL or Datasheet URL field, then retry |
+| *"Network error: ... JSON"* | `enrich_api.php` returned a PHP error page instead of JSON | Check the PHP server terminal for the actual error; ensure `db.php` credentials are correct |
+| Button turns green but page doesn't update | Enrichment succeeded — the cached text is stored in the DB | Reload the page to see the green "Enriched" badge and text preview |
+| No visible AI improvement after enrichment | Enrichment only stores the text — it is injected into AI prompts the *next time* you use Lab Chat, Creative Engine, or Blueprints | Use one of those AI features after enriching |
+
+**How it works in brief:**
+1. Reads `product_url` and `datasheet_url` saved on the item
+2. Makes a server-side cURL request to each URL (stripping HTML to plain text)
+3. Stores up to ~3,000 chars of text in the `enriched_data` column
+4. Future AI prompts automatically include this text as context — no extra action needed
 
 ### Blank page / PHP errors
 - Enable error reporting temporarily by adding to the top of `db.php`:
