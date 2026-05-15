@@ -15,13 +15,18 @@ foreach ($pdo->query("SELECT setting_key, setting_value FROM settings")->fetchAl
 $provider = $settings['ai_provider'] ?? 'gemini';
 
 // Fetch inventory
-$stmt = $pdo->query("SELECT name, model, category, quantity, specs FROM inventory ORDER BY category, name");
+$stmt = $pdo->query("SELECT name, model, category, quantity, specs, notes FROM inventory ORDER BY category, name");
 $items = $stmt->fetchAll();
 
 $inventory_context = '';
 foreach ($items as $i) {
-    $inventory_context .= "- {$i['name']} ({$i['model']}), Qty: {$i['quantity']}, Category: {$i['category']}, Specs: {$i['specs']}\n";
+    $line = "- {$i['name']} ({$i['model']}), Qty: {$i['quantity']}, Category: {$i['category']}, Specs: {$i['specs']}";
+    if (!empty($i['notes'])) $line .= ", Notes: {$i['notes']}";
+    $inventory_context .= $line . "\n";
 }
+
+// Enrichment context: cached product docs from URLs
+$enrichment_context = build_enrichment_context($pdo);
 
 $ai_results = null;
 $ai_error   = '';
@@ -35,8 +40,8 @@ You are an expert DIY electronics project advisor.
 Review the following lab inventory:
 
 $inventory_context
-
-Suggest exactly 5 creative projects. For each, provide structured data.
+$enrichment_context
+Using the inventory above (and any supplementary component documentation provided), suggest exactly 5 creative projects. For each, provide structured data.
 Respond ONLY with a valid JSON array — no markdown, no extra text:
 [
   {

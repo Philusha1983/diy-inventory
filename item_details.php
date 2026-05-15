@@ -49,6 +49,9 @@ $badge_class = match($item['status']) {
     .info-row:last-child { border-bottom:none; }
     .info-label { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:#64748b; min-width:90px; flex-shrink:0; }
     .info-value { color:#e2e8f0; font-size:.9rem; }
+    .enrich-log { font-family:'JetBrains Mono',monospace; font-size:.72rem; line-height:1.6;
+      background:#0d0d1f; border:1px solid rgba(124,58,237,.2); border-radius:10px; padding:.75rem 1rem;
+      color:#94a3b8; max-height:150px; overflow-y:auto; white-space:pre-wrap; }
   </style>
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
@@ -155,13 +158,78 @@ $badge_class = match($item['status']) {
             </div>
           </div>
 
-          <!-- Specs -->
           <?php if ($item['specs']): ?>
           <div class="glass rounded-2xl p-5">
             <h2 class="font-semibold text-white mb-3 text-sm uppercase tracking-wider">Technical Specifications</h2>
             <div class="spec-block text-slate-300 leading-relaxed whitespace-pre-wrap bg-black/20 rounded-xl p-4 border border-white/5">
               <?= htmlspecialchars($item['specs']) ?>
             </div>
+          </div>
+          <?php endif; ?>
+
+          <!-- Product Details -->
+          <?php $has_urls = !empty($item['product_url']) || !empty($item['datasheet_url']); ?>
+          <?php if ($has_urls || !empty($item['notes']) || !empty($item['purchase_price'])): ?>
+          <div class="glass rounded-2xl p-5">
+            <h2 class="font-semibold text-white mb-3 text-sm uppercase tracking-wider">Product Details</h2>
+            <?php if (!empty($item['product_url'])): ?>
+            <div class="info-row">
+              <span class="info-label">Product</span>
+              <a href="<?= htmlspecialchars($item['product_url']) ?>" target="_blank" rel="noopener"
+                 class="info-value text-cyan-400 hover:text-cyan-300 truncate max-w-xs transition-colors">
+                <?= htmlspecialchars(parse_url($item['product_url'], PHP_URL_HOST) ?: $item['product_url']) ?> ↗
+              </a>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($item['datasheet_url'])): ?>
+            <div class="info-row">
+              <span class="info-label">Datasheet</span>
+              <a href="<?= htmlspecialchars($item['datasheet_url']) ?>" target="_blank" rel="noopener"
+                 class="info-value text-purple-400 hover:text-purple-300 truncate max-w-xs transition-colors">
+                <?= htmlspecialchars(parse_url($item['datasheet_url'], PHP_URL_HOST) ?: $item['datasheet_url']) ?> ↗
+              </a>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($item['purchase_price'])): ?>
+            <div class="info-row">
+              <span class="info-label">Price</span>
+              <span class="info-value"><?= '$' . number_format((float)$item['purchase_price'], 2) ?></span>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($item['notes'])): ?>
+            <div class="mt-3 pt-3 border-t border-white/5">
+              <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Notes</p>
+              <p class="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap"><?= htmlspecialchars($item['notes']) ?></p>
+            </div>
+            <?php endif; ?>
+          </div>
+          <?php endif; ?>
+
+          <!-- AI Enrichment panel -->
+          <?php if ($has_urls): ?>
+          <div class="glass rounded-2xl p-5" id="enrich-panel">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="font-semibold text-white text-sm uppercase tracking-wider flex items-center gap-2">
+                <span>🤖</span> AI Enrichment
+              </h2>
+              <?php if ($item['enriched_at']): ?>
+              <span class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                ✓ Enriched <?= date('d M Y', strtotime($item['enriched_at'])) ?>
+              </span>
+              <?php else: ?>
+              <span class="text-xs text-slate-500">Not yet enriched</span>
+              <?php endif; ?>
+            </div>
+            <?php if ($item['enriched_data']): ?>
+            <p class="text-xs text-slate-500 mb-2">Cached data used in AI prompts:</p>
+            <div class="enrich-log"><?= htmlspecialchars(mb_substr($item['enriched_data'], 0, 400)) ?>…</div>
+            <?php endif; ?>
+            <button id="btn-enrich" onclick="runEnrichment()"
+              class="mt-3 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white btn-primary shadow-lg shadow-purple-900/30 transition-all">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <?= $item['enriched_data'] ? 'Re-fetch &amp; Refresh' : 'Enrich from Web' ?>
+            </button>
+            <div id="enrich-status" class="mt-3 hidden"></div>
           </div>
           <?php endif; ?>
 
@@ -190,6 +258,46 @@ $badge_class = match($item['status']) {
     document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
     thumb.classList.add('active');
   }
+
+  async function runEnrichment() {
+    const btn    = document.getElementById('btn-enrich');
+    const status = document.getElementById('enrich-status');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Fetching…';
+    status.className = 'mt-3 text-xs text-slate-400';
+    status.textContent = 'Connecting to URLs…';
+    status.classList.remove('hidden');
+
+    try {
+      const res  = await fetch('enrich_api.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ item_id: <?= (int)$item['id'] ?> })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        status.innerHTML =
+          data.log.map(l => `<div>${l}</div>`).join('') +
+          `<div class="mt-1 text-emerald-400 font-semibold">✅ ${data.chars} chars cached from ${data.sources} source(s). Reload to see the badge.</div>`;
+        status.className = 'mt-3 enrich-log';
+        btn.innerHTML    = '✓ Enriched — Reload to see';
+        btn.classList.replace('btn-primary','');
+        btn.style.cssText = 'background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.3);color:#4ade80;cursor:default;';
+      } else {
+        status.textContent = '❌ ' + (data.error || 'Enrichment failed.');
+        status.className = 'mt-3 text-xs text-red-400';
+        btn.disabled = false;
+        btn.innerHTML = '🔄 Retry';
+      }
+    } catch(e) {
+      status.textContent = '❌ Network error: ' + e.message;
+      status.className = 'mt-3 text-xs text-red-400';
+      btn.disabled = false;
+      btn.innerHTML = '🔄 Retry';
+    }
+  }
+
   function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
   function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
   </script>

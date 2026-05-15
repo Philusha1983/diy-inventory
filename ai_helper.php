@@ -147,3 +147,43 @@ function clean_json_response(string $text): string {
     $text = preg_replace('/```\s*$/i',     '', $text);
     return trim($text);
 }
+
+/**
+ * Helper: build a supplementary enrichment context string from the DB.
+ *
+ * Fetches all inventory items that have cached enriched_data and formats
+ * them into a block suitable for injection into any AI prompt.
+ * Items without enriched_data are skipped — this is additive-only.
+ *
+ * @param  \PDO   $pdo
+ * @param  int[]  $item_ids   Optional: limit to specific item IDs
+ * @return string             Empty string if nothing enriched yet
+ */
+function build_enrichment_context(\PDO $pdo, array $item_ids = []): string {
+    if (!empty($item_ids)) {
+        $placeholders = implode(',', array_fill(0, count($item_ids), '?'));
+        $stmt = $pdo->prepare(
+            "SELECT name, model, enriched_data FROM inventory
+             WHERE enriched_data IS NOT NULL AND id IN ($placeholders)
+             ORDER BY name"
+        );
+        $stmt->execute($item_ids);
+    } else {
+        $stmt = $pdo->query(
+            "SELECT name, model, enriched_data FROM inventory
+             WHERE enriched_data IS NOT NULL
+             ORDER BY name"
+        );
+    }
+
+    $rows = $stmt->fetchAll();
+    if (empty($rows)) return '';
+
+    $out = "\n--- Additional Component Documentation (fetched from manufacturer/datasheet URLs) ---\n";
+    foreach ($rows as $r) {
+        $label = trim("{$r['name']} ({$r['model']})");
+        $out  .= "\n### {$label}\n" . $r['enriched_data'] . "\n";
+    }
+    $out .= "--- End of component documentation ---\n";
+    return $out;
+}

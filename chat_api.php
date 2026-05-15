@@ -30,7 +30,7 @@ foreach ($pdo->query("SELECT setting_key, setting_value FROM settings")->fetchAl
 $provider = $settings['ai_provider'] ?? 'gemini';
 
 // Build inventory context
-$stmt  = $pdo->query("SELECT name, model, category, quantity, location, specs FROM inventory ORDER BY category, name");
+$stmt  = $pdo->query("SELECT name, model, category, quantity, location, specs, notes, purchase_price FROM inventory ORDER BY category, name");
 $items = $stmt->fetchAll();
 
 $total_types = count($items);
@@ -39,22 +39,29 @@ $total_qty   = array_sum(array_column($items, 'quantity'));
 if ($total_types > 0) {
     $inventory_context = "Current lab inventory ({$total_types} component types, {$total_qty} total units):\n";
     foreach ($items as $i) {
-        $inventory_context .= "- {$i['name']} ({$i['model']}) — Category: {$i['category']}, Qty: {$i['quantity']}, Location: {$i['location']}, Specs: {$i['specs']}\n";
+        $line = "- {$i['name']} ({$i['model']}) — Category: {$i['category']}, Qty: {$i['quantity']}, Location: {$i['location']}, Specs: {$i['specs']}";
+        if (!empty($i['notes']))          $line .= ", Notes: {$i['notes']}";
+        if (!empty($i['purchase_price'])) $line .= ", Price: \${$i['purchase_price']}";
+        $inventory_context .= $line . "\n";
     }
 } else {
     $inventory_context = "The lab inventory is currently empty.";
 }
+
+// Enrichment: add cached product documentation for components that have been enriched
+$enrichment_context = build_enrichment_context($pdo);
 
 $prompt = <<<PROMPT
 You are the DIY Lab Planning Assistant — a knowledgeable, enthusiastic electronics and maker expert.
 
 Here is the user's current lab inventory:
 $inventory_context
-
+$enrichment_context
 The user says: "$user_msg"
 
 Instructions:
 - Answer helpfully and technically. Reference specific components from the inventory when relevant.
+- If supplementary component documentation is provided above, use it to give more precise, technical answers.
 - If suggesting a project, mention which exact components from the inventory to use.
 - Keep answers concise but thorough. Use markdown formatting (headers, code blocks, bullet lists).
 - If asked about code, provide real, runnable examples tailored to their specific hardware.

@@ -46,13 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $existing_images = json_decode($item['image_paths'] ?? '[]', true) ?: [];
     } else {
         // Save / Update
-        $name     = trim($_POST['name']     ?? '');
-        $model    = trim($_POST['model']    ?? '');
-        $category = trim($_POST['category'] ?? '');
-        $quantity = (int)($_POST['quantity'] ?? 1);
-        $status   = $_POST['status']   ?? 'New';
-        $specs    = trim($_POST['specs']    ?? '');
-        $location = trim($_POST['location'] ?? '');
+        $name          = trim($_POST['name']          ?? '');
+        $model         = trim($_POST['model']         ?? '');
+        $category      = trim($_POST['category']      ?? '');
+        $quantity      = (int)($_POST['quantity']     ?? 1);
+        $status        = $_POST['status']             ?? 'New';
+        $specs         = trim($_POST['specs']         ?? '');
+        $location      = trim($_POST['location']      ?? '');
+        $product_url   = trim($_POST['product_url']   ?? '');
+        $datasheet_url = trim($_POST['datasheet_url'] ?? '');
+        $notes         = trim($_POST['notes']         ?? '');
+        $purchase_price = $_POST['purchase_price'] !== '' ? (float)$_POST['purchase_price'] : null;
 
         if ($name === '') $errors[] = 'Component name is required.';
 
@@ -76,11 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $image_json = json_encode($new_paths);
 
             if ($edit_id) {
-                $stmt = $pdo->prepare("UPDATE inventory SET name=?, model=?, category=?, quantity=?, status=?, specs=?, location=?, image_paths=? WHERE id=?");
-                $stmt->execute([$name, $model, $category, $quantity, $status, $specs, $location, $image_json, $edit_id]);
+                $stmt = $pdo->prepare("UPDATE inventory SET name=?, model=?, category=?, quantity=?, status=?, specs=?, location=?, image_paths=?, product_url=?, datasheet_url=?, notes=?, purchase_price=? WHERE id=?");
+                $stmt->execute([$name, $model, $category, $quantity, $status, $specs, $location, $image_json, $product_url ?: null, $datasheet_url ?: null, $notes ?: null, $purchase_price, $edit_id]);
             } else {
-                $stmt = $pdo->prepare("INSERT INTO inventory (name, model, category, quantity, status, specs, location, image_paths) VALUES (?,?,?,?,?,?,?,?)");
-                $stmt->execute([$name, $model, $category, $quantity, $status, $specs, $location, $image_json]);
+                $stmt = $pdo->prepare("INSERT INTO inventory (name, model, category, quantity, status, specs, location, image_paths, product_url, datasheet_url, notes, purchase_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $model, $category, $quantity, $status, $specs, $location, $image_json, $product_url ?: null, $datasheet_url ?: null, $notes ?: null, $purchase_price]);
             }
 
             header('Location: dashboard.php');
@@ -245,6 +249,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             value="<?= htmlspecialchars($item['location'] ?? '') ?>"
             placeholder="e.g. BIN-A3, Drawer-2"
             class="input-field w-full rounded-xl px-4 py-2.5 text-sm">
+        </div>
+
+        <!-- ── Product Details (enrichment fields) ──────────────── -->
+        <div class="border-t border-white/5 pt-5">
+          <h3 class="text-sm font-semibold text-slate-300 mb-1 flex items-center gap-2">
+            <span class="text-base">🔗</span> Product Details
+            <span class="text-xs font-normal text-slate-500 ml-1">— optional, used to enrich AI context</span>
+          </h3>
+          <p class="text-xs text-slate-600 mb-4">Add URLs and the AI will fetch additional specs, pinouts, and code examples automatically.</p>
+
+          <div class="space-y-4">
+            <div>
+              <label for="product_url" class="form-label">Product / Manufacturer URL</label>
+              <input type="url" id="product_url" name="product_url"
+                value="<?= htmlspecialchars($item['product_url'] ?? '') ?>"
+                placeholder="https://www.adafruit.com/product/3405"
+                class="input-field w-full rounded-xl px-4 py-2.5 text-sm">
+            </div>
+            <div>
+              <label for="datasheet_url" class="form-label">Datasheet URL</label>
+              <input type="url" id="datasheet_url" name="datasheet_url"
+                value="<?= htmlspecialchars($item['datasheet_url'] ?? '') ?>"
+                placeholder="https://example.com/ESP32_datasheet.pdf"
+                class="input-field w-full rounded-xl px-4 py-2.5 text-sm">
+            </div>
+            <div>
+              <label for="notes" class="form-label">Personal Notes</label>
+              <textarea id="notes" name="notes" rows="3"
+                placeholder="e.g. Bought 5 units, one has bent pins. Works at 3.3V only."
+                class="input-field w-full rounded-xl px-4 py-2.5 text-sm resize-none"><?= htmlspecialchars($item['notes'] ?? '') ?></textarea>
+            </div>
+            <div class="w-40">
+              <label for="purchase_price" class="form-label">Purchase Price ($)</label>
+              <input type="number" id="purchase_price" name="purchase_price" min="0" step="0.01"
+                value="<?= $item['purchase_price'] ?? '' ?>"
+                placeholder="0.00"
+                class="input-field w-full rounded-xl px-4 py-2.5 text-sm">
+            </div>
+          </div>
         </div>
 
         <!-- Additional images to store -->
