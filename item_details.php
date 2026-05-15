@@ -282,7 +282,7 @@ $badge_class = match($item['status']) {
           `<div class="mt-1 text-emerald-400 font-semibold">✅ ${data.chars} chars cached from ${data.sources} source(s). Reload to see the badge.</div>`;
         status.className = 'mt-3 enrich-log';
         btn.innerHTML    = '✓ Enriched — Reload to see';
-        btn.classList.replace('btn-primary','');
+        btn.classList.remove('btn-primary');
         btn.style.cssText = 'background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.3);color:#4ade80;cursor:default;';
       } else {
         status.textContent = '❌ ' + (data.error || 'Enrichment failed.');
