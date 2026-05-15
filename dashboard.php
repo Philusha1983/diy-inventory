@@ -8,8 +8,13 @@ require 'image_helper.php';
 session_start();
 if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 
+// Bulk action feedback
+$bulk_ok    = $_GET['bulk_ok']    ?? '';
+$bulk_count = (int)($_GET['count'] ?? 0);
+$bulk_error = $_GET['bulk_error'] ?? '';
+
 // Search / filter
-$search   = trim($_GET['q']    ?? '');
+$search     = trim($_GET['q']    ?? '');
 $cat_filter = trim($_GET['cat'] ?? '');
 
 $where_clauses = [];
@@ -30,8 +35,9 @@ $stmt = $pdo->prepare("SELECT * FROM inventory $where_sql ORDER BY id DESC");
 $stmt->execute($params);
 $items = $stmt->fetchAll();
 
-// Distinct categories for the filter dropdown
-$cats = $pdo->query("SELECT DISTINCT category FROM inventory WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
+// Distinct categories & locations for dropdowns / datalists
+$cats      = $pdo->query("SELECT DISTINCT category FROM inventory WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
+$locations = $pdo->query("SELECT DISTINCT location  FROM inventory WHERE location  IS NOT NULL AND location  != '' ORDER BY location" )->fetchAll(PDO::FETCH_COLUMN);
 
 // Stats
 $total_items = (int)$pdo->query("SELECT COUNT(*) FROM inventory")->fetchColumn();
@@ -48,34 +54,39 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
   <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    .glass-card {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.07);
-      transition: border-color .2s, transform .2s, box-shadow .2s;
-    }
-    .glass-card:hover {
-      border-color: rgba(124,58,237,.4);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(124,58,237,.15);
-    }
+    .glass-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); transition:border-color .2s,transform .2s,box-shadow .2s; }
+    .glass-card:hover { border-color:rgba(124,58,237,.4); transform:translateY(-2px); box-shadow:0 8px 32px rgba(124,58,237,.15); }
     .mobile-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:1rem; transition:border-color .2s; }
     .mobile-card:active { border-color:rgba(124,58,237,.4); }
-    .stat-card {
-      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
-      border-radius: 1rem; padding: 1.25rem 1.5rem; position: relative; overflow: hidden;
-    }
-    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-    .stat-card.purple::before  { background: linear-gradient(90deg, #7c3aed, transparent); }
-    .stat-card.cyan::before    { background: linear-gradient(90deg, #06b6d4, transparent); }
-    .stat-card.emerald::before { background: linear-gradient(90deg, #10b981, transparent); }
-    tr.item-row:hover td { background: rgba(124,58,237,.05); }
-    td, th { transition: background .15s; }
-    .thumbnail { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); }
-    .thumb-placeholder {
-      width: 44px; height: 44px; border-radius: 8px;
-      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.2);
-      display: flex; align-items: center; justify-content: center;
-    }
+    .mobile-card.selected { border-color:rgba(124,58,237,.5); background:rgba(124,58,237,.06); }
+    .stat-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:1rem; padding:1.25rem 1.5rem; position:relative; overflow:hidden; }
+    .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+    .stat-card.purple::before  { background:linear-gradient(90deg,#7c3aed,transparent); }
+    .stat-card.cyan::before    { background:linear-gradient(90deg,#06b6d4,transparent); }
+    .stat-card.emerald::before { background:linear-gradient(90deg,#10b981,transparent); }
+    tr.item-row:hover td { background:rgba(124,58,237,.05); }
+    tr.item-row.selected td { background:rgba(124,58,237,.08) !important; }
+    td, th { transition:background .15s; }
+    .thumbnail { width:44px; height:44px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,.1); }
+    .thumb-placeholder { width:44px; height:44px; border-radius:8px; background:rgba(124,58,237,.15); border:1px solid rgba(124,58,237,.2); display:flex; align-items:center; justify-content:center; }
+    /* checkbox */
+    .row-cb { width:16px; height:16px; accent-color:#7c3aed; cursor:pointer; flex-shrink:0; }
+    /* bulk bar */
+    #bulk-bar { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(120%); z-index:60; transition:transform .25s cubic-bezier(.34,1.56,.64,1); white-space:nowrap; }
+    #bulk-bar.visible { transform:translateX(-50%) translateY(0); }
+    .bulk-select { background:rgba(15,15,30,.95); border:1px solid rgba(124,58,237,.4); backdrop-filter:blur(16px); border-radius:16px; padding:.6rem .75rem; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 0 1px rgba(124,58,237,.15); }
+    .bulk-btn { font-size:.75rem; font-weight:600; padding:.4rem .85rem; border-radius:10px; border:1px solid; cursor:pointer; transition:all .15s; background:transparent; }
+    .bulk-btn.purple { color:#c4b5fd; border-color:rgba(124,58,237,.4); } .bulk-btn.purple:hover { background:rgba(124,58,237,.2); }
+    .bulk-btn.cyan   { color:#67e8f9; border-color:rgba(6,182,212,.4);  } .bulk-btn.cyan:hover   { background:rgba(6,182,212,.15); }
+    .bulk-btn.emerald{ color:#4ade80; border-color:rgba(34,197,94,.4);  } .bulk-btn.emerald:hover{ background:rgba(34,197,94,.15); }
+    .bulk-btn.red    { color:#f87171; border-color:rgba(239,68,68,.4);  } .bulk-btn.red:hover    { background:rgba(239,68,68,.15); }
+    .bulk-btn.slate  { color:#94a3b8; border-color:rgba(148,163,184,.2); } .bulk-btn.slate:hover  { background:rgba(148,163,184,.08); }
+    /* modal */
+    #bulk-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:70; align-items:center; justify-content:center; padding:1rem; }
+    #bulk-modal.open { display:flex; }
+    .bulk-modal-box { background:#0f0f1e; border:1px solid rgba(124,58,237,.3); border-radius:20px; padding:1.5rem; width:100%; max-width:380px; }
+    /* toast */
+    #toast { position:fixed; top:1rem; right:1rem; z-index:80; padding:.65rem 1.1rem; border-radius:12px; font-size:.82rem; font-weight:500; transition:opacity .4s; }
   </style>
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
@@ -158,6 +169,24 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       </a>
     </header>
 
+    <?php
+    // Toast message from bulk action
+    $toast_msg = '';
+    $toast_cls = '';
+    if ($bulk_ok) {
+        $labels = ['category'=>'Category','status'=>'Status','location'=>'Location','delete'=>'Deleted'];
+        $lbl = $labels[$bulk_ok] ?? ucfirst($bulk_ok);
+        $toast_msg = $bulk_ok === 'delete' ? "🗑 {$bulk_count} item(s) deleted." : "✅ {$lbl} updated on {$bulk_count} item(s).";
+        $toast_cls = 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-300';
+    } elseif ($bulk_error) {
+        $toast_msg = '❌ Bulk action failed: ' . htmlspecialchars($bulk_error);
+        $toast_cls = 'bg-red-500/20 border border-red-500/30 text-red-300';
+    }
+    ?>
+    <?php if ($toast_msg): ?>
+    <div id="toast" class="<?= $toast_cls ?>"><?= $toast_msg ?></div>
+    <?php endif; ?>
+
     <div class="p-4 lg:p-8">
 
       <!-- Stats Row -->
@@ -211,8 +240,9 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
           $thumb  = $images[0] ? derive_thumb($images[0]) : null;
           $badge_class = match($item['status']) { 'New' => 'badge-new', 'Used' => 'badge-used', 'Refurbished' => 'badge-refurbished', default => 'badge-used' };
         ?>
-          <div class="mobile-card">
+          <div class="mobile-card" data-id="<?= $item['id'] ?>">
             <div class="flex items-start gap-3">
+              <input type="checkbox" class="row-cb item-cb mt-1" value="<?= $item['id'] ?>" onclick="event.stopPropagation()">
               <?php if ($thumb): ?>
                 <img src="<?= htmlspecialchars($thumb) ?>" alt="" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-white/10">
               <?php else: ?>
@@ -231,6 +261,7 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
                 <?php if ($item['location']): ?><p class="text-xs text-slate-600 mt-1">📍 <?= htmlspecialchars($item['location']) ?></p><?php endif; ?>
               </div>
             </div>
+
             <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-white/5">
               <a href="item_details.php?id=<?= $item['id'] ?>" class="text-center text-xs text-cyan-400 border border-cyan-500/20 py-2 rounded-lg hover:bg-cyan-500/10 transition-colors">View</a>
               <a href="add_item.php?edit=<?= $item['id'] ?>" class="text-center text-xs text-purple-400 border border-purple-500/20 py-2 rounded-lg hover:bg-purple-500/10 transition-colors">Edit</a>
@@ -244,8 +275,11 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       <div class="glass rounded-2xl overflow-hidden hidden md:block">
         <table class="w-full text-sm">
           <thead>
-            <tr class="border-b border-white/5">
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-12">Img</th>
+          <tr class="border-b border-white/5">
+              <th class="px-4 py-3.5 w-10">
+                <input type="checkbox" id="cb-all" class="row-cb" title="Select all">
+              </th>
+              <th class="text-left px-3 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-12">Img</th>
               <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Name</th>
               <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Model</th>
               <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Category</th>
@@ -275,8 +309,11 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
                 default       => 'badge-used',
               };
             ?>
-            <tr class="item-row border-b border-white/5 last:border-0">
-              <td class="px-5 py-3.5">
+            <tr class="item-row border-b border-white/5 last:border-0" data-id="<?= $item['id'] ?>">
+              <td class="px-4 py-3.5">
+                <input type="checkbox" class="row-cb item-cb" value="<?= $item['id'] ?>">
+              </td>
+              <td class="px-3 py-3.5">
                 <?php if ($thumb): ?>
                   <img src="<?= htmlspecialchars($thumb) ?>" alt="" class="thumbnail">
                 <?php else: ?>
@@ -332,17 +369,198 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
     </div>
   </main>
 
+  <!-- ── Bulk Action Bar ───────────────────────────────────────────────── -->
+  <div id="bulk-bar" role="toolbar" aria-label="Bulk actions">
+    <div class="bulk-select">
+      <span id="bulk-count-label" class="text-xs text-slate-400 px-1"></span>
+      <div class="w-px h-5 bg-white/10"></div>
+      <button class="bulk-btn purple" onclick="openModal('category')">📁 Category</button>
+      <button class="bulk-btn cyan"   onclick="openModal('status')">🔖 Status</button>
+      <button class="bulk-btn emerald" onclick="openModal('location')">📍 Location</button>
+      <button class="bulk-btn slate"  onclick="submitBulk('export_csv')">⬇ Export CSV</button>
+      <button class="bulk-btn red"    onclick="confirmDelete()">🗑 Delete</button>
+      <button class="bulk-btn slate"  onclick="clearSelection()" title="Clear selection">✕</button>
+    </div>
+  </div>
+
+  <!-- ── Bulk Modal ────────────────────────────────────────────────────── -->
+  <div id="bulk-modal">
+    <div class="bulk-modal-box">
+      <h3 id="modal-title" class="font-semibold text-white text-base mb-4"></h3>
+
+      <!-- Category -->
+      <div id="modal-category" class="modal-pane hidden">
+        <label class="form-label" for="val-category">New Category</label>
+        <input id="val-category" list="cat-list" autocomplete="off"
+          class="input-field w-full rounded-xl px-4 py-2.5 text-sm mt-1" placeholder="e.g. Microcontroller">
+        <datalist id="cat-list">
+          <?php foreach ($cats as $c): ?><option value="<?= htmlspecialchars($c) ?>"><?php endforeach; ?>
+        </datalist>
+      </div>
+
+      <!-- Status -->
+      <div id="modal-status" class="modal-pane hidden">
+        <label class="form-label" for="val-status">New Status</label>
+        <select id="val-status" class="input-field w-full rounded-xl px-4 py-2.5 text-sm mt-1">
+          <option>New</option><option>Used</option><option>Refurbished</option>
+        </select>
+      </div>
+
+      <!-- Location -->
+      <div id="modal-location" class="modal-pane hidden">
+        <label class="form-label" for="val-location">New Location</label>
+        <input id="val-location" list="loc-list" autocomplete="off"
+          class="input-field w-full rounded-xl px-4 py-2.5 text-sm mt-1" placeholder="e.g. BIN-A3">
+        <datalist id="loc-list">
+          <?php foreach ($locations as $l): ?><option value="<?= htmlspecialchars($l) ?>"><?php endforeach; ?>
+        </datalist>
+      </div>
+
+      <div class="flex gap-3 mt-5">
+        <button id="modal-ok" onclick="applyModal()"
+          class="btn-primary flex-1 py-2.5 rounded-xl font-semibold text-white text-sm">Apply</button>
+        <button onclick="closeModal()"
+          class="flex-1 py-2.5 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 transition-all">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden form used for POST submissions -->
+  <form id="bulk-form" method="POST" action="bulk_action.php" style="display:none">
+    <input type="hidden" name="bulk_op" id="bulk-action-field">
+    <input type="hidden" name="value"  id="bulk-value-field">
+    <div id="bulk-ids-container"></div>
+  </form>
+
   <script>
-  function openSidebar(){
-    document.getElementById('sidebar').classList.remove('-translate-x-full');
-    document.getElementById('sidebar-overlay').classList.remove('hidden');
-    document.body.style.overflow='hidden';
+  // ── Sidebar ───────────────────────────────────────────────────────────
+  function openSidebar(){ document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebar-overlay').classList.remove('hidden'); document.body.style.overflow='hidden'; }
+  function closeSidebar(){ document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden'); document.body.style.overflow=''; }
+
+  // ── Toast auto-dismiss ────────────────────────────────────────────────
+  const toastEl = document.getElementById('toast');
+  if (toastEl) setTimeout(() => { toastEl.style.opacity='0'; setTimeout(()=>toastEl.remove(),400); }, 3500);
+
+  // ── Bulk selection state ──────────────────────────────────────────────
+  const bar       = document.getElementById('bulk-bar');
+  const cbAll     = document.getElementById('cb-all');
+  const countLbl  = document.getElementById('bulk-count-label');
+  let   selected  = new Set();
+
+  function updateBar() {
+    const n         = selected.size;
+    const totalItems = new Set([...document.querySelectorAll('.item-cb')].map(cb => cb.value)).size;
+    countLbl.textContent = n + ' item' + (n !== 1 ? 's' : '') + ' selected';
+    bar.classList.toggle('visible', n > 0);
+    if (cbAll) cbAll.indeterminate = n > 0 && n < totalItems;
+    if (cbAll) cbAll.checked       = totalItems > 0 && n === totalItems;
   }
-  function closeSidebar(){
-    document.getElementById('sidebar').classList.add('-translate-x-full');
-    document.getElementById('sidebar-overlay').classList.add('hidden');
-    document.body.style.overflow='';
+
+  function toggleRow(cb) {
+    const id  = cb.value;
+    const row = cb.closest('[data-id]');
+    if (cb.checked) { selected.add(id); row?.classList.add('selected'); }
+    else            { selected.delete(id); row?.classList.remove('selected'); }
+    updateBar();
   }
+
+  // Per-row checkboxes
+  document.querySelectorAll('.item-cb').forEach(cb => {
+    cb.addEventListener('change', () => toggleRow(cb));
+  });
+
+  // Clicking a mobile card toggles its checkbox
+  document.querySelectorAll('.mobile-card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+      const cb = card.querySelector('.item-cb');
+      if (!cb) return;
+      cb.checked = !cb.checked;
+      toggleRow(cb);
+    });
+  });
+
+  // Select-all
+  if (cbAll) cbAll.addEventListener('change', () => {
+    const allCbs     = document.querySelectorAll('.item-cb');
+    const totalItems = new Set([...allCbs].map(cb => cb.value)).size;
+    // If anything is unselected → select all; otherwise deselect all
+    const shouldSelect = selected.size < totalItems;
+    cbAll.checked = shouldSelect;
+    allCbs.forEach(cb => {
+      cb.checked = shouldSelect;
+      const id  = cb.value;
+      const row = cb.closest('[data-id]');
+      if (shouldSelect) { selected.add(id);    row?.classList.add('selected');    }
+      else              { selected.delete(id); row?.classList.remove('selected'); }
+    });
+    updateBar(); // single call after all rows updated
+  });
+
+  function clearSelection() {
+    selected.clear();
+    document.querySelectorAll('.item-cb').forEach(cb => { cb.checked = false; });
+    document.querySelectorAll('[data-id]').forEach(el => el.classList.remove('selected'));
+    updateBar();
+  }
+
+  // ── Form submission helper ────────────────────────────────────────────
+  function submitBulk(action, value = '') {
+    document.getElementById('bulk-action-field').value = action;
+    document.getElementById('bulk-value-field').value  = value;
+    const container = document.getElementById('bulk-ids-container');
+    container.innerHTML = '';
+    selected.forEach(id => {
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'ids[]'; inp.value = id;
+      container.appendChild(inp);
+    });
+    document.getElementById('bulk-form').submit();
+  }
+
+  // ── Delete confirm ────────────────────────────────────────────────────
+  function confirmDelete() {
+    const n = selected.size;
+    if (!confirm(`Delete ${n} item${n!==1?'s':''}? This will also remove all associated images and cannot be undone.`)) return;
+    submitBulk('delete');
+  }
+
+  // ── Modal ─────────────────────────────────────────────────────────────
+  let activePane = null;
+  const modal = document.getElementById('bulk-modal');
+  const titles = { category:'Set Category', status:'Set Status', location:'Set Location' };
+
+  function openModal(type) {
+    document.querySelectorAll('.modal-pane').forEach(p => p.classList.add('hidden'));
+    const pane = document.getElementById('modal-' + type);
+    if (!pane) return;
+    pane.classList.remove('hidden');
+    activePane = type;
+    document.getElementById('modal-title').textContent = titles[type] || type;
+    modal.classList.add('open');
+    pane.querySelector('input,select')?.focus();
+  }
+
+  function closeModal() { modal.classList.remove('open'); activePane = null; }
+
+  function applyModal() {
+    if (!activePane) return;
+    const pane = activePane;          // capture before closeModal clears it
+    let value = '';
+    if (pane === 'category') value = document.getElementById('val-category').value.trim();
+    if (pane === 'status')   value = document.getElementById('val-status').value;
+    if (pane === 'location') value = document.getElementById('val-location').value.trim();
+    closeModal();
+    submitBulk('set_' + pane, value);
+  }
+
+  // Close modal on backdrop click
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+  // Allow Enter key inside modal inputs to apply
+  document.querySelectorAll('.modal-pane input').forEach(inp => {
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') applyModal(); });
+  });
   </script>
 </body>
 </html>
