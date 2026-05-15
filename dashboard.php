@@ -45,7 +45,7 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — DIY Lab Inventory</title>
   <meta name="description" content="Main control centre for your DIY lab hardware inventory.">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #0a0a1a; }

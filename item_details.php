@@ -33,7 +33,7 @@ $badge_class = match($item['status']) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($item['name']) ?> — DIY Lab</title>
   <meta name="description" content="Component detail page for <?= htmlspecialchars($item['name']) ?> in your DIY Lab inventory.">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #0a0a1a; }

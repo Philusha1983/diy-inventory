@@ -1,6 +1,10 @@
 # Sensitive files — DO NOT commit
 db.php
 
+# Node / Tailwind build dependencies (not needed in production)
+node_modules/
+package-lock.json
+
 # Uploaded component images
 uploads/*
 !uploads/.gitkeep

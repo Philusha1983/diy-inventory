@@ -87,7 +87,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 |-------|-----------|
 | **Backend** | PHP 8.0+ (vanilla, no framework) |
 | **Database** | MySQL 8.0+ / MariaDB |
-| **Frontend** | HTML5, Vanilla JavaScript, Tailwind CSS (CDN) |
+| **Frontend** | HTML5, Vanilla JavaScript, Tailwind CSS v3 (pre-built, local) |
 | **Fonts** | Google Fonts — Inter, JetBrains Mono |
 | **Markdown** | marked.js (CDN) — for blueprint rendering |
 | **AI Providers** | Google Gemini 2.5 Flash · OpenAI GPT-4o |
@@ -313,6 +313,12 @@ php -c php.ini -S localhost:8080
 # Make it accessible from phones on the same Wi-Fi network
 php -c php.ini -S 0.0.0.0:8080
 ```
+
+> **CSS rebuild:** If you add new Tailwind utility classes to a PHP file, regenerate `assets/app.css`:
+> ```bash
+> npm run build:css
+> ```
+> Or watch for changes during development: `npm run watch:css`
 
 Open your browser at: **`http://localhost:8080`**
 
