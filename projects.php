@@ -129,7 +129,17 @@ PROMPT;
             exit;
         }
 
-        echo json_encode(['projects' => $results, 'provider' => ucfirst($provider), 'count' => count($items)]);
+        // ── Persist to settings cache so the page survives navigation ──────────
+        $ts  = date('c');
+        $upsert = $pdo->prepare(
+            "INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)
+             ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)"
+        );
+        $upsert->execute(['project_ideas_cache',    json_encode($results)]);
+        $upsert->execute(['project_ideas_provider',  ucfirst($provider)]);
+        $upsert->execute(['project_ideas_cached_at', $ts]);
+
+        echo json_encode(['projects' => $results, 'provider' => ucfirst($provider), 'count' => count($items), 'cached_at' => $ts]);
 
     } catch (\Throwable $e) {
         echo json_encode(['error' => 'Exception: ' . $e->getMessage()]);
@@ -142,8 +152,24 @@ $settings = [];
 foreach ($pdo->query("SELECT setting_key, setting_value FROM settings")->fetchAll() as $r) {
     $settings[$r['setting_key']] = $r['setting_value'];
 }
-$provider    = $settings['ai_provider'] ?? 'gemini';
-$item_count  = (int)$pdo->query("SELECT COUNT(*) FROM inventory")->fetchColumn();
+$provider   = $settings['ai_provider'] ?? 'gemini';
+$item_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory")->fetchColumn();
+
+// Load cached projects (if any)
+$cached_projects  = $settings['project_ideas_cache']    ?? null;
+$cached_provider  = $settings['project_ideas_provider']  ?? ucfirst($provider);
+$cached_at_raw    = $settings['project_ideas_cached_at'] ?? null;
+$has_cache        = ($cached_projects && $cached_at_raw);
+
+// Human-readable age
+$cache_age = '';
+if ($cached_at_raw) {
+    $diff = time() - strtotime($cached_at_raw);
+    if    ($diff < 60)        $cache_age = 'just now';
+    elseif($diff < 3600)      $cache_age = floor($diff/60)  . 'm ago';
+    elseif($diff < 86400)     $cache_age = floor($diff/3600) . 'h ago';
+    else                      $cache_age = floor($diff/86400) . 'd ago';
+}
 ob_end_flush();
 ?>
 <!DOCTYPE html>
@@ -238,11 +264,17 @@ ob_end_flush();
         <p class="text-xs text-slate-500 mt-0.5">AI-powered project discovery from your inventory</p>
       </div>
     </div>
-    <button id="discover-btn" onclick="brainstorm()"
-      class="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-      <span class="hidden sm:inline">Brainstorm Projects</span><span class="sm:hidden">Go</span>
-    </button>
+    <div class="flex items-center gap-2 flex-shrink-0">
+      <?php if ($has_cache): ?>
+      <span class="text-xs text-slate-500 hidden sm:block">Generated <?= htmlspecialchars($cache_age) ?></span>
+      <?php endif; ?>
+      <button id="discover-btn" onclick="brainstorm()"
+        class="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span class="hidden sm:inline"><?= $has_cache ? 'Regenerate' : 'Brainstorm Projects' ?></span>
+        <span class="sm:hidden"><?= $has_cache ? '↺' : 'Go' ?></span>
+      </button>
+    </div>
   </header>
 
   <div class="p-4 lg:p-8">
@@ -257,6 +289,11 @@ ob_end_flush();
         <p class="text-slate-500 text-sm mb-4">Add components first, then come back to discover projects.</p>
         <a href="add_item.php" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm">+ Add Components</a>
       </div>
+      <?php elseif ($has_cache): ?>
+      <div class="flex items-center justify-between mb-6 px-4 py-3 rounded-xl bg-purple-500/5 border border-purple-500/20">
+        <p class="text-sm text-slate-400">Showing results from <span class="text-purple-300 font-medium"><?= htmlspecialchars($cache_age) ?></span>. Regenerate any time for fresh ideas.</p>
+        <button onclick="brainstorm()" class="flex-shrink-0 ml-4 text-xs text-purple-300 border border-purple-500/30 px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all">↺ Regenerate</button>
+      </div>
       <?php else: ?>
       <div class="big-cta cursor-pointer" onclick="brainstorm()">
         <div class="text-5xl mb-4">🚀</div>
@@ -267,10 +304,21 @@ ob_end_flush();
       </div>
       <?php endif; ?>
     </div>
+
   </div>
 </main>
 
 <script>
+// ── Cached results injected by PHP ───────────────────────────────────────────
+const CACHED = <?= $has_cache ? $cached_projects : 'null' ?>;
+const CACHED_PROVIDER = <?= json_encode($cached_provider) ?>;
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (CACHED && Array.isArray(CACHED) && CACHED.length) {
+    renderProjects(CACHED, CACHED_PROVIDER, true /* fromCache */);
+  }
+});
+
 async function brainstorm() {
   // Show loading overlay
   document.getElementById('loading-overlay').classList.add('active');
@@ -292,7 +340,7 @@ async function brainstorm() {
     }
 
     if (data.error) { showError(data.error); return; }
-    renderProjects(data.projects, data.provider);
+    renderProjects(data.projects, data.provider, false);
 
   } catch(e) {
     showError('Network error: ' + e.message);
@@ -322,9 +370,15 @@ function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function renderProjects(projects, provider) {
+function renderProjects(projects, provider, fromCache = false) {
+  // If fresh results arrived, clear the "Generated X ago" notice strip
+  if (!fromCache) {
+    const notice = document.querySelector('#results-area .border-purple-500\\/20');
+    if (notice) notice.remove();
+  }
+
   let html = `<div class="mb-4 flex items-center justify-between">
-    <p class="text-sm text-slate-500">${projects.length} project ideas generated</p>
+    <p class="text-sm text-slate-500">${projects.length} project ideas${fromCache ? ' (cached)' : ' generated'}</p>
     <span class="text-xs text-purple-400 bg-purple-500/10 border border-purple-500/20 px-3 py-1 rounded-full">Powered by ${esc(provider)}</span>
   </div><div class="space-y-5">`;
 
