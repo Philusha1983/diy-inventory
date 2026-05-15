@@ -57,6 +57,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 📦 **Inventory CRUD** | Add, edit, delete components with name, model, category, quantity, condition, specs, location, purchase price, and product/datasheet URLs. |
 | 📸 **Multi-Angle Image Upload** | Upload several photos per component. Images are **automatically resized and compressed** on upload (max 1200px, ~100–200 KB). Two versions are stored: a full-res viewer image and a small thumbnail. Saves ~98% storage vs raw phone photos. |
 | 🤖 **AI Auto-Identify** | Drag-and-drop photos → AI returns a structured JSON with `name`, `model`, `category`, and `specs`. Fields are auto-filled. |
+| 📂 **Bulk Import** | Import an entire folder of subfolders at once. Each subfolder = one item (images + `description.txt` with product name and URL). AI identifies each item from its first photo, processes all images, and inserts into the DB with a live progress log, pause/resume, and automatic rate-limit handling. |
 | 🔍 **Search & Filter** | Full-text search across name, model, specs, and location. Filter by category. |
 | 🔃 **Column Sorting** | Click any column header (Name, Model, Category, Qty, Status, Location) to sort ascending or descending. Active column highlights in purple. Preserves active search and filter. |
 | ☑️ **Bulk Actions** | Select multiple items with checkboxes (per-row + select-all). A floating action bar appears with: **Category change**, **Status change**, **Location change**, **Export CSV**, and **Delete** (with image cleanup). |
@@ -106,10 +107,12 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 diy-inventory/
 ├── index.php              # Login / password gate
 ├── dashboard.php          # Main inventory dashboard (sorting, bulk actions)
-├── add_item.php           # Add & edit components (with AI identify + enrichment fields)
+├── add_item.php           # Add & edit components (AI identify + AJAX submit + enrichment)
 ├── item_details.php       # Single component detail + image gallery + web enrichment
 ├── delete_item.php        # Image-aware deletion handler
 ├── bulk_action.php        # Bulk operations handler (category/status/location/delete/CSV)
+├── bulk_import.php        # Bulk import UI — scans folder, drives sequential AJAX import
+├── bulk_import_worker.php # Bulk import worker — processes ONE folder per call (AI + GD + DB)
 ├── enrich_api.php         # Web scraper — fetches & caches product documentation
 ├── projects.php           # Creative Engine — AI project discovery
 ├── project_blueprint.php  # AI-generated build guides
@@ -118,12 +121,12 @@ diy-inventory/
 ├── settings.php           # AI provider + API key configuration UI
 ├── identify_api.php       # AI vision endpoint (used by add_item.php)
 ├── ai_helper.php          # Central AI proxy — call_ai_api() + enrichment context builder
-├── image_helper.php       # Image processing — resize to full (1200px) + thumb (400px)
-├── db.php                 # PDO database connection
+├── image_helper.php       # Image processing — imagecreatefromstring, resize full+thumb
+├── db.php                 # PDO database connection (git-ignored, copy from db.php.example)
 ├── schema.sql             # Database schema + seed data
 ├── php.ini                # PHP upload/memory limits for built-in server
 ├── .htaccess              # PHP limits for Apache deployments
-├── uploads/               # Component photos (auto-created)
+├── uploads/               # Component photos (auto-created, git-ignored)
 └── docs/                  # Original design & phase documentation
 ```
 
@@ -380,6 +383,32 @@ brew services start mysql
 - Click **"Lab Assistant"** in the sidebar
 - Ask anything: *"What can I build with my ESP32 and OLED display?"*, *"Show me all my sensors"*, *"I want to make a gift for my kid"*
 - The assistant has full context of your current inventory
+
+### 5. Bulk-import from a folder
+
+If you have a folder of product subfolders (e.g. saved from AliExpress/Amazon), the Bulk Import tool can add all of them automatically:
+
+1. Place a folder named **`bulk import`** inside the project directory
+2. Each subfolder = one item and must contain:
+   - `image_01.jpg` … `image_06.jpg` (product photos)
+   - `description.txt` with two lines:
+     ```
+     Product Name : My Component Name
+     Final URL    : https://...product-page-url...
+     ```
+3. Click **"Bulk Import"** in the dashboard header
+4. Adjust the **delay slider** (default 4s → ≤15 RPM stays under Gemini free tier)
+5. Click **▶ Start Import** — a live log shows ✅/⚠️/❌ per item with "View →" links
+6. Use **⏸ Pause / ▶ Resume** at any time; rate-limit errors auto-pause for 30s
+
+> [!TIP]
+> Items with AI identification failures are still inserted using the product listing name. You can refine them later via the Edit page or the AI Enrichment button.
+
+### 6. Enrich component data from the web
+
+- Open any component's detail page → click **"🌐 Enrich from Web"**
+- The server fetches and caches plain text from the saved `product_url` / `datasheet_url`
+- Cached text is automatically injected into all future AI prompts (Lab Chat, Creative Engine, Blueprints) for that component
 
 ---
 

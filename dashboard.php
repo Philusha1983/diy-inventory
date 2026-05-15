@@ -191,6 +191,10 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
         <span class="hidden sm:inline">Add Component</span><span class="sm:hidden">Add</span>
       </a>
+      <a href="bulk_import.php" class="flex-shrink-0 flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl text-sm font-semibold text-purple-300 border border-purple-500/30 hover:bg-purple-500/10 transition-all" title="Bulk import from folder">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+        <span class="hidden lg:inline">Bulk Import</span>
+      </a>
     </header>
 
     <?php

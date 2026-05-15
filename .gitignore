@@ -1,29 +1,38 @@
-# Sensitive files — DO NOT commit
+# ── Sensitive / personal ────────────────────────────────────────────────────
+# Never commit DB credentials
 db.php
 
-# Node / Tailwind build dependencies (not needed in production)
-node_modules/
-package-lock.json
-
-# Uploaded component images
+# ── User data ────────────────────────────────────────────────────────────────
+# Processed component images (created at runtime)
 uploads/*
 !uploads/.gitkeep
 
-# macOS system files
+# Bulk import staging folder (user's local product images, not part of the app)
+bulk import/
+
+# ── Node / build tools ──────────────────────────────────────────────────────
+node_modules/
+package-lock.json
+
+# ── macOS system files ──────────────────────────────────────────────────────
 .DS_Store
 .AppleDouble
 .LSOverride
+**/.DS_Store
 
-# Editor directories
+# ── Editor directories ──────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# PHP logs
+# ── PHP / runtime ───────────────────────────────────────────────────────────
 *.log
 error_log
 
-# Environment files
+# ── Env files ───────────────────────────────────────────────────────────────
 .env
 .env.local
+
+# ── Internal dev / AI agent files (not needed by end users) ─────────────────
+AI Agent Onboarding & File Map.md
