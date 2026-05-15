@@ -69,27 +69,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!empty($_FILES['images']['name'][0])) {
                 foreach ($_FILES['images']['tmp_name'] as $k => $tmp) {
                     $err_code = $_FILES['images']['error'][$k];
+                    $fname    = htmlspecialchars($_FILES['images']['name'][$k]);
 
-                    // Detect size-exceeded errors (server rejects before PHP even sees the file)
                     if ($err_code === UPLOAD_ERR_INI_SIZE || $err_code === UPLOAD_ERR_FORM_SIZE) {
                         $max = ini_get('upload_max_filesize');
-                        $fname = htmlspecialchars($_FILES['images']['name'][$k]);
-                        $errors[] = "\u26a0 \"$fname\" exceeds the server upload limit ($max). Please resize or compress it before uploading.";
+                        $errors[] = "&quot;$fname&quot; exceeds the server upload limit ($max). Please compress it first.";
                         continue;
                     }
                     if ($err_code !== UPLOAD_ERR_OK) {
-                        $fname = htmlspecialchars($_FILES['images']['name'][$k]);
-                        $errors[] = "\u26a0 \"$fname\" failed to upload (error code: $err_code).";
+                        $errors[] = "&quot;$fname&quot; failed to upload (error code: $err_code).";
+                        continue;
+                    }
+
+                    // Pre-flight: catch 0-byte files (DataTransfer copy failure on some browsers)
+                    if ($_FILES['images']['size'][$k] === 0) {
+                        $errors[] = "&quot;$fname&quot; arrived empty (0 bytes). If you used drag-and-drop for AI Identify, please also select the files using the \"Upload photos\" file picker below before saving.";
+                        continue;
+                    }
+
+                    // Pre-flight: HEIC/HEIF/AVIF are not supported by PHP GD
+                    $mime = $_FILES['images']['type'][$k];
+                    if (in_array(strtolower($mime), ['image/heic','image/heif','image/avif'], true)) {
+                        $errors[] = "&quot;$fname&quot; is in $mime format which is not supported. Please convert it to JPEG, PNG, or WebP first.";
                         continue;
                     }
 
                     $base_name = time() . '_' . uniqid();
                     $result    = process_image($tmp, $upload_dir, $base_name);
                     if ($result) {
-                        $new_paths[] = $result['full']; // store the full-res path
+                        $new_paths[] = $result['full'];
                     } else {
-                        $fname = htmlspecialchars($_FILES['images']['name'][$k]);
-                        $errors[] = "\u26a0 \"$fname\" could not be processed. Ensure it is a valid JPEG, PNG, or WebP image.";
+                        // getimagesize or imagecreateXxx failed — give a diagnostic hint
+                        $info = @getimagesize($tmp);
+                        if (!$info) {
+                            $errors[] = "&quot;$fname&quot; could not be read as an image. It may be in an unsupported format (e.g. HEIC) or corrupted.";
+                        } else {
+                            $errors[] = "&quot;$fname&quot; could not be processed (GD error). Try re-saving the image as a standard JPEG.";
+                        }
                     }
                 }
             }
@@ -179,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <?php if (!empty($errors)): ?>
       <div class="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm space-y-1">
-        <?php foreach ($errors as $e): ?><p>⚠ <?= htmlspecialchars($e) ?></p><?php endforeach; ?>
+        <?php foreach ($errors as $e): ?><p>⚠ <?= $e ?></p><?php endforeach; ?>
       </div>
       <?php endif; ?>
 
@@ -210,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <!-- Main Form -->
-      <form method="POST" enctype="multipart/form-data" class="glass rounded-2xl p-6 space-y-5">
+      <form id="add-item-form" method="POST" enctype="multipart/form-data" class="glass rounded-2xl p-6 space-y-5">
         <?php if ($edit_id): ?>
           <input type="hidden" name="edit_id" value="<?= $edit_id ?>">
         <?php endif; ?>
@@ -369,11 +385,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
   }
 
-  window.removeAIFile = (i) => { aiFiles.splice(i, 1); renderAIPreviews(); };
+  window.removeAIFile = (i) => { aiFiles.splice(i, 1); renderAIPreviews(); syncFilesToFormInput(); };
+
+  function syncFilesToFormInput() {
+    // Kept for reference — actual submission uses aiFiles directly via fetch()
+    const dt = new DataTransfer();
+    aiFiles.forEach(f => dt.items.add(f));
+    document.getElementById('form-images').files = dt.files;
+  }
 
   aiInput.addEventListener('change', () => {
     const newFiles = Array.from(aiInput.files);
-    // Warn if any file exceeds the server upload limit (25 MB)
     const SERVER_LIMIT_MB = <?= (int)ini_get('upload_max_filesize') ?: 25 ?>;
     const oversized = newFiles.filter(f => f.size > SERVER_LIMIT_MB * 1024 * 1024);
     if (oversized.length > 0) {
@@ -430,6 +452,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (data.specs)    document.getElementById('specs').value    = data.specs;
 
       // Copy files to the form upload input so they get saved
+      // (syncFilesToFormInput already did this on drop/select, but call again to be safe)
       const dt = new DataTransfer();
       aiFiles.forEach(f => dt.items.add(f));
       document.getElementById('form-images').files = dt.files;
@@ -449,6 +472,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
   function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
   function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
+
+  // ── AJAX form submission (bypasses DataTransfer copy issue) ───────────────
+  document.getElementById('add-item-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const btn = this.querySelector('button[type="submit"]');
+    const origLabel = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span style="opacity:.7">⏳ Saving…</span>';
+
+    // Build FormData from all typed fields
+    const fd = new FormData(this);
+
+    // Replace whatever form-images has (may be 0-byte via DataTransfer) with
+    // the actual File objects from aiFiles — these are identical to what AI
+    // identify used, so we know they contain valid data.
+    fd.delete('images[]');
+    const fileSources = aiFiles.length > 0
+      ? aiFiles
+      : Array.from(document.getElementById('form-images').files); // fallback: direct picker
+    fileSources.forEach(f => fd.append('images[]', f));
+
+    try {
+      const res = await fetch('add_item.php', { method: 'POST', body: fd });
+
+      // Success: server redirected to dashboard
+      if (res.redirected || res.url.includes('dashboard.php')) {
+        window.location.href = res.url;
+        return;
+      }
+
+      // Errors: parse them from the returned HTML and show in the error box
+      const html = await res.text();
+      const doc2  = new DOMParser().parseFromString(html, 'text/html');
+      const errDiv = doc2.querySelector('.bg-red-500\\/10');
+      let errBox = document.querySelector('.bg-red-500\\/10');
+
+      if (errDiv) {
+        if (!errBox) {
+          // Create error box if it doesn't exist yet
+          errBox = document.createElement('div');
+          errBox.className = 'mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm space-y-1';
+          this.insertAdjacentElement('afterbegin', errBox);
+        }
+        errBox.innerHTML = errDiv.innerHTML;
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch(err) {
+      alert('Save failed: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = origLabel;
+    }
+  });
   </script>
 </body>
 </html>

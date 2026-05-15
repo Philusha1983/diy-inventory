@@ -9,20 +9,30 @@
  * caches the result in enriched_data / enriched_at columns,
  * and returns a JSON summary of what was found.
  */
+
+// ── Defensive output handling ────────────────────────────────────────────────
+ob_start();                        // capture any stray PHP warnings/notices
+ini_set('display_errors', '0');    // never let PHP inject HTML into our JSON
+header('Content-Type: application/json; charset=utf-8');
+
 require 'db.php';
 session_start();
-header('Content-Type: application/json');
 
 if (!isset($_SESSION['authenticated'])) {
+    ob_end_clean();
     http_response_code(403);
     echo json_encode(['ok' => false, 'error' => 'Not authenticated.']);
     exit;
 }
 
+// Global try-catch so any unexpected exception returns clean JSON, not HTML
+try {
+
 $input   = json_decode(file_get_contents('php://input'), true);
 $item_id = (int)($input['item_id'] ?? 0);
 
 if (!$item_id) {
+    ob_end_clean();
     echo json_encode(['ok' => false, 'error' => 'Missing item_id.']);
     exit;
 }
@@ -33,6 +43,7 @@ $stmt->execute([$item_id]);
 $item = $stmt->fetch();
 
 if (!$item) {
+    ob_end_clean();
     echo json_encode(['ok' => false, 'error' => 'Component not found.']);
     exit;
 }
@@ -43,6 +54,7 @@ $urls = array_filter([
 ]);
 
 if (empty($urls)) {
+    ob_end_clean();
     echo json_encode(['ok' => false, 'error' => 'No URLs saved for this component. Add a Product URL or Datasheet URL first.']);
     exit;
 }
@@ -102,6 +114,7 @@ foreach ($urls as $label => $url) {
 }
 
 if (empty($sections)) {
+    ob_end_clean();
     echo json_encode(['ok' => false, 'error' => 'Could not fetch any URLs. ' . implode('; ', $log)]);
     exit;
 }
@@ -112,6 +125,7 @@ $enriched = implode("\n\n", $sections);
 $stmt = $pdo->prepare("UPDATE inventory SET enriched_data = ?, enriched_at = NOW() WHERE id = ?");
 $stmt->execute([$enriched, $item_id]);
 
+ob_end_clean();
 echo json_encode([
     'ok'      => true,
     'chars'   => mb_strlen($enriched),
@@ -119,3 +133,9 @@ echo json_encode([
     'log'     => $log,
     'preview' => mb_substr($enriched, 0, 300) . '…',
 ]);
+
+} catch (\Throwable $e) {
+    ob_end_clean();
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'Server error: ' . $e->getMessage()]);
+}

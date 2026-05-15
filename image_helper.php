@@ -14,17 +14,20 @@
  */
 function process_image(string $tmp_path, string $upload_dir, string $base_name): array|false
 {
+    // Raise memory before any GD work (large images need it)
+    @ini_set('memory_limit', '512M');
+
     // ── Read source image ────────────────────────────────────────────────────
     $info = @getimagesize($tmp_path);
     if (!$info) return false;
 
-    $src = match($info[2]) {
-        IMAGETYPE_JPEG => @imagecreatefromjpeg($tmp_path),
-        IMAGETYPE_PNG  => @imagecreatefrompng($tmp_path),
-        IMAGETYPE_WEBP => @imagecreatefromwebp($tmp_path),
-        IMAGETYPE_GIF  => @imagecreatefromgif($tmp_path),
-        default        => false,
-    };
+    // imagecreatefromstring() auto-detects format and handles CMYK, progressive
+    // JPEG, and format variants that the explicit loaders sometimes reject.
+    $raw = @file_get_contents($tmp_path);
+    if ($raw === false || $raw === '') return false;
+
+    $src = @imagecreatefromstring($raw);
+    unset($raw); // free string buffer immediately
     if (!$src) return false;
 
     $orig_w = imagesx($src);

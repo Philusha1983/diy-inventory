@@ -54,15 +54,18 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | Feature | Description |
 |---------|-------------|
 | 🔐 **Secure Login** | Password-protected gate. No user accounts needed for a personal lab. |
-| 📦 **Inventory CRUD** | Add, edit, delete components with name, model, category, quantity, condition, specs, and physical location. |
+| 📦 **Inventory CRUD** | Add, edit, delete components with name, model, category, quantity, condition, specs, location, purchase price, and product/datasheet URLs. |
 | 📸 **Multi-Angle Image Upload** | Upload several photos per component. Images are **automatically resized and compressed** on upload (max 1200px, ~100–200 KB). Two versions are stored: a full-res viewer image and a small thumbnail. Saves ~98% storage vs raw phone photos. |
 | 🤖 **AI Auto-Identify** | Drag-and-drop photos → AI returns a structured JSON with `name`, `model`, `category`, and `specs`. Fields are auto-filled. |
 | 🔍 **Search & Filter** | Full-text search across name, model, specs, and location. Filter by category. |
+| 🔃 **Column Sorting** | Click any column header (Name, Model, Category, Qty, Status, Location) to sort ascending or descending. Active column highlights in purple. Preserves active search and filter. |
+| ☑️ **Bulk Actions** | Select multiple items with checkboxes (per-row + select-all). A floating action bar appears with: **Category change**, **Status change**, **Location change**, **Export CSV**, and **Delete** (with image cleanup). |
+| 🔗 **Product Enrichment** | Attach a product URL or datasheet URL to any component. Click "Enrich from Web" to scrape and cache the page content. This documentation is automatically injected into AI prompts for richer, more accurate suggestions. |
 | 💡 **Creative Engine** | Feed your whole inventory to the AI and get 5 tailored project ideas with complexity, duration, skill domain, and missing-part shopping links. |
 | 📐 **Project Blueprints** | One-click generation of a full technical guide (wiring, BOM, and firmware code) for any suggested project. |
-| 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory and answers questions like "what can I build with my extra LEDs?". |
+| 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory — including cached product documentation — and answers questions like "what can I build with my extra LEDs?". |
 | ⚙️ **AI Settings UI** | Switch between **Gemini** and **OpenAI** and save your API key through the web UI — no code editing required. |
-| 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view, and adaptive layouts for phones and tablets. |
+| 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view (with checkboxes for bulk selection), and adaptive layouts for phones and tablets. |
 
 ---
 
@@ -102,18 +105,20 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 ```
 diy-inventory/
 ├── index.php              # Login / password gate
-├── dashboard.php          # Main inventory dashboard
-├── add_item.php           # Add & edit components (with AI identify)
-├── item_details.php       # Single component detail + image gallery
+├── dashboard.php          # Main inventory dashboard (sorting, bulk actions)
+├── add_item.php           # Add & edit components (with AI identify + enrichment fields)
+├── item_details.php       # Single component detail + image gallery + web enrichment
 ├── delete_item.php        # Image-aware deletion handler
+├── bulk_action.php        # Bulk operations handler (category/status/location/delete/CSV)
+├── enrich_api.php         # Web scraper — fetches & caches product documentation
 ├── projects.php           # Creative Engine — AI project discovery
 ├── project_blueprint.php  # AI-generated build guides
 ├── chat.php               # Lab Assistant chat UI
-├── chat_api.php           # Chat backend — injects inventory context
+├── chat_api.php           # Chat backend — injects inventory + enrichment context
 ├── settings.php           # AI provider + API key configuration UI
 ├── identify_api.php       # AI vision endpoint (used by add_item.php)
-├── ai_helper.php          # Central AI proxy — call_ai_api()
-├── image_helper.php        # Image processing — resize to full (1200px) + thumb (400px)
+├── ai_helper.php          # Central AI proxy — call_ai_api() + enrichment context builder
+├── image_helper.php       # Image processing — resize to full (1200px) + thumb (400px)
 ├── db.php                 # PDO database connection
 ├── schema.sql             # Database schema + seed data
 ├── php.ini                # PHP upload/memory limits for built-in server
@@ -227,7 +232,7 @@ This creates two tables:
 
 | Table | Purpose |
 |-------|---------|
-| `inventory` | All components — name, model, category, quantity, status, specs, image paths, location |
+| `inventory` | All components — name, model, category, quantity, status, specs, image paths, location, product URL, datasheet URL, notes, purchase price, and cached enrichment data |
 | `settings` | Key-value store for AI provider and API key |
 
 **4. Verify database credentials in `db.php`**
@@ -471,18 +476,20 @@ uploads/
 |------|------|
 | `index.php` | Login page with session-based password gate |
 | `db.php` | PDO connection wrapper — required by all pages |
-| `ai_helper.php` | Central AI proxy: `call_ai_api($prompt, $images)` — fetches key from DB, handles Gemini & OpenAI |
-| `dashboard.php` | Inventory list with search, filter, stats, and CRUD links |
-| `add_item.php` | Add/Edit form + AI Auto-Identify drag-drop zone |
+| `ai_helper.php` | Central AI proxy: `call_ai_api($prompt, $images)` + `build_enrichment_context()` — fetches key from DB, handles Gemini & OpenAI |
+| `dashboard.php` | Inventory list with search, filter, column sorting, bulk actions (checkboxes + floating bar), and stats |
+| `add_item.php` | Add/Edit form + AI Auto-Identify drag-drop zone + product URL/datasheet/notes/price fields |
 | `image_helper.php` | `process_image()` — resizes uploads to `full_*.jpg` (1200px/q85) + `thumb_*.jpg` (400px/q80) using PHP GD |
-| `item_details.php` | Single component view with interactive image gallery |
+| `item_details.php` | Single component view with interactive image gallery and "Enrich from Web" button |
 | `delete_item.php` | Deletes DB record + physical image files |
+| `bulk_action.php` | Handles bulk POST actions: `set_category`, `set_status`, `set_location`, `delete` (with image cleanup), `export_csv` |
+| `enrich_api.php` | Fetches a product URL, strips HTML, and caches the plain-text content in `enriched_data` for AI injection |
 | `identify_api.php` | API endpoint called by the Auto-Identify button (POST, returns JSON) |
 | `settings.php` | UI to set AI provider and save/update API key |
-| `projects.php` | Creative Engine — sends inventory to AI, renders project cards |
+| `projects.php` | Creative Engine — sends inventory + enrichment context to AI, renders project cards |
 | `project_blueprint.php` | Generates and renders a full build guide for a chosen project |
 | `chat.php` | Lab Assistant chat UI (WebSocket-free, AJAX polling) |
-| `chat_api.php` | Chat backend — injects inventory context into every AI message |
+| `chat_api.php` | Chat backend — injects inventory + cached product documentation into every AI message |
 | `schema.sql` | Database schema + seed data for `settings` table |
 | `php.ini` | Raises PHP upload limits (`25M`) for built-in server — pass with `-c php.ini` |
 | `.htaccess` | Same limits for Apache-based deployments |
@@ -562,10 +569,10 @@ Both paid and free Gemini keys look identical (`AIza...`). The tier is determine
 Contributions are welcome! Here are good starting points:
 
 - **Add barcode/QR scanning** — integrate a JS barcode library on the add-item page
-- **Export to CSV** — add a dashboard export button
 - **Bulk import** — CSV upload for migrating from spreadsheets
 - **Dark/light theme toggle** — extend the existing CSS variables
 - **Multi-user support** — replace the single password with a proper user table
+- **Pagination** — add page controls to the dashboard for very large inventories
 
 Please open an issue to discuss major changes before submitting a PR.
 
