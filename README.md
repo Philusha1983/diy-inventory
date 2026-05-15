@@ -62,7 +62,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 🔃 **Column Sorting** | Click any column header (Name, Model, Category, Qty, Status, Location) to sort ascending or descending. Active column highlights in purple. Preserves active search and filter. |
 | ☑️ **Bulk Actions** | Select multiple items with checkboxes (per-row + select-all). A floating action bar appears with: **Category change**, **Status change**, **Location change**, **Export CSV**, and **Delete** (with image cleanup). |
 | 🔗 **Product Enrichment** | Attach a product URL or datasheet URL to any component. Click "Enrich from Web" to scrape and cache the page content. This documentation is automatically injected into AI prompts for richer, more accurate suggestions. |
-| 💡 **Creative Engine** | Feed your whole inventory to the AI and get 5 tailored project ideas with complexity, duration, skill domain, and missing-part shopping links. |
+| 💡 **Creative Engine** | Click **Brainstorm Projects** to have the AI analyse your entire inventory and return 5 tailored project ideas with complexity, duration, skill domain, and missing-part shopping links. Results are **cached in the DB** — navigating away and returning shows the last ideas instantly at zero API cost. Click **Regenerate** any time for fresh suggestions. |
 | 📐 **Project Blueprints** | One-click generation of a full technical guide (wiring, BOM, and firmware code) for any suggested project. |
 | 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory — including cached product documentation — and answers questions like "what can I build with my extra LEDs?". |
 | ⚙️ **AI Settings UI** | Switch between **Gemini** and **OpenAI** and save your API key through the web UI — no code editing required. |
@@ -371,12 +371,13 @@ brew services start mysql
 ### 3. Discover projects
 
 - Click **"Creative Engine"** in the sidebar
-- Click **"Brainstorm Projects"**
+- Click **"Brainstorm Projects"** — a loading overlay shows while the AI works (15–40 s)
 - The AI analyses your entire inventory and returns 5 tailored project ideas with:
   - Complexity level and estimated build time
   - Components used from your stock
   - Missing parts with Amazon & AliExpress search links
 - Click **"Generate Blueprint"** on any project for full wiring instructions and firmware code
+- Results are **saved automatically** — if you navigate away and return, the last ideas load instantly (no API call). The header shows when they were generated and offers a **↺ Regenerate** button.
 
 ### 4. Chat with your Lab Assistant
 
@@ -620,6 +621,20 @@ On macOS, some browsers transfer drag-and-drop files via the DataTransfer API in
 3. Stores up to ~3,000 chars of text in the `enriched_data` column
 4. Future AI prompts automatically include this text as context — no extra action needed
 
+### "Brainstorm Projects" button clicks but nothing appears
+
+This was caused by two issues now fixed in `projects.php`:
+
+| Root cause | Symptom | Fix applied |
+|------------|---------|-------------|
+| `maxOutputTokens` was 2048 — not enough for 5 full project cards | Page reloaded silently to "Ready to Discover" state | Raised to 8192 |
+| Synchronous form POST — any timeout/truncation reloaded page with empty state | No error shown | Converted to AJAX fetch; errors now appear in a red banner |
+
+If you still see no results, check the red error banner that now appears above the results area. Common causes:
+- No API key → go to ⚙️ AI Settings
+- Rate limit hit → wait 60 s then click Regenerate
+- Inventory is empty → add components first
+
 ### Blank page / PHP errors
 - Enable error reporting temporarily by adding to the top of `db.php`:
   ```php
@@ -635,10 +650,10 @@ On macOS, some browsers transfer drag-and-drop files via the DataTransfer API in
 Contributions are welcome! Here are good starting points:
 
 - **Add barcode/QR scanning** — integrate a JS barcode library on the add-item page
-- **Bulk import** — CSV upload for migrating from spreadsheets
 - **Dark/light theme toggle** — extend the existing CSS variables
 - **Multi-user support** — replace the single password with a proper user table
 - **Pagination** — add page controls to the dashboard for very large inventories
+- **Scheduled cron import** — auto-run the bulk importer via cron instead of the browser
 
 Please open an issue to discuss major changes before submitting a PR.
 
