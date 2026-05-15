@@ -68,11 +68,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!empty($_FILES['images']['name'][0])) {
                 foreach ($_FILES['images']['tmp_name'] as $k => $tmp) {
-                    if ($_FILES['images']['error'][$k] !== UPLOAD_ERR_OK) continue;
+                    $err_code = $_FILES['images']['error'][$k];
+
+                    // Detect size-exceeded errors (server rejects before PHP even sees the file)
+                    if ($err_code === UPLOAD_ERR_INI_SIZE || $err_code === UPLOAD_ERR_FORM_SIZE) {
+                        $max = ini_get('upload_max_filesize');
+                        $fname = htmlspecialchars($_FILES['images']['name'][$k]);
+                        $errors[] = "\u26a0 \"$fname\" exceeds the server upload limit ($max). Please resize or compress it before uploading.";
+                        continue;
+                    }
+                    if ($err_code !== UPLOAD_ERR_OK) {
+                        $fname = htmlspecialchars($_FILES['images']['name'][$k]);
+                        $errors[] = "\u26a0 \"$fname\" failed to upload (error code: $err_code).";
+                        continue;
+                    }
+
                     $base_name = time() . '_' . uniqid();
                     $result    = process_image($tmp, $upload_dir, $base_name);
                     if ($result) {
                         $new_paths[] = $result['full']; // store the full-res path
+                    } else {
+                        $fname = htmlspecialchars($_FILES['images']['name'][$k]);
+                        $errors[] = "\u26a0 \"$fname\" could not be processed. Ensure it is a valid JPEG, PNG, or WebP image.";
                     }
                 }
             }
@@ -87,8 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$name, $model, $category, $quantity, $status, $specs, $location, $image_json, $product_url ?: null, $datasheet_url ?: null, $notes ?: null, $purchase_price]);
             }
 
-            header('Location: dashboard.php');
-            exit;
+            // Only redirect if no upload errors occurred
+            if (empty($errors)) {
+                header('Location: dashboard.php');
+                exit;
+            }
         }
     }
 }
@@ -353,10 +373,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   aiInput.addEventListener('change', () => {
     const newFiles = Array.from(aiInput.files);
-    // Warn if any file is over 20 MB
-    const oversized = newFiles.filter(f => f.size > 20 * 1024 * 1024);
+    // Warn if any file exceeds the server upload limit (25 MB)
+    const SERVER_LIMIT_MB = <?= (int)ini_get('upload_max_filesize') ?: 25 ?>;
+    const oversized = newFiles.filter(f => f.size > SERVER_LIMIT_MB * 1024 * 1024);
     if (oversized.length > 0) {
-      alert('⚠️ One or more photos exceed 20 MB. Please compress them before uploading\n\n' + oversized.map(f => f.name + ' (' + (f.size/1024/1024).toFixed(1) + ' MB)').join('\n'));
+      alert('⚠️ One or more photos exceed the server limit (' + SERVER_LIMIT_MB + ' MB). Please compress them before uploading.\n\n' + oversized.map(f => f.name + ' (' + (f.size/1024/1024).toFixed(1) + ' MB)').join('\n'));
       aiInput.value = '';
       return;
     }
