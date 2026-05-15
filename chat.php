@@ -21,13 +21,6 @@ if (!isset($_SESSION['authenticated'])) {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     html, body { height:100%; margin:0; }
-    body { font-family:'Inter',sans-serif; background-color:#0a0a1a; }
-
-    .bg-grid { background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px); background-size:40px 40px; }
-    .glass { background:rgba(255,255,255,.03); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.07); }
-    .nav-link { color:#94a3b8; transition:color .2s; }
-    .nav-link:hover,.nav-link.active { color:#c4b5fd; }
-
     /* Chat layout */
     #chat-panel { position:fixed; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; transition:left .3s ease; }
     @media(min-width:1024px){ #chat-panel { left:256px; } }
@@ -35,7 +28,6 @@ if (!isset($_SESSION['authenticated'])) {
     #chat-window::-webkit-scrollbar { width:6px; }
     #chat-window::-webkit-scrollbar-track { background:transparent; }
     #chat-window::-webkit-scrollbar-thumb { background:rgba(124,58,237,.3); border-radius:3px; }
-
     /* Bubbles */
     .msg-user {
       align-self:flex-end; max-width:70%;
@@ -59,13 +51,11 @@ if (!isset($_SESSION['authenticated'])) {
     .msg-ai ul { margin:.5rem 0 .5rem 1.25rem; list-style:disc; }
     .msg-ai li { margin:.2rem 0; }
     .msg-ai h3 { color:#e2e8f0; font-weight:600; margin:.75rem 0 .3rem; }
-
     .msg-system {
       align-self:center; font-size:.75rem; color:#475569;
       background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05);
       border-radius:999px; padding:.25rem .75rem;
     }
-
     /* Input area */
     #input-area {
       padding:1rem; border-top:1px solid rgba(255,255,255,.06);
@@ -77,22 +67,14 @@ if (!isset($_SESSION['authenticated'])) {
       color:#e2e8f0; resize:none; font-family:'Inter',sans-serif;
       transition:border-color .2s, box-shadow .2s;
     }
-    .input-field:focus { outline:none; border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,.2); }
-    .input-field::placeholder { color:#4b5563; }
-
-    .btn-send {
-      background:linear-gradient(135deg,#7c3aed,#06b6d4);
-      transition:all .2s;
-    }
+    .btn-send { background:linear-gradient(135deg,#7c3aed,#06b6d4); transition:all .2s; }
     .btn-send:hover:not(:disabled) { opacity:.9; transform:translateY(-1px); }
     .btn-send:disabled { opacity:.4; cursor:not-allowed; }
-
     .typing-indicator { display:flex; gap:5px; align-items:center; padding:.5rem; }
     .typing-dot { width:8px; height:8px; background:#7c3aed; border-radius:50%; animation:typingBounce .9s infinite ease-in-out; }
     .typing-dot:nth-child(2) { animation-delay:.2s; }
     .typing-dot:nth-child(3) { animation-delay:.4s; }
     @keyframes typingBounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-8px)} }
-
     /* Suggestion chips */
     .chip {
       font-size:.75rem; padding:.35rem .85rem; border-radius:999px;

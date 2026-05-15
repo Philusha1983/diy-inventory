@@ -74,15 +74,7 @@ $guide_markdown = extract_ai_text($response, $provider);
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family:'Inter',sans-serif; background-color:#0a0a1a; }
-    .bg-grid { background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px); background-size:40px 40px; }
-    .glass { background:rgba(255,255,255,.03); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.07); }
-    .nav-link { color:#94a3b8; transition:color .2s; }
-    .nav-link:hover { color:#c4b5fd; }
-    .btn-primary { background:linear-gradient(135deg,#7c3aed,#06b6d4); transition:all .2s; }
-    .btn-primary:hover { opacity:.9; }
-
-    /* Markdown styling */
+    /* Markdown rendering styles */
     .markdown-body { color:#cbd5e1; line-height:1.75; }
     .markdown-body h1,.markdown-body h2 { color:#f1f5f9; font-weight:700; margin:1.75rem 0 .75rem; padding-bottom:.5rem; border-bottom:1px solid rgba(255,255,255,.07); }
     .markdown-body h1 { font-size:1.5rem; }
@@ -91,15 +83,8 @@ $guide_markdown = extract_ai_text($response, $provider);
     .markdown-body p { margin:.75rem 0; }
     .markdown-body ul,.markdown-body ol { margin:.75rem 0 .75rem 1.5rem; }
     .markdown-body li { margin:.3rem 0; }
-    .markdown-body code {
-      font-family:'JetBrains Mono',monospace; font-size:.8rem;
-      background:rgba(124,58,237,.15); border:1px solid rgba(124,58,237,.2);
-      color:#c4b5fd; padding:.15rem .4rem; border-radius:.3rem;
-    }
-    .markdown-body pre {
-      background:#0d0d1f; border:1px solid rgba(124,58,237,.25); border-left:3px solid #7c3aed;
-      border-radius:12px; padding:1.25rem; overflow-x:auto; margin:1.25rem 0;
-    }
+    .markdown-body code { font-family:'JetBrains Mono',monospace; font-size:.8rem; background:rgba(124,58,237,.15); border:1px solid rgba(124,58,237,.2); color:#c4b5fd; padding:.15rem .4rem; border-radius:.3rem; }
+    .markdown-body pre { background:#0d0d1f; border:1px solid rgba(124,58,237,.25); border-left:3px solid #7c3aed; border-radius:12px; padding:1.25rem; overflow-x:auto; margin:1.25rem 0; }
     .markdown-body pre code { background:none; border:none; color:#a5f3fc; padding:0; font-size:.82rem; }
     .markdown-body table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.9rem; }
     .markdown-body th { background:rgba(124,58,237,.15); color:#e2e8f0; font-weight:600; }

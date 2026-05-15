@@ -36,14 +36,6 @@ $badge_class = match($item['status']) {
   <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #0a0a1a; }
-    .bg-grid { background-image: linear-gradient(rgba(124,58,237,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,.04) 1px, transparent 1px); background-size: 40px 40px; }
-    .glass { background: rgba(255,255,255,.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.07); }
-    .badge-new         { background:rgba(34,197,94,.15);  color:#4ade80; border:1px solid rgba(34,197,94,.3); }
-    .badge-used        { background:rgba(251,191,36,.15); color:#fbbf24; border:1px solid rgba(251,191,36,.3); }
-    .badge-refurbished { background:rgba(99,179,237,.15); color:#60a5fa; border:1px solid rgba(99,179,237,.3); }
-    .nav-link { color:#94a3b8; transition:color .2s; }
-    .nav-link:hover { color:#c4b5fd; }
     .gallery-thumb {
       width:80px; height:80px; object-fit:cover; border-radius:10px;
       border:2px solid transparent; cursor:pointer; transition:all .2s;
@@ -53,8 +45,6 @@ $badge_class = match($item['status']) {
     .main-image { width:100%; max-height:320px; object-fit:contain; border-radius:16px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); }
     @media(min-width:768px){.main-image{max-height:400px;}}
     .spec-block { font-family:'JetBrains Mono',monospace; font-size:.8rem; }
-    .btn-primary { background:linear-gradient(135deg,#7c3aed,#06b6d4); transition:all .2s; }
-    .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
     .info-row { display:flex; align-items:baseline; gap:.75rem; padding:.75rem 0; border-bottom:1px solid rgba(255,255,255,.05); }
     .info-row:last-child { border-bottom:none; }
     .info-label { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:#64748b; min-width:90px; flex-shrink:0; }

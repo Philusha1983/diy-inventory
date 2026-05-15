@@ -83,13 +83,6 @@ PROMPT;
   <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family:'Inter',sans-serif; background-color:#0a0a1a; }
-    .bg-grid { background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px); background-size:40px 40px; }
-    .glass { background:rgba(255,255,255,.03); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.07); }
-    .nav-link { color:#94a3b8; transition:color .2s; }
-    .nav-link:hover,.nav-link.active { color:#c4b5fd; }
-    .btn-primary { background:linear-gradient(135deg,#7c3aed,#06b6d4); transition:all .2s; }
-    .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
     .project-card {
       background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
       border-radius:20px; padding:1.5rem; transition:all .25s;
@@ -97,17 +90,14 @@ PROMPT;
     }
     .project-card:hover { border-color:rgba(124,58,237,.35); transform:translateY(-3px); box-shadow:0 12px 40px rgba(124,58,237,.12); }
     @keyframes fadeInUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-    .complexity-beginner  { background:rgba(34,197,94,.15);  color:#4ade80; border:1px solid rgba(34,197,94,.3); }
-    .complexity-intermediate { background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
-    .complexity-expert    { background:rgba(239,68,68,.15);  color:#f87171; border:1px solid rgba(239,68,68,.3); }
+    .complexity-beginner     { background:rgba(34,197,94,.15);  color:#4ade80; border:1px solid rgba(34,197,94,.3); }
+    .complexity-intermediate { background:rgba(251,191,36,.15); color:#fbbf24; border:1px solid rgba(251,191,36,.3); }
+    .complexity-expert       { background:rgba(239,68,68,.15);  color:#f87171; border:1px solid rgba(239,68,68,.3); }
     .tag { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:#94a3b8; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; }
-    .spinner { display:inline-block; width:20px; height:20px; border:2px solid rgba(255,255,255,.2); border-top-color:white; border-radius:50%; animation:spin .7s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
     .big-cta {
       background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1));
       border:2px dashed rgba(124,58,237,.3);
-      border-radius:24px; padding:3rem; text-align:center;
-      transition:all .3s;
+      border-radius:24px; padding:3rem; text-align:center; transition:all .3s;
     }
     .big-cta:hover { border-color:rgba(124,58,237,.6); background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(6,182,212,.15)); }
   </style>

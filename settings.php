@@ -44,23 +44,12 @@ $has_key          = !empty($settings['api_key']);
   <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family:'Inter',sans-serif; background-color:#0a0a1a; }
-    .bg-grid { background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px); background-size:40px 40px; }
-    .glass { background:rgba(255,255,255,.03); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.07); }
-    .input-field { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#e2e8f0; transition:border-color .2s,box-shadow .2s; }
-    .input-field:focus { outline:none; border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,.2); }
-    .input-field::placeholder { color:#4b5563; }
-    .btn-primary { background:linear-gradient(135deg,#7c3aed,#06b6d4); transition:all .2s; }
-    .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
-    .nav-link { color:#94a3b8; transition:color .2s; }
-    .nav-link:hover { color:#c4b5fd; }
     .provider-card {
       border:2px solid rgba(255,255,255,.07); border-radius:16px; padding:1.25rem; cursor:pointer;
       transition:all .2s; background:rgba(255,255,255,.03);
     }
     .provider-card.selected { border-color:#7c3aed; background:rgba(124,58,237,.1); }
     .provider-card:hover:not(.selected) { border-color:rgba(255,255,255,.15); }
-    label.form-label { display:block; font-size:.75rem; font-weight:500; color:#94a3b8; margin-bottom:.4rem; text-transform:uppercase; letter-spacing:.05em; }
   </style>
 </head>
 <body class="bg-grid min-h-screen text-slate-200">

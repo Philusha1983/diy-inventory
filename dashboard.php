@@ -48,22 +48,6 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
   <link rel="stylesheet" href="assets/app.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #0a0a1a; }
-
-    .bg-grid {
-      background-image:
-        linear-gradient(rgba(124,58,237,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,58,237,.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    .glass {
-      background: rgba(255,255,255,.03);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,.07);
-    }
-
     .glass-card {
       background: rgba(255,255,255,.04);
       border: 1px solid rgba(255,255,255,.07);
@@ -74,50 +58,18 @@ $total_cats  = (int)$pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       transform: translateY(-2px);
       box-shadow: 0 8px 32px rgba(124,58,237,.15);
     }
-
-    .badge-new         { background: rgba(34,197,94,.15);  color: #4ade80; border: 1px solid rgba(34,197,94,.3); }
-    .badge-used        { background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.3); }
-    .badge-refurbished { background: rgba(99,179,237,.15); color: #60a5fa; border: 1px solid rgba(99,179,237,.3); }
-
-    .btn-primary   { background: linear-gradient(135deg, #7c3aed, #06b6d4); }
-    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
-
-    .input-field {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.1);
-      color: #e2e8f0;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .input-field:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.2); }
-    .input-field::placeholder { color: #4b5563; }
-
-    .nav-link { color: #94a3b8; transition: color .2s; }
-    .nav-link:hover, .nav-link.active { color: #c4b5fd; }
-
     .mobile-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:1rem; transition:border-color .2s; }
     .mobile-card:active { border-color:rgba(124,58,237,.4); }
-
     .stat-card {
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
-      position: relative;
-      overflow: hidden;
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 1rem; padding: 1.25rem 1.5rem; position: relative; overflow: hidden;
     }
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-    }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
     .stat-card.purple::before  { background: linear-gradient(90deg, #7c3aed, transparent); }
     .stat-card.cyan::before    { background: linear-gradient(90deg, #06b6d4, transparent); }
     .stat-card.emerald::before { background: linear-gradient(90deg, #10b981, transparent); }
-
     tr.item-row:hover td { background: rgba(124,58,237,.05); }
     td, th { transition: background .15s; }
-
     .thumbnail { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); }
     .thumb-placeholder {
       width: 44px; height: 44px; border-radius: 8px;

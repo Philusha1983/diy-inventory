@@ -36,54 +36,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; }
-
-    .bg-grid {
-      background-color: #0a0a1a;
-      background-image:
-        linear-gradient(rgba(124,58,237,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,58,237,.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    .glow-purple {
-      box-shadow: 0 0 60px rgba(124,58,237,.35), 0 0 120px rgba(124,58,237,.12);
-    }
-
+    /* Login page overrides — glass is more opaque here for better contrast */
     .glass {
       background: rgba(255,255,255,.04);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255,255,255,.08);
     }
-
-    .input-field {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.1);
-      color: #e2e8f0;
-      transition: border-color .25s, box-shadow .25s;
+    .glow-purple {
+      box-shadow: 0 0 60px rgba(124,58,237,.35), 0 0 120px rgba(124,58,237,.12);
     }
-    .input-field:focus {
-      outline: none;
-      border-color: #7c3aed;
-      box-shadow: 0 0 0 3px rgba(124,58,237,.25);
-    }
-    .input-field::placeholder { color: #64748b; }
-
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-12px); }
     }
     .float-anim { animation: float 5s ease-in-out infinite; }
-
     @keyframes pulse-ring {
       0%   { transform: scale(.9); opacity: 1; }
       100% { transform: scale(1.5); opacity: 0; }
     }
     .pulse-ring {
-      position: absolute;
-      inset: -6px;
-      border-radius: 50%;
+      position: absolute; inset: -6px; border-radius: 50%;
       border: 2px solid rgba(124,58,237,.5);
       animation: pulse-ring 2s ease-out infinite;
     }
