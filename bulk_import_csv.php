@@ -76,15 +76,16 @@ if ($step === 'preview' && isset($_FILES['csv_file'])) {
 
 // ── Step 3: Execute import ────────────────────────────────────────────────────
 $import_results = [];
+$enrich_queued  = [];
 if ($step === 'import' && isset($_POST['raw_csv'])) {
-    $raw_csv  = $_POST['raw_csv'];
-    $delim    = $_POST['delim'] ?? ',';
-    $mapping  = json_decode($_POST['mapping'] ?? '{}', true);
-    $skip_row1= true; // always skip header
+    $raw_csv     = $_POST['raw_csv'];
+    $delim       = $_POST['delim'] ?? ',';
+    $mapping     = json_decode($_POST['mapping'] ?? '{}', true);
+    $do_enrich   = !empty($_POST['enrich_urls']); // checkbox
 
-    $lines = array_filter(explode("\n", str_replace("\r", "", $raw_csv)));
-    $rows  = array_map(fn($l) => str_getcsv($l, $delim), array_values($lines));
-    $dataRows = array_slice($rows, 1); // skip header
+    $lines    = array_filter(explode("\n", str_replace("\r", "", $raw_csv)));
+    $rows     = array_map(fn($l) => str_getcsv($l, $delim), array_values($lines));
+    $dataRows = array_slice($rows, 1);
 
     $stmt = $pdo->prepare("INSERT INTO inventory
         (name, model, category, quantity, status, location, notes, purchase_price, product_url, datasheet_url, specs)
@@ -92,7 +93,6 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
 
     $done = 0; $skipped = 0; $failed = 0;
     foreach ($dataRows as $row) {
-        // Build field map
         $fields = [];
         foreach ($mapping as $col_idx => $db_col) {
             $fields[$db_col] = trim($row[$col_idx] ?? '');
@@ -101,37 +101,39 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
         $name = $fields['name'] ?? '';
         if (!$name) { $skipped++; $import_results[] = ['skip', '(empty name row)']; continue; }
 
-        // Sanitise quantity
         $qty = isset($fields['quantity']) ? (int)preg_replace('/[^0-9]/', '', $fields['quantity']) : 1;
         if ($qty < 1) $qty = 1;
 
-        // Sanitise status
         $valid_status = ['New', 'Used', 'Refurbished'];
         $status = isset($fields['status']) ? ucfirst(strtolower($fields['status'])) : 'New';
         if (!in_array($status, $valid_status)) $status = 'New';
 
-        // Sanitise price
         $price = isset($fields['purchase_price']) && $fields['purchase_price'] !== ''
-            ? (float)preg_replace('/[^0-9.]/', '', $fields['purchase_price'])
-            : null;
+            ? (float)preg_replace('/[^0-9.]/', '', $fields['purchase_price']) : null;
+
+        $product_url = $fields['product_url'] ?? null;
 
         try {
             $stmt->execute([
                 ':name'           => $name,
-                ':model'          => $fields['model']          ?? null,
-                ':category'       => $fields['category']       ?? 'Uncategorised',
+                ':model'          => $fields['model']         ?? null,
+                ':category'       => $fields['category']      ?? 'Uncategorised',
                 ':quantity'       => $qty,
                 ':status'         => $status,
-                ':location'       => $fields['location']       ?? null,
-                ':notes'          => $fields['notes']           ?? null,
+                ':location'       => $fields['location']      ?? null,
+                ':notes'          => $fields['notes']          ?? null,
                 ':purchase_price' => $price,
-                ':product_url'    => $fields['product_url']    ?? null,
-                ':datasheet_url'  => $fields['datasheet_url']  ?? null,
-                ':specs'          => $fields['specs']           ?? null,
+                ':product_url'    => $product_url,
+                ':datasheet_url'  => $fields['datasheet_url'] ?? null,
+                ':specs'          => $fields['specs']          ?? null,
             ]);
             $id = $pdo->lastInsertId();
             $done++;
-            $import_results[] = ['ok', $name, $id];
+            // Queue enrichment if checkbox ticked and URL exists
+            if ($do_enrich && $product_url) {
+                $enrich_queued[] = ['id' => $id, 'name' => $name];
+            }
+            $import_results[] = ['ok', $name, $id, $do_enrich && $product_url];
         } catch (\Throwable $e) {
             $failed++;
             $import_results[] = ['fail', $name, $e->getMessage()];
@@ -328,7 +330,29 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
         </table>
       </div>
 
-      <div style="display:flex;gap:12px;margin-top:24px;">
+      <!-- Enrich option -->
+      <?php
+        // Check if any column is mapped to product_url
+        $has_url_col = in_array('product_url', $mapping);
+      ?>
+      <div style="margin:20px 0;padding:16px;background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2);border-radius:12px;">
+        <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+          <input type="checkbox" name="enrich_urls" id="enrich-cb" value="1" style="margin-top:2px;accent-color:#06b6d4;"
+            <?= !$has_url_col ? 'disabled' : '' ?>>
+          <div>
+            <div style="font-size:.875rem;font-weight:600;color:<?= $has_url_col?'#67e8f9':'var(--muted)'?>;">
+              🔗 Auto-enrich via Product URL after import
+            </div>
+            <div style="font-size:.78rem;color:var(--muted);margin-top:3px;">
+              <?= $has_url_col
+                ? 'For each imported item with a product URL, calls the AI enrichment endpoint to fill in specs, category, and additional details.'
+                : 'No column mapped to <code>product_url</code> — map one above to enable this option.' ?>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:16px;">
         <button type="submit" class="btn btn-primary" onclick="buildMapping()">✅ Import to Inventory</button>
         <a href="bulk_import_csv.php" class="btn btn-secondary">← Start over</a>
       </div>
@@ -341,25 +365,58 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
     <h2>✅ Import complete</h2>
     <p>
       <strong style="color:var(--green)"><?= $done ?> items imported</strong>
-      <?php if ($skipped): ?> · <span style="color:var(--yellow)"><?= $skipped ?> skipped (empty name)</span><?php endif; ?>
+      <?php if ($skipped): ?> · <span style="color:var(--yellow)"><?= $skipped ?> skipped</span><?php endif; ?>
       <?php if ($failed): ?>  · <span style="color:var(--red)"><?= $failed ?> failed</span><?php endif; ?>
+      <?php if ($enrich_queued): ?> · <span style="color:#67e8f9"><?= count($enrich_queued) ?> queued for enrichment</span><?php endif; ?>
     </p>
-    <div style="margin:20px 0;max-height:400px;overflow-y:auto;">
+    <div style="margin:20px 0;max-height:400px;overflow-y:auto;" id="result-list">
       <?php foreach ($import_results as $r): ?>
-      <div class="result-item">
+      <div class="result-item" id="res-<?= $r[2] ?? '' ?>">
         <span class="result-icon"><?= $r[0]==='ok'?'✅':($r[0]==='skip'?'⏭':'❌') ?></span>
-        <span><?php if ($r[0]==='ok'): ?><a href="item_details.php?id=<?= $r[2] ?>" style="color:#c4b5fd;text-decoration:none;"><?= htmlspecialchars($r[1]) ?></a>
+        <span><?php if ($r[0]==='ok'): ?>
+          <a href="item_details.php?id=<?= $r[2] ?>" style="color:#c4b5fd;text-decoration:none;"><?= htmlspecialchars($r[1]) ?></a>
+          <?php if (!empty($r[3])): ?><span style="font-size:.72rem;color:#67e8f9;margin-left:6px;">⏳ enriching…</span><?php endif; ?>
         <?php elseif ($r[0]==='skip'): ?><span style="color:var(--muted)"><?= htmlspecialchars($r[1]) ?></span>
-        <?php else: ?><span style="color:var(--red)"><?= htmlspecialchars($r[1]) ?></span> <span style="color:var(--muted);font-size:.72rem;"><?= htmlspecialchars($r[2]) ?></span>
+        <?php else: ?><span style="color:var(--red)"><?= htmlspecialchars($r[1]) ?></span>
+          <span style="color:var(--muted);font-size:.72rem;"><?= htmlspecialchars($r[2]) ?></span>
         <?php endif; ?></span>
       </div>
       <?php endforeach; ?>
     </div>
+    <?php if ($enrich_queued): ?>
+    <div id="enrich-status" style="font-size:.82rem;color:#67e8f9;margin-bottom:16px;">🔗 Running enrichment for <?= count($enrich_queued) ?> items…</div>
+    <?php endif; ?>
     <div style="display:flex;gap:12px;">
       <a href="dashboard.php" class="btn btn-primary">View Inventory →</a>
       <a href="bulk_import_csv.php" class="btn btn-secondary">Import another file</a>
     </div>
   </div>
+  <?php if ($enrich_queued): ?>
+  <script>
+  // Run enrichment sequentially after page load
+  const toEnrich = <?= json_encode($enrich_queued) ?>;
+  (async () => {
+    for (const item of toEnrich) {
+      try {
+        const r = await fetch('enrich_api.php', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ item_id: item.id })
+        });
+        const d = await r.json();
+        const row = document.getElementById('res-' + item.id);
+        if (row) {
+          const tag = row.querySelector('[style*="67e8f9"]');
+          if (tag) tag.textContent = d.ok ? '✅ enriched' : '⚠️ ' + (d.error || 'failed');
+          if (tag) tag.style.color = d.ok ? '#4ade80' : '#fbbf24';
+        }
+      } catch(e) { /* ignore */ }
+      await new Promise(r => setTimeout(r, 2500)); // rate limit buffer
+    }
+    const status = document.getElementById('enrich-status');
+    if (status) status.textContent = '✅ Enrichment complete.';
+  })();
+  </script>
+  <?php endif; ?>
   <?php endif; ?>
 
 </div>

@@ -56,45 +56,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
                 $zip->extractTo($tmp_dir);
                 $zip->close();
 
-                // ── Copy valid subfolders into the bulk import directory ──────────
+                // ── Detect ZIP mode: flat (images in root) vs subfolder-per-component ──
+                $root_imgs = glob($tmp_dir . '/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', GLOB_BRACE);
+                $is_flat   = !empty($root_imgs);
+
+                // ── Copy into bulk import directory ──────────────────────────────
                 $import_base = __DIR__ . '/bulk import';
                 if (!is_dir($import_base)) mkdir($import_base, 0755, true);
 
-                $extracted = scandir($tmp_dir);
                 $copied = 0; $skipped_dirs = [];
 
-                foreach ($extracted as $entry) {
-                    if ($entry === '.' || $entry === '..') continue;
-                    $src = $tmp_dir . DIRECTORY_SEPARATOR . $entry;
-                    if (!is_dir($src)) continue;
-
-                    // Check for images
-                    $imgs = glob($src . '/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', GLOB_BRACE);
-                    if (empty($imgs)) {
-                        $skipped_dirs[] = $entry . ' (no images)';
-                        continue;
-                    }
-
-                    $dst = $import_base . DIRECTORY_SEPARATOR . $entry;
-                    // Don't overwrite existing folders
+                if ($is_flat) {
+                    // Flat mode: all root images = one component named after the ZIP
+                    $component_name = pathinfo($file['name'], PATHINFO_FILENAME);
+                    $dst = $import_base . DIRECTORY_SEPARATOR . $component_name;
                     if (is_dir($dst)) {
-                        $skipped_dirs[] = $entry . ' (already exists)';
-                        continue;
+                        $skipped_dirs[] = $component_name . ' (already exists)';
+                    } else {
+                        mkdir($dst, 0755, true);
+                        foreach ($root_imgs as $img) {
+                            copy($img, $dst . DIRECTORY_SEPARATOR . basename($img));
+                        }
+                        // Copy description.txt if present
+                        $desc_src = $tmp_dir . DIRECTORY_SEPARATOR . 'description.txt';
+                        if (file_exists($desc_src)) copy($desc_src, $dst . DIRECTORY_SEPARATOR . 'description.txt');
+                        $copied = 1;
+                        $folders[] = $component_name;
                     }
+                } else {
+                    // Subfolder mode: one subfolder per component
+                    $extracted = scandir($tmp_dir);
+                    foreach ($extracted as $entry) {
+                        if ($entry === '.' || $entry === '..') continue;
+                        $src = $tmp_dir . DIRECTORY_SEPARATOR . $entry;
+                        if (!is_dir($src)) continue;
 
-                    // Copy folder recursively
-                    $iter = new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator($src, RecursiveDirectoryIterator::SKIP_DOTS),
-                        RecursiveIteratorIterator::SELF_FIRST
-                    );
-                    mkdir($dst, 0755, true);
-                    foreach ($iter as $item) {
-                        $target = $dst . DIRECTORY_SEPARATOR . $iter->getSubPathname();
-                        if ($item->isDir()) mkdir($target, 0755, true);
-                        else copy($item->getPathname(), $target);
+                        $imgs = glob($src . '/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', GLOB_BRACE);
+                        if (empty($imgs)) { $skipped_dirs[] = $entry . ' (no images)'; continue; }
+
+                        $dst = $import_base . DIRECTORY_SEPARATOR . $entry;
+                        if (is_dir($dst)) { $skipped_dirs[] = $entry . ' (already exists)'; continue; }
+
+                        $iter = new RecursiveIteratorIterator(
+                            new RecursiveDirectoryIterator($src, RecursiveDirectoryIterator::SKIP_DOTS),
+                            RecursiveIteratorIterator::SELF_FIRST
+                        );
+                        mkdir($dst, 0755, true);
+                        foreach ($iter as $item) {
+                            $target = $dst . DIRECTORY_SEPARATOR . $iter->getSubPathname();
+                            if ($item->isDir()) mkdir($target, 0755, true);
+                            else copy($item->getPathname(), $target);
+                        }
+                        $copied++;
+                        $folders[] = $entry;
                     }
-                    $copied++;
-                    $folders[] = $entry;
                 }
 
                 // Cleanup temp dir
@@ -183,20 +198,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
     <h2>Upload a ZIP of component folders</h2>
     <p>Each subfolder in the ZIP becomes one inventory item. The AI analyses the photos and description (if present) to identify the component — the same pipeline as the existing folder import.</p>
 
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px;">Expected ZIP structure:</p>
-    <div class="structure-box">
-      my-components.zip<br>
-      ├── <span style="color:#4ade80;">ESP32-C3/</span>  <span class="comment">← folder name = fallback item name</span><br>
-      │   ├── image_01.jpg<br>
-      │   ├── image_02.jpg<br>
-      │   └── description.txt  <span class="comment">← optional hint for AI</span><br>
-      └── <span style="color:#4ade80;">SG90 Servo/</span><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;└── image_01.jpg
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px;">Supported ZIP structures:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+      <div>
+        <div style="font-size:.72rem;color:#67e8f9;font-weight:600;margin-bottom:6px;">📁 Subfolder mode (multiple components)</div>
+        <div class="structure-box" style="font-size:.75rem;">
+          my-parts.zip<br>
+          ├── <span style="color:#4ade80;">ESP32-C3/</span><br>
+          │   ├── image_01.jpg<br>
+          │   └── description.txt<br>
+          └── <span style="color:#4ade80;">SG90 Servo/</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;└── image_01.jpg
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;color:#a78bfa;font-weight:600;margin-bottom:6px;">🖼️ Flat mode (single component)</div>
+        <div class="structure-box" style="font-size:.75rem;">
+          my-sensor.zip<br>
+          ├── photo1.jpg<br>
+          ├── photo2.jpg<br>
+          ├── photo3.jpg<br>
+          └── description.txt <span class="comment">← optional</span>
+        </div>
+      </div>
     </div>
-
     <div class="info-box">
-      💡 <strong>description.txt</strong> is optional but improves AI accuracy. Add lines like:<br>
-      <code style="font-size:.78rem;">Product Name: ESP32-C3 WROOM-02<br>Category: Microcontroller<br>Notes: 4MB flash, USB-C</code>
+      💡 <strong>Flat ZIP</strong> (images directly in the root) = one component named after the ZIP file.<br>
+      <strong>Subfolder ZIP</strong> (one folder per component) = multiple components imported at once.<br>
+      <strong>description.txt</strong> is optional but improves AI accuracy. Lines like: <code>Product Name: ESP32-C3 | Category: Microcontroller</code>
     </div>
 
     <form method="post" enctype="multipart/form-data" id="zip-form">

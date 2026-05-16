@@ -1,25 +1,11 @@
 <?php
-/**
- * bulk_import.php — Bulk Import Hub. Choose an import method.
- */
 require 'db.php';
 session_start();
 if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 
-// Flash message from ZIP redirect
 $zip_added   = (int)($_GET['added'] ?? 0);
 $zip_skipped = $_SESSION['zip_import_skipped'] ?? [];
 unset($_SESSION['zip_import_skipped']);
-
-// Count pending folders for "Folder Import" card
-$import_base    = __DIR__ . '/bulk import';
-$pending_folders = 0;
-if (is_dir($import_base)) {
-    foreach (scandir($import_base) as $e) {
-        if ($e==='.'||$e==='..') continue;
-        if (is_dir($import_base.'/'.$e)) $pending_folders++;
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -140,30 +126,14 @@ if (is_dir($import_base)) {
       <div class="card-arrow">→</div>
     </a>
 
-    <!-- Folder (existing) -->
-    <a href="bulk_import_folder.php" class="option-card card-amber">
-      <?php if ($pending_folders): ?>
-      <div class="pending-badge"><?= $pending_folders ?> pending</div>
-      <?php endif; ?>
-      <div class="card-icon">📁</div>
-      <div class="card-title">Server Folder Import</div>
-      <div class="card-desc">
-        Classic method — place component folders inside the <code>bulk import/</code> directory on the server,
-        then run the AI import from here. Used for the initial bulk import session.
-      </div>
-      <span class="card-badge badge-med"><?= $pending_folders ? "$pending_folders folders queued" : 'No folders queued' ?></span>
-      <div class="card-arrow">→</div>
-    </a>
-
   </div>
 
   <div class="tips">
     <h3>Which method should I use?</h3>
     <ul>
-      <li>You have a spreadsheet of parts → <strong>CSV Import</strong></li>
-      <li>You have photos organised in folders on your computer → <strong>ZIP Import</strong></li>
-      <li>You want to photograph components one-by-one right now → <strong>Image Wizard</strong></li>
-      <li>You set up the server folder structure previously → <strong>Folder Import</strong></li>
+      <li>You have a spreadsheet of parts — <strong>CSV Import</strong></li>
+      <li>You have photos organised in folders on your computer — <strong>ZIP Import</strong></li>
+      <li>You want to photograph components one-by-one right now — <strong>Image Wizard</strong></li>
     </ul>
   </div>
 

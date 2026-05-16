@@ -215,8 +215,14 @@ function buildGroupCard(group) {
   card.innerHTML = `
     <div class="group-header">
       <div class="group-num">#${group.id}</div>
-      <input class="group-name-input" type="text" placeholder="Component name (optional — AI will identify)"
-             value="${escHtml(group.name)}" oninput="updateGroupName(${group.id}, this.value)">
+      <div style="flex:1;min-width:0;">
+        <input class="group-name-input" type="text" placeholder="Name (optional — AI will identify from photos)"
+               value="${escHtml(group.name.startsWith('Component') ? '' : group.name)}"
+               oninput="updateGroupName(${group.id}, this.value)">
+        <div style="font-size:.65rem;color:var(--muted);margin-top:3px;padding-left:2px;">
+          Leave blank to let AI identify · Add a hint to improve accuracy
+        </div>
+      </div>
       <button class="btn-remove-group" onclick="removeGroup(${group.id})" title="Remove group">✕</button>
     </div>
     <div class="thumbs" id="thumbs-${group.id}"></div>
