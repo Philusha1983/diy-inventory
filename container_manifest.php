@@ -58,10 +58,44 @@ ksort($by_category);
     .sticker-info { flex:1; min-width:0; }
     .sticker-title { font-size:14px; font-weight:700; }
     .sticker-sub   { font-size:10px; color:#555; margin-top:2px; }
+    /* ── Print styles — clean A4 manifest sheet ──────────────────────── */
     @media print {
+      * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
       .no-print { display:none !important; }
-      body { background:#fff; color:#111; }
-      .glass { background:#f9fafb; border:1px solid #e5e7eb; }
+      body { background:#fff !important; color:#111 !important;
+             font-family: 'Inter', system-ui, sans-serif; margin:0; padding:0; }
+      /* Hide all app chrome */
+      #sidebar, #sidebar-overlay, #sticker-panel, #print-sticker-overlay { display:none !important; }
+      main { margin-left:0 !important; }
+      header { display:none !important; }
+      .p-4, .p-8, .lg\:p-8 { padding:0 !important; }
+      /* Show print-only header */
+      .print-header { display:block !important; }
+      /* Table styles for paper */
+      .glass { background:#fff !important; border:none !important;
+               border-radius:0 !important; box-shadow:none !important; }
+      .manifest-table { border-collapse:collapse; width:100%; font-size:9pt; }
+      .manifest-table th { background:#f3f4f6 !important; color:#374151 !important;
+        border:1px solid #d1d5db !important; padding:5pt 7pt;
+        font-size:8pt; text-transform:uppercase; letter-spacing:.04em; }
+      .manifest-table td { border:1px solid #e5e7eb !important; padding:5pt 7pt;
+        color:#111 !important; font-size:9pt; }
+      .manifest-table tr:hover td { background:none !important; }
+      .cat-header { background:#ede9fe !important; color:#4c1d95 !important;
+        font-weight:700; font-size:8pt; border:1px solid #c4b5fd !important; }
+      .qty-badge { background:none !important; color:#111 !important;
+        border:1px solid #9ca3af !important; border-radius:4px; }
+      /* Verified column — print only */
+      .col-verify { display:table-cell !important; }
+      /* Force hidden cols to show */
+      .hidden { display:table-cell !important; }
+      /* Avoid page breaks inside rows */
+      tr { page-break-inside:avoid; }
+      .cat-header { page-break-after:avoid; }
+    }
+    @media screen {
+      .print-header { display:none; }
+      .col-verify   { display:none; }
     }
   </style>
 </head>
@@ -99,14 +133,34 @@ ksort($by_category);
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
       <a href="print_labels.php?loc=<?= urlencode($loc) ?>" target="_blank"
-         class="text-xs text-cyan-400 border border-cyan-500/30 px-3 py-1.5 rounded-lg hover:bg-cyan-500/10 transition-all">
+         class="text-xs text-cyan-400 border border-cyan-500/30 px-3 py-1.5 rounded-lg hover:bg-cyan-500/10 transition-all no-print">
         🏷️ Print Item Labels
       </a>
-      <button onclick="toggleSticker()" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold text-white">
+      <button onclick="window.print()" class="text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-all no-print">
+        🖨️ Print Manifest
+      </button>
+      <button onclick="toggleSticker()" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold text-white no-print">
         📄 Container QR Sticker
       </button>
     </div>
   </header>
+
+  <!-- Print-only manifest header (hidden on screen) -->
+  <div class="print-header" style="padding:12mm 12mm 6mm;border-bottom:2px solid #111;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-size:18pt;font-weight:700;">📦 <?= htmlspecialchars($loc) ?></div>
+        <div style="font-size:9pt;color:#555;margin-top:3pt;">
+          <?= $total_items ?> component types &middot; <?= $total_qty ?> total units &middot;
+          <?= count($by_category) ?> categories
+        </div>
+      </div>
+      <div style="text-align:right;font-size:8pt;color:#777;">
+        <div>Printed: <?= date('d M Y, H:i') ?></div>
+        <div style="margin-top:2pt;">DIY Lab Inventory</div>
+      </div>
+    </div>
+  </div>
 
   <div class="p-4 lg:p-8">
 
@@ -176,12 +230,13 @@ ksort($by_category);
             <th>Model</th>
             <th class="hidden sm:table-cell">Category</th>
             <th>Qty</th>
+            <th class="col-verify" style="width:60px;text-align:center;">Verified</th>
             <th class="no-print">Action</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($by_category as $cat => $cat_items): ?>
-          <tr><td colspan="5" class="cat-header">📁 <?= htmlspecialchars($cat) ?> (<?= count($cat_items) ?>)</td></tr>
+          <tr><td colspan="6" class="cat-header">📁 <?= htmlspecialchars($cat) ?> (<?= count($cat_items) ?>)</td></tr>
           <?php foreach ($cat_items as $item): ?>
           <tr>
             <td>
@@ -190,6 +245,7 @@ ksort($by_category);
             <td class="text-slate-400"><?= htmlspecialchars($item['model'] ?? '—') ?></td>
             <td class="text-slate-500 hidden sm:table-cell"><?= htmlspecialchars($item['category']) ?></td>
             <td><span class="qty-badge"><?= (int)$item['quantity'] ?></span></td>
+            <td class="col-verify" style="text-align:center;">☐</td>
             <td class="no-print">
               <a href="item_details.php?id=<?= $item['id'] ?>"
                  class="text-xs text-purple-400 hover:text-purple-300 transition-colors">View →</a>
@@ -198,7 +254,17 @@ ksort($by_category);
           <?php endforeach; ?>
           <?php endforeach; ?>
         </tbody>
+        <tfoot>
+          <tr class="col-verify" style="display:none;">
+            <?php /* tfoot only visible in print via CSS col-verify */ ?>
+          </tr>
+        </tfoot>
       </table>
+    </div>
+    <!-- Print footer -->
+    <div class="print-header" style="padding:4mm 12mm;font-size:7pt;color:#9ca3af;border-top:1px solid #e5e7eb;margin-top:4mm;display:flex;justify-content:space-between;">
+      <span>☐ = verify item is in container &nbsp;|&nbsp; Generated by DIY Lab Inventory System</span>
+      <span><?= htmlspecialchars($loc) ?> — <?= date('d M Y') ?></span>
     </div>
     <?php endif; ?>
 
