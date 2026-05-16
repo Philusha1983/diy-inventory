@@ -191,8 +191,15 @@ function toggleQR(idx, locName, itemTypes, totalQty) {
 
   if (!generatedQRs.has(idx)) {
     const url = `${origin}/container_manifest.php?loc=${encodeURIComponent(locName)}`;
+    // Offline-readable text payload: container info + URL at bottom
+    const qrText = [
+      `CONTAINER: ${locName}`,
+      `${itemTypes} types | ${totalQty} units`,
+      '---',
+      url,
+    ].join('\n');
     new QRCode(document.getElementById('qr-' + idx), {
-      text: url, width:80, height:80,
+      text: qrText, width:80, height:80,
       colorDark:'#111', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M
     });
     generatedQRs.add(idx);
@@ -201,11 +208,16 @@ function toggleQR(idx, locName, itemTypes, totalQty) {
 
 function printContainerQR(locName, itemTypes, totalQty, locEncoded) {
   const url = `${origin}/container_manifest.php?loc=${locEncoded}`;
-  // Generate a temp QR for the print window
+  const qrText = [
+    `CONTAINER: ${locName}`,
+    `${itemTypes} types | ${totalQty} units`,
+    '---',
+    url,
+  ].join('\n');
   const tmp = document.createElement('div');
   tmp.id = 'tmp-qr-print';
   document.body.appendChild(tmp);
-  const qr = new QRCode(tmp, { text: url, width:130, height:130,
+  new QRCode(tmp, { text: qrText, width:130, height:130,
     colorDark:'#111', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
   setTimeout(() => {
     const html = `<!DOCTYPE html><html><head><style>
@@ -213,21 +225,23 @@ function printContainerQR(locName, itemTypes, totalQty, locEncoded) {
       .sticker{display:inline-flex;align-items:center;gap:16px;border:2px dashed #aaa;padding:16px;border-radius:8px;}
       .title{font-size:16px;font-weight:700;color:#111;}
       .sub{font-size:10px;color:#555;margin-top:4px;}
-      .link{font-size:9px;color:#7c3aed;font-weight:700;margin-top:4px;}
-      p{font-size:10px;color:#888;margin-top:1rem;}
+      .link{font-size:9px;color:#9ca3af;margin-top:6px;word-break:break-all;}
+      .accent{color:#7c3aed;font-weight:700;}
+      p.note{font-size:9px;color:#888;margin-top:1rem;}
     </style></head><body>
     <div class="sticker">
       ${tmp.innerHTML}
       <div>
         <div class="title">📦 ${locName}</div>
         <div class="sub">${itemTypes} types · ${totalQty} units</div>
-        <div class="link">Scan for live manifest →</div>
+        <div class="sub accent">Scan to view full manifest</div>
+        <div class="link">${url}</div>
       </div>
     </div>
-    <p>Cut out and laminate this sticker. Affix to the container.<br>Scanning with any phone camera opens the live manifest.</p>
+    <p class="note">QR contains item info — readable offline. URL opens live manifest when connected.</p>
     </body></html>`;
     tmp.remove();
-    const w = window.open('','_blank','width=500,height=450');
+    const w = window.open('','_blank','width=540,height=440');
     w.document.write(html);
     w.document.close();
     w.focus();

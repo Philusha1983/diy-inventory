@@ -28,11 +28,7 @@ foreach ($items as $i) {
 }
 ksort($by_category);
 
-// Updated timestamp
-$updated_stmt = $pdo->prepare("SELECT MAX(updated_at) FROM inventory WHERE location=?");
-// Fallback if no updated_at column
-try { $updated_stmt->execute([$loc]); $last_updated = $updated_stmt->fetchColumn(); }
-catch(Exception $e) { $last_updated = null; }
+// (updated_at not in schema — omitted)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -223,14 +219,30 @@ catch(Exception $e) { $last_updated = null; }
 
 <script>
 const manifestUrl = window.location.href;
+const locName     = <?= json_encode($loc) ?>;
+const totalTypes  = <?= $total_items ?>;
+const totalQty    = <?= $total_qty ?>;
+const categories  = <?= json_encode(implode(', ', array_keys($by_category))) ?>;
 let qrGenerated = false;
+
+// Self-contained QR text — readable offline from any QR scanner.
+// URL appended so online users can tap/visit.
+function buildContainerQrText() {
+  return [
+    `CONTAINER: ${locName}`,
+    `${totalTypes} types | ${totalQty} units`,
+    categories ? `Categories: ${categories}` : null,
+    '---',
+    manifestUrl,
+  ].filter(Boolean).join('\n');
+}
 
 function toggleSticker() {
   const panel = document.getElementById('sticker-panel');
   panel.classList.toggle('hidden');
   if (!qrGenerated) {
     new QRCode(document.getElementById('container-qr'), {
-      text: manifestUrl, width:100, height:100,
+      text: buildContainerQrText(), width:100, height:100,
       colorDark:'#111', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M
     });
     qrGenerated = true;
@@ -238,11 +250,9 @@ function toggleSticker() {
 }
 
 function printSticker() {
-  const overlay = document.getElementById('print-sticker-overlay');
-  // Generate print QR if not done
   if (!document.getElementById('print-qr').innerHTML) {
     new QRCode(document.getElementById('print-qr'), {
-      text: manifestUrl, width:130, height:130,
+      text: buildContainerQrText(), width:130, height:130,
       colorDark:'#111', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M
     });
   }
@@ -252,17 +262,21 @@ function printSticker() {
     .title{font-size:16px;font-weight:700;}
     .sub{font-size:10px;color:#555;margin-top:3px;}
     .accent{color:#7c3aed;font-weight:700;}
+    .url{font-size:8px;color:#9ca3af;margin-top:6px;word-break:break-all;}
+    p.note{font-size:9px;color:#888;margin-top:1rem;}
   </style></head><body>
   <div class="sticker">
     ${document.getElementById('print-qr').innerHTML}
     <div>
       <div class="title">📦 <?= htmlspecialchars(addslashes($loc)) ?></div>
       <div class="sub"><?= $total_items ?> types · <?= $total_qty ?> units</div>
-      <div class="sub accent">Scan for live manifest →</div>
+      <div class="sub accent">Scan to view full manifest</div>
+      <div class="url">${manifestUrl}</div>
     </div>
   </div>
+  <p class="note">QR contains item list — readable offline. URL opens live manifest when connected.</p>
   </body></html>`;
-  const w = window.open('','_blank','width=500,height=400');
+  const w = window.open('','_blank','width=540,height=420');
   w.document.write(html);
   w.document.close();
   w.focus();

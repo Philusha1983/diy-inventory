@@ -81,13 +81,16 @@ $sz = $sizes[$label_size] ?? $sizes['medium'];
       flex-shrink:0;
     }
     .label-qr { flex-shrink:0; }
-    .label-info { min-width:0; flex:1; }
+    .label-info { min-width:0; flex:1; display:flex; flex-direction:column; justify-content:center; }
     .label-name { font-size:<?= $sz['font'] ?>; font-weight:700; line-height:1.2;
                   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .label-model{ font-size:<?= $sz['font'] ?>; color:#555; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .label-meta { font-size:<?= $sz['font'] ?>; color:#777; margin-top:1mm; }
     .label-loc  { font-size:<?= $sz['font'] ?>; color:#374151; font-weight:600; margin-top:1mm;
                   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .label-url  { font-size:6px; color:#9ca3af; margin-top:1.5mm;
+                  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+                  <?= $label_size === 'small' ? 'display:none;' : '' ?> }
     /* screen preview border */
     @media screen {
       .label-card { box-shadow:0 2px 12px rgba(0,0,0,.35); }
@@ -119,25 +122,51 @@ $sz = $sizes[$label_size] ?? $sizes['medium'];
       <?php if ($item['location']): ?>
       <div class="label-loc">📍 <?= htmlspecialchars($item['location']) ?></div>
       <?php endif; ?>
+      <div class="label-url" id="url-<?= $item['id'] ?>"></div>
     </div>
   </div>
   <?php endforeach; ?>
 </div>
 
 <script>
-// Build QR URLs using the actual host (not localhost) so they work from any device
 const origin = window.location.origin;
-const items = <?= json_encode(array_map(fn($i)=>['id'=>$i['id']],$items)) ?>;
+// Pass full item data so QR text is built client-side (includes name, model etc.)
+const items = <?= json_encode(array_map(fn($i) => [
+    'id'       => $i['id'],
+    'name'     => $i['name'],
+    'model'    => $i['model'] ?? '',
+    'category' => $i['category'],
+    'quantity' => (int)$i['quantity'],
+    'location' => $i['location'] ?? '',
+], $items)) ?>;
 const qrSize = <?= $sz['qr'] ?>;
 
 items.forEach(item => {
   const url = `${origin}/item_details.php?id=${item.id}`;
+
+  // Self-contained text payload — readable offline from any QR scanner.
+  // URL is included at the bottom so online users can tap/visit it.
+  const lines = [
+    item.name,
+    item.model   ? `Model: ${item.model}`       : null,
+    `Category: ${item.category}`,
+    `Qty: ${item.quantity}`,
+    item.location ? `Location: ${item.location}` : null,
+    '---',
+    url,
+  ].filter(Boolean).join('\n');
+
   new QRCode(document.getElementById('qr-' + item.id), {
-    text: url, width: qrSize, height: qrSize,
+    text: lines, width: qrSize, height: qrSize,
     colorDark:'#111111', colorLight:'#ffffff',
     correctLevel: QRCode.CorrectLevel.M
   });
+
+  // Show URL as tiny text on the label (medium/large only — hidden via CSS for small)
+  const urlEl = document.getElementById('url-' + item.id);
+  if (urlEl) urlEl.textContent = url;
 });
+
 
 function setSize(sz) {
   const u = new URL(window.location.href);
