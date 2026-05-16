@@ -58,38 +58,37 @@ ksort($by_category);
     .sticker-info { flex:1; min-width:0; }
     .sticker-title { font-size:14px; font-weight:700; }
     .sticker-sub   { font-size:10px; color:#555; margin-top:2px; }
-    /* ── Print styles — clean A4 manifest sheet ──────────────────────── */
+    /* ── Print styles — strict black-on-white, no colours ───────────── */
     @media print {
-      * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      /* Nuclear colour reset — overrides ALL Tailwind colour classes */
+      * { color:#000 !important; background:#fff !important;
+          -webkit-print-color-adjust:exact; print-color-adjust:exact; }
       .no-print { display:none !important; }
-      body { background:#fff !important; color:#111 !important;
-             font-family: 'Inter', system-ui, sans-serif; margin:0; padding:0; }
+      body { font-family:'Inter',system-ui,sans-serif; margin:0; padding:0; }
       /* Hide all app chrome */
-      #sidebar, #sidebar-overlay, #sticker-panel, #print-sticker-overlay { display:none !important; }
-      main { margin-left:0 !important; }
-      header { display:none !important; }
-      .p-4, .p-8, .lg\:p-8 { padding:0 !important; }
-      /* Show print-only header */
+      #sidebar, #sidebar-overlay, #sticker-panel,
+      #print-sticker-overlay { display:none !important; }
+      main  { margin-left:0 !important; }
+      header{ display:none !important; }
+      .p-4, .p-8 { padding:0 !important; }
+      /* Show print-only sections */
       .print-header { display:block !important; }
-      /* Table styles for paper */
-      .glass { background:#fff !important; border:none !important;
-               border-radius:0 !important; box-shadow:none !important; }
+      /* Table — clean borders, no colour */
+      .glass { border:none !important; border-radius:0 !important;
+               box-shadow:none !important; }
       .manifest-table { border-collapse:collapse; width:100%; font-size:9pt; }
-      .manifest-table th { background:#f3f4f6 !important; color:#374151 !important;
-        border:1px solid #d1d5db !important; padding:5pt 7pt;
-        font-size:8pt; text-transform:uppercase; letter-spacing:.04em; }
-      .manifest-table td { border:1px solid #e5e7eb !important; padding:5pt 7pt;
-        color:#111 !important; font-size:9pt; }
-      .manifest-table tr:hover td { background:none !important; }
-      .cat-header { background:#ede9fe !important; color:#4c1d95 !important;
-        font-weight:700; font-size:8pt; border:1px solid #c4b5fd !important; }
-      .qty-badge { background:none !important; color:#111 !important;
-        border:1px solid #9ca3af !important; border-radius:4px; }
-      /* Verified column — print only */
+      .manifest-table th { border:1px solid #000 !important; padding:4pt 6pt;
+        font-size:8pt; text-transform:uppercase; letter-spacing:.04em;
+        background:#e5e7eb !important; /* light grey header — prints fine */ }
+      .manifest-table td { border:1px solid #555 !important; padding:4pt 6pt; font-size:9pt; }
+      .cat-header { background:#e5e7eb !important; font-weight:700;
+        font-size:8pt; border:1px solid #000 !important; }
+      .qty-badge  { border:1px solid #000 !important; border-radius:3px;
+        padding:1pt 4pt; font-weight:600; }
+      /* Verified column visible only on paper */
       .col-verify { display:table-cell !important; }
-      /* Force hidden cols to show */
-      .hidden { display:table-cell !important; }
-      /* Avoid page breaks inside rows */
+      /* Force cols hidden by Tailwind's responsive prefix to show */
+      .hidden, [class*="sm:"] { display:table-cell !important; }
       tr { page-break-inside:avoid; }
       .cat-header { page-break-after:avoid; }
     }
@@ -199,8 +198,8 @@ ksort($by_category);
     </div>
     <?php else: ?>
 
-    <!-- Summary stats -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <!-- Summary stats — screen only -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 no-print">
       <div class="glass rounded-xl p-4 text-center">
         <p class="text-2xl font-bold text-white"><?= $total_items ?></p>
         <p class="text-xs text-slate-500 mt-1">Component Types</p>
