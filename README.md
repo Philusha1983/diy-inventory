@@ -76,14 +76,22 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 
 > The app uses a dark glassmorphism aesthetic with an electric purple + cyan gradient palette.
 
-| Page | Description |
-|------|-------------|
-| **Login** | Full-screen dark login with animated logo |
-| **Dashboard** | Stats cards + searchable inventory table (desktop) / card list (mobile) |
-| **Add Component** | Drag-drop AI identify zone + manual form |
-| **Creative Engine** | AI project cards with complexity badges and shopping links |
-| **Lab Assistant** | Full-screen chat with inventory context |
-| **AI Settings** | Provider toggle (Gemini / OpenAI) + API key management |
+> Screenshots taken from a live install with 52 components across 3 storage locations.
+
+### Login
+![Login — dark glassmorphism full-screen gate](docs/screenshots/01_login.png)
+
+### Inventory Dashboard
+![Dashboard — sortable table with stats cards, search, and filter](docs/screenshots/02_dashboard.png)
+
+### Location Manager
+![Locations — storage containers with Manifest, QR, and Label buttons](docs/screenshots/03_locations.png)
+
+### Bulk Import Hub
+![Bulk Import Hub — choose between CSV, ZIP, or Image Wizard](docs/screenshots/04_bulk_import_hub.png)
+
+### Creative Engine
+![Creative Engine — AI-powered project discovery from your inventory](docs/screenshots/05_projects.png)
 
 ---
 
