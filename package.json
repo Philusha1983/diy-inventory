@@ -1,7 +1,7 @@
 {
   "name": "diy-inventory",
   "version": "1.0.0",
-  "description": "> A self-hosted, AI-powered hardware inventory system for makers, hobbyists, and electronics enthusiasts. Track your components, identify parts from photos, and let AI generate project ideas from your actual stock.",
+  "description": "A self-hosted, AI-powered hardware inventory system for makers, hobbyists, and electronics enthusiasts. Track your components, identify parts from photos, and let AI generate project ideas from your actual stock.",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -10,9 +10,13 @@
     "build:css": "tailwindcss -i assets/input.css -o assets/app.css --minify",
     "watch:css": "tailwindcss -i assets/input.css -o assets/app.css --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "diy", "inventory", "makers", "self-hosted", "php",
+    "gemini", "openai", "ai", "electronics", "components",
+    "qr-code", "lab-management", "raspberry-pi", "arduino"
+  ],
+  "author": "Philip Sandler <https://github.com/Philusha1983>",
+  "license": "MIT",
   "devDependencies": {
     "tailwindcss": "^3.4.19"
   }
