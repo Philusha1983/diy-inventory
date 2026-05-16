@@ -57,10 +57,12 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 📦 **Inventory CRUD** | Add, edit, delete components with name, model, category, quantity, condition, specs, location, purchase price, and product/datasheet URLs. |
 | 📸 **Multi-Angle Image Upload** | Upload several photos per component. Images are **automatically resized and compressed** on upload (max 1200px, ~100–200 KB). Two versions are stored: a full-res viewer image and a small thumbnail. Saves ~98% storage vs raw phone photos. |
 | 🤖 **AI Auto-Identify** | Drag-and-drop photos → AI returns a structured JSON with `name`, `model`, `category`, and `specs`. Fields are auto-filled. |
-| 📂 **Bulk Import** | Import an entire folder of subfolders at once. Each subfolder = one item (images + `description.txt` with product name and URL). AI identifies each item from its first photo, processes all images, and inserts into the DB with a live progress log, pause/resume, and automatic rate-limit handling. |
-| 🔍 **Search & Filter** | Full-text search across name, model, specs, and location. Filter by category. |
+| 📂 **Flexible Bulk Import** | Three browser-based import methods — no server access needed: **CSV/Spreadsheet** (auto-maps columns, optional AI enrichment via Product URL), **ZIP upload** (flat ZIP = one component; subfolder ZIP = many components; AI identifies from photos), **Image Group Wizard** (drag photos, declare groups, AI identifies each). |
+| 🏷️ **Location Manager** | Dedicated `locations.php` dashboard groups all components by location. Shows per-location stats, expandable item lists, and generates a **Container QR sticker** (offline-readable) or a full **printable manifest** for each location. |
+| 📄 **QR Code Labels** | Offline-ready QR stickers for individual components (print from item detail or bulk-select on dashboard). QR payload contains Name, Model, Category, Qty, Location as plain text — readable without a network connection. URL appended for one-tap browser open when online. |
+| 🖨️ **Print Manifest** | Per-container A4 printout with all items, quantities, and a **Verified ☐** checkbox column for physical stock audits. Strict black-on-white CSS — works on any B&W printer. |
 | 🔃 **Column Sorting** | Click any column header (Name, Model, Category, Qty, Status, Location) to sort ascending or descending. Active column highlights in purple. Preserves active search and filter. |
-| ☑️ **Bulk Actions** | Select multiple items with checkboxes (per-row + select-all). A floating action bar appears with: **Category change**, **Status change**, **Location change**, **Export CSV**, and **Delete** (with image cleanup). |
+| ☑️ **Bulk Actions** | Select multiple items with checkboxes (per-row + select-all). A floating action bar appears with: **Category change**, **Status change**, **Location change**, **Export CSV**, **Print Labels**, and **Delete** (with image cleanup). |
 | 🔗 **Product Enrichment** | Attach a product URL or datasheet URL to any component. Click "Enrich from Web" to scrape and cache the page content. This documentation is automatically injected into AI prompts for richer, more accurate suggestions. |
 | 💡 **Creative Engine** | Click **Brainstorm Projects** to have the AI analyse your entire inventory and return 5 tailored project ideas with complexity, duration, skill domain, and missing-part shopping links. Results are **cached in the DB** — navigating away and returning shows the last ideas instantly at zero API cost. Click **Regenerate** any time for fresh suggestions. |
 | 📐 **Project Blueprints** | One-click generation of a full technical guide (wiring, BOM, and firmware code) for any suggested project. |
@@ -105,29 +107,36 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 
 ```
 diy-inventory/
-├── index.php              # Login / password gate
-├── dashboard.php          # Main inventory dashboard (sorting, bulk actions)
-├── add_item.php           # Add & edit components (AI identify + AJAX submit + enrichment)
-├── item_details.php       # Single component detail + image gallery + web enrichment
-├── delete_item.php        # Image-aware deletion handler
-├── bulk_action.php        # Bulk operations handler (category/status/location/delete/CSV)
-├── bulk_import.php        # Bulk import UI — scans folder, drives sequential AJAX import
-├── bulk_import_worker.php # Bulk import worker — processes ONE folder per call (AI + GD + DB)
-├── enrich_api.php         # Web scraper — fetches & caches product documentation
-├── projects.php           # Creative Engine — AI project discovery
-├── project_blueprint.php  # AI-generated build guides
-├── chat.php               # Lab Assistant chat UI
-├── chat_api.php           # Chat backend — injects inventory + enrichment context
-├── settings.php           # AI provider + API key configuration UI
-├── identify_api.php       # AI vision endpoint (used by add_item.php)
-├── ai_helper.php          # Central AI proxy — call_ai_api() + enrichment context builder
-├── image_helper.php       # Image processing — imagecreatefromstring, resize full+thumb
-├── db.php                 # PDO database connection (git-ignored, copy from db.php.example)
-├── schema.sql             # Database schema + seed data
-├── php.ini                # PHP upload/memory limits for built-in server
-├── .htaccess              # PHP limits for Apache deployments
-├── uploads/               # Component photos (auto-created, git-ignored)
-└── docs/                  # Original design & phase documentation
+├── index.php                    # Login / password gate
+├── dashboard.php                # Main inventory dashboard (sorting, bulk actions, print labels)
+├── add_item.php                 # Add & edit components (AI identify + AJAX submit + enrichment)
+├── item_details.php             # Single component detail + image gallery + print label button
+├── delete_item.php              # Image-aware deletion handler
+├── bulk_action.php              # Bulk operations handler (category/status/location/delete/CSV)
+├── bulk_import.php              # Bulk Import Hub — choose CSV, ZIP, or Image Wizard
+├── bulk_import_csv.php          # CSV/TSV import — column auto-map + optional URL enrichment
+├── bulk_import_zip.php          # ZIP upload — flat ZIP or subfolder-per-component, AI pipeline
+├── bulk_import_wizard.php       # Image Group Wizard — drag photos, group, AI identify
+├── bulk_import_wizard_worker.php# Wizard AI worker — receives images, calls Gemini, inserts item
+├── bulk_import_worker.php       # Legacy folder worker — processes ONE folder per call
+├── locations.php                # Location Manager — grouped view, QR stickers, manifest links
+├── container_manifest.php       # Per-location manifest — live table + B&W printable sheet
+├── print_labels.php             # Bulk QR label printer — small/medium/large Avery sizes
+├── enrich_api.php               # Web scraper — fetches & caches product documentation
+├── projects.php                 # Creative Engine — AI project discovery (cached in DB)
+├── project_blueprint.php        # AI-generated build guides
+├── chat.php                     # Lab Assistant chat UI
+├── chat_api.php                 # Chat backend — injects inventory + enrichment context
+├── settings.php                 # AI provider + API key configuration UI
+├── identify_api.php             # AI vision endpoint (used by add_item.php)
+├── ai_helper.php                # Central AI proxy — call_ai_api() + enrichment context builder
+├── image_helper.php             # Image processing — imagecreatefromstring, resize full+thumb
+├── db.php                       # PDO database connection (git-ignored, copy from db.php.example)
+├── schema.sql                   # Database schema + seed data
+├── php.ini                      # PHP upload/memory limits for built-in server
+├── .htaccess                    # PHP limits for Apache deployments
+├── uploads/                     # Component photos (auto-created, git-ignored)
+└── docs/                        # Original design & phase documentation
 ```
 
 > **Single-File Mandate:** Every page contains its own HTML, CSS, and JS in one file to keep the architecture slim and portable.
@@ -385,27 +394,58 @@ brew services start mysql
 - Ask anything: *"What can I build with my ESP32 and OLED display?"*, *"Show me all my sensors"*, *"I want to make a gift for my kid"*
 - The assistant has full context of your current inventory
 
-### 5. Bulk-import from a folder
+### 5. Bulk-import components
 
-If you have a folder of product subfolders (e.g. saved from AliExpress/Amazon), the Bulk Import tool can add all of them automatically:
+Open **Bulk Import** from the dashboard header. Three methods are available:
 
-1. Place a folder named **`bulk import`** inside the project directory
-2. Each subfolder = one item and must contain:
-   - `image_01.jpg` … `image_06.jpg` (product photos)
-   - `description.txt` with two lines:
-     ```
-     Product Name : My Component Name
-     Final URL    : https://...product-page-url...
-     ```
-3. Click **"Bulk Import"** in the dashboard header
-4. Adjust the **delay slider** (default 4s → ≤15 RPM stays under Gemini free tier)
-5. Click **▶ Start Import** — a live log shows ✅/⚠️/❌ per item with "View →" links
-6. Use **⏸ Pause / ▶ Resume** at any time; rate-limit errors auto-pause for 30s
+#### 📊 CSV / Spreadsheet Import
+1. Export your parts list from Google Sheets, Excel, Notion, or any tool as a `.csv` file
+2. Upload on the **CSV Import** page — the delimiter is auto-detected
+3. Column headers are auto-mapped (30+ common aliases like `qty`, `part number`, `bin`, `shop url`, etc.)
+4. Adjust any unrecognised columns using the dropdown mapping UI
+5. Optionally check **"Auto-enrich via Product URL"** — inserts items then calls the AI enrichment endpoint for each item that has a URL
+6. Click **Import to Inventory** — results appear with live enrichment status
+
+#### 🗜️ ZIP Upload
+1. Create a ZIP file on your computer
+   - **Flat ZIP** (one component): put all photos directly in the ZIP root → named after the ZIP file
+   - **Subfolder ZIP** (many components): one subfolder per component, each with photos and an optional `description.txt`
+2. Upload on the **ZIP Import** page
+3. The ZIP is extracted and validated (path traversal protection), then the AI import pipeline runs
+
+#### 🧙 Image Group Wizard
+1. Open the **Image Wizard** page
+2. Drag a batch of photos onto the drop zone — each batch becomes one component group
+3. Optionally type a name hint (e.g. "servo motor") to improve AI accuracy — leave blank for full AI identification
+4. Repeat for as many components as needed
+5. Click **"🤖 Import All via AI"** — groups are processed sequentially with a 3s rate-limit buffer
+6. Each card updates live: ⏳ → ✅ with a "View →" link
 
 > [!TIP]
-> Items with AI identification failures are still inserted using the product listing name. You can refine them later via the Edit page or the AI Enrichment button.
+> Items that fail AI identification are still inserted using the folder/ZIP/hint name. Refine them later via the Edit page or the **🌐 Enrich from Web** button.
 
-### 6. Enrich component data from the web
+### 6. Manage locations & generate QR labels
+
+#### Location Manager (`locations.php`)
+- Click **"📍 Locations"** in the dashboard sidebar
+- All components are grouped by their `location` field
+- Each location card shows item count, total units, and category breakdown
+- Click **"🏷️ QR Sticker"** to generate an offline-readable QR code for any container
+- Click **"📄 Manifest"** to open the full container manifest page
+
+#### Container Manifest (`container_manifest.php`)
+- Shows a live table of all items in a location
+- QR payload is **self-contained** (Name / Model / Category / Qty / Location as plain text) — scannable with no network connection
+- URL appended to payload for one-tap browser open when online
+- Click **"🖨️ Print Manifest"** for a clean A4 printout with a **Verified ☐** checkbox column for physical audits
+
+#### Component Labels (`print_labels.php`)
+- On any item detail page, click **"🏷️ Print Label"** for a single label
+- On the dashboard, select multiple items and click **"🏷️ Print Labels"** in the bulk action bar
+- Choose label size: Small (Avery 62×29 mm), Medium (Avery 99×57 mm), Large (Avery 99×93 mm)
+- Labels print with QR code + component name, model, category, qty, and location
+
+### 7. Enrich component data from the web
 
 - Open any component's detail page → click **"🌐 Enrich from Web"**
 - The server fetches and caches plain text from the saved `product_url` / `datasheet_url`
@@ -649,11 +689,11 @@ If you still see no results, check the red error banner that now appears above t
 
 Contributions are welcome! Here are good starting points:
 
-- **Add barcode/QR scanning** — integrate a JS barcode library on the add-item page
 - **Dark/light theme toggle** — extend the existing CSS variables
 - **Multi-user support** — replace the single password with a proper user table
 - **Pagination** — add page controls to the dashboard for very large inventories
 - **Scheduled cron import** — auto-run the bulk importer via cron instead of the browser
+- **Location hierarchy** — nested `Area → Unit → Container` relational structure
 
 Please open an issue to discuss major changes before submitting a PR.
 
