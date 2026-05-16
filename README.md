@@ -90,8 +90,11 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 ### Bulk Import Hub
 ![Bulk Import Hub — choose between CSV, ZIP, or Image Wizard](docs/screenshots/04_bulk_import_hub.png)
 
-### Creative Engine
-![Creative Engine — AI-powered project discovery from your inventory](docs/screenshots/05_projects.png)
+### Creative Engine — Generated Project Ideas
+![Creative Engine — showing an AI-generated project card with components from your lab and shopping links for missing parts](docs/screenshots/05_projects.png)
+
+### Lab Assistant Chat
+![Lab Assistant — inventory-aware chat showing a real conversation with code snippets and step-by-step guidance](docs/screenshots/06_chat.png)
 
 ---
 
