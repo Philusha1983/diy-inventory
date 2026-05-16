@@ -100,6 +100,7 @@ $badge_class = match($item['status']) {
         <span class="<?= $badge_class ?> flex-shrink-0 text-xs px-2.5 py-1 rounded-full font-medium hidden sm:inline"><?= htmlspecialchars($item['status']) ?></span>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
+        <a href="print_labels.php?id=<?= $item['id'] ?>" target="_blank" class="text-xs sm:text-sm text-cyan-400 hover:text-cyan-300 border border-cyan-500/20 hover:border-cyan-500/40 px-2 sm:px-3 py-1.5 rounded-lg transition-all">🏷️ <span class="hidden sm:inline">Print Label</span></a>
         <a href="add_item.php?edit=<?= $item['id'] ?>" class="text-xs sm:text-sm text-purple-400 hover:text-purple-300 border border-purple-500/20 hover:border-purple-500/40 px-2 sm:px-3 py-1.5 rounded-lg transition-all">✏️ <span class="hidden sm:inline">Edit</span></a>
         <a href="delete_item.php?id=<?= $item['id'] ?>" onclick="return confirm('Delete this component and all its images?')" class="text-xs sm:text-sm text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-500/40 px-2 sm:px-3 py-1.5 rounded-lg transition-all">🗑 <span class="hidden sm:inline">Delete</span></a>
       </div>
