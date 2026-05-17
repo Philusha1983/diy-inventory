@@ -68,6 +68,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 📐 **Project Blueprints** | One-click generation of a full technical guide (wiring, BOM, and firmware code) for any suggested project. |
 | 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory — including cached product documentation — and answers questions like "what can I build with my extra LEDs?". |
 | ⚙️ **AI Settings UI** | Switch between **Gemini** and **OpenAI** and save your API key through the web UI — no code editing required. |
+| 🌗 **Light / Dark Theme** | Toggle between dark (default) and light mode via the sidebar switch. Preference is persisted in `localStorage` across sessions and page reloads — survives logout. All colours meet **WCAG 2.1 AA** contrast requirements in both themes. |
 | 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view (with checkboxes for bulk selection), and adaptive layouts for phones and tablets. |
 
 ---
@@ -107,7 +108,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 |-------|-----------|
 | **Backend** | PHP 8.0+ (vanilla, no framework) |
 | **Database** | MySQL 8.0+ / MariaDB |
-| **Frontend** | HTML5, Vanilla JavaScript, Tailwind CSS v3 (pre-built, local) |
+| **Frontend** | HTML5, Vanilla JavaScript, Tailwind CSS v3 (pre-built, local) + custom `assets/app.css` (theme tokens, light-mode overrides, WCAG 2.1 AA contrast) |
 | **Fonts** | Google Fonts — Inter, JetBrains Mono |
 | **Markdown** | marked.js (CDN) — for blueprint rendering |
 | **AI Providers** | Google Gemini 2.5 Flash · OpenAI GPT-4o |
@@ -149,6 +150,8 @@ diy-inventory/
 ├── schema.sql                   # Database schema + seed data
 ├── php.ini                      # PHP upload/memory limits for built-in server
 ├── .htaccess                    # PHP limits for Apache deployments
+├── assets/app.css               # Global stylesheet — Tailwind base + theme tokens + WCAG light-mode overrides
+├── contrast_audit.js            # Dev utility — audits all page colours against WCAG 2.1 AA ratios
 ├── uploads/                     # Component photos (auto-created, git-ignored)
 └── docs/                        # Original design & phase documentation
 ```
@@ -577,6 +580,8 @@ uploads/
 | `schema.sql` | Database schema + seed data for `settings` table |
 | `php.ini` | Raises PHP upload limits (`25M`) for built-in server — pass with `-c php.ini` |
 | `.htaccess` | Same limits for Apache-based deployments |
+| `assets/app.css` | Global stylesheet — Tailwind base, design tokens (`btn-primary`, `btn-secondary`, badge colours), and `html.light` scoped overrides ensuring WCAG 2.1 AA contrast in light mode |
+| `contrast_audit.js` | Dev-only utility — runs in the browser console to measure contrast ratios for all rendered text against WCAG 2.1 AA (4.5:1 normal / 3:1 large text) |
 | `uploads/` | Auto-created directory for component images |
 | `docs/` | Original design documents and phase guides |
 
@@ -703,11 +708,11 @@ If you still see no results, check the red error banner that now appears above t
 
 Contributions are welcome! Here are good starting points:
 
-- **Dark/light theme toggle** — extend the existing CSS variables
 - **Multi-user support** — replace the single password with a proper user table
 - **Pagination** — add page controls to the dashboard for very large inventories
 - **Scheduled cron import** — auto-run the bulk importer via cron instead of the browser
 - **Location hierarchy** — nested `Area → Unit → Container` relational structure
+- **PWA / offline mode** — service worker + IndexedDB cache for mobile-first use
 
 Please open an issue to discuss major changes before submitting a PR.
 
