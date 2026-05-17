@@ -96,6 +96,9 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 ### Lab Assistant Chat
 ![Lab Assistant — inventory-aware chat showing a real conversation with code snippets and step-by-step guidance](docs/screenshots/06_chat.png)
 
+### Item Detail View
+![Item Detail — image gallery, component info panel, and technical specifications for an ESP32-S3 Development Board with LCD](docs/screenshots/07_item_details.png)
+
 ---
 
 ## 🛠 Tech Stack
