@@ -107,7 +107,6 @@ ksort($by_category);
 <div id="sidebar" class="fixed inset-y-0 left-0 w-64 glass border-r border-white/5 flex flex-col z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
   <div class="p-5 border-b border-white/5">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center text-white text-lg">📦</div>
       <?php if (!empty($site_logo_url)): ?>
           <img src="<?= htmlspecialchars($site_logo_url) ?>" alt="Logo" class="w-9 h-9 rounded-lg object-cover flex-shrink-0">
         <?php else: ?>
