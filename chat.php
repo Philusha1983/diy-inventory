@@ -18,6 +18,7 @@ if (!isset($_SESSION['authenticated'])) {
   <meta name="description" content="AI-powered inventory-aware brainstorming assistant for your DIY lab.">
   <link rel="stylesheet" href="assets/app.css">
   <script>if(localStorage.getItem('theme')==='light')document.getElementById('html-root').classList.add('light');</script>
+  <script src="assets/i18n.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -95,7 +96,7 @@ if (!isset($_SESSION['authenticated'])) {
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>
         </div>
-        <div><p class="font-semibold text-white text-sm">DIY Lab</p><p class="text-xs text-slate-500">Inventory System</p></div>
+        <div><p class="font-semibold text-white text-sm" data-i18n-text="nav.brand_name">DIY Lab</p><p class="text-xs text-slate-500" data-i18n-text="nav.brand_sub">Inventory System</p></div>
       </div>
     </div>
     <nav class="flex-1 p-4 space-y-1">
@@ -109,7 +110,7 @@ if (!isset($_SESSION['authenticated'])) {
       <div class="theme-toggle-wrap mb-2" onclick="toggleTheme()" role="button" aria-label="Toggle light mode" title="Toggle light/dark mode">
         <span class="theme-toggle-label">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-          Light Mode
+          <span data-i18n-text="nav.light_mode">Light Mode</span>
         </span>
         <span class="toggle-pill"></span>
       </div>
@@ -135,13 +136,11 @@ if (!isset($_SESSION['authenticated'])) {
           <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-slate-900"></span>
         </div>
         <div>
-          <p class="font-semibold text-white text-sm">Lab Planning Assistant</p>
-          <p class="text-xs text-emerald-400">Online · Inventory-aware</p>
+          <p class="font-semibold text-white text-sm" data-i18n-text="chat.title">Lab Planning Assistant</p>
+          <p class="text-xs text-emerald-400"><span data-i18n-text="chat.online">Online</span> · Inventory-aware</p>
         </div>
       </div>
-      <button onclick="clearChat()" class="text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg">
-        Clear Chat
-      </button>
+        <button onclick="clearChat()" class="text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg" data-i18n-text="chat.clear">Clear Chat</button>
     </div>
 
     <!-- Messages -->
@@ -267,7 +266,8 @@ if (!isset($_SESSION['authenticated'])) {
   }
   function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
   function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
-function toggleTheme(){const h=document.getElementById('html-root');const l=h.classList.toggle('light');localStorage.setItem('theme',l?'light':'dark');}
+  function toggleTheme(){const h=document.getElementById('html-root');const l=h.classList.toggle('light');localStorage.setItem('theme',l?'light':'dark');}
+  localizationController.init();
   </script>
 </body>
 </html>

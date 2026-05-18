@@ -75,8 +75,9 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
   <title>Dashboard — DIY Lab Inventory</title>
   <meta name="description" content="Main control centre for your DIY lab hardware inventory.">
   <link rel="stylesheet" href="assets/app.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>if (localStorage.getItem('theme') === 'light') document.getElementById('html-root').classList.add('light');</script>
+  <script src="assets/i18n.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .glass-card {
       background: rgba(255, 255, 255, .04);
@@ -354,14 +355,14 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
           </svg>
         </div>
         <div>
-          <p class="font-semibold text-white text-sm">DIY Lab</p>
-          <p class="text-xs text-slate-500">Inventory System</p>
+          <p class="font-semibold text-white text-sm" data-i18n-text="nav.brand_name">DIY Lab</p>
+          <p class="text-xs text-slate-500" data-i18n-text="nav.brand_sub">Inventory System</p>
         </div>
       </div>
     </div>
 
     <nav class="flex-1 p-4 space-y-1">
-      <a href="dashboard.php"
+      <a href="dashboard.php" data-i18n="nav.dashboard"
         class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-600/15 text-purple-300 text-sm font-medium">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -369,13 +370,13 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
         </svg>
         Dashboard
       </a>
-      <a href="add_item.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
+      <a href="add_item.php" data-i18n="nav.add_component" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         Add Component
       </a>
-      <a href="locations.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
+      <a href="locations.php" data-i18n="nav.locations" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -383,21 +384,21 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
         </svg>
         Locations
       </a>
-      <a href="projects.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
+      <a href="projects.php" data-i18n="nav.creative_engine" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
         Creative Engine
       </a>
-      <a href="chat.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
+      <a href="chat.php" data-i18n="nav.lab_assistant" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
         </svg>
         Lab Assistant
       </a>
-      <a href="settings.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
+      <a href="settings.php" data-i18n="nav.ai_settings" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -416,7 +417,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
-          Light Mode
+          <span data-i18n-text="nav.light_mode">Light Mode</span>
         </span>
         <span class="toggle-pill" id="toggle-pill"></span>
       </div>
@@ -432,7 +433,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
         </svg>
-        Logout
+        <span data-i18n-text="nav.logout">Logout</span>
       </a>
     </div>
   </div>
@@ -460,7 +461,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
           </svg>
         </button>
         <div class="min-w-0">
-          <h1 class="text-lg lg:text-xl font-bold text-white truncate">Inventory Dashboard</h1>
+          <h1 class="text-lg lg:text-xl font-bold text-white truncate" data-i18n-text="dashboard.title">Inventory Dashboard</h1>
           <p class="text-xs text-slate-500 mt-0.5"><?= $total_items ?> components &middot; <?= $total_qty ?> units</p>
         </div>
       </div>
@@ -473,14 +474,14 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
           </svg>
-          <span class="hidden sm:inline">Bulk Import</span>
+          <span class="hidden sm:inline" data-i18n-text="nav.bulk_import">Bulk Import</span>
         </a>
         <a href="add_item.php"
           class="btn-primary flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg shadow-purple-900/30">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
           </svg>
-          <span class="hidden sm:inline">Add Component</span><span class="sm:hidden">Add</span>
+          <span class="hidden sm:inline" data-i18n-text="nav.add_component">Add Component</span><span class="sm:hidden" data-i18n-text="common.add">Add</span>
         </a>
       </div>
     </header>
@@ -508,19 +509,19 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       <!-- Stats Row -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="stat-card purple">
-          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Component Types</p>
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1" data-i18n-text="dashboard.stat_component_types">Component Types</p>
           <p class="text-3xl font-bold text-white"><?= $total_items ?></p>
-          <p class="text-xs text-purple-400 mt-1">unique parts</p>
+          <p class="text-xs text-purple-400 mt-1" data-i18n-text="dashboard.stat_unique_parts">unique parts</p>
         </div>
         <div class="stat-card cyan">
-          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Total Units</p>
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1" data-i18n-text="dashboard.stat_total_units">Total Units</p>
           <p class="text-3xl font-bold text-white"><?= $total_qty ?></p>
-          <p class="text-xs text-cyan-400 mt-1">across all items</p>
+          <p class="text-xs text-cyan-400 mt-1" data-i18n-text="dashboard.stat_across_all">across all items</p>
         </div>
         <div class="stat-card emerald">
-          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Categories</p>
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1" data-i18n-text="dashboard.stat_categories">Categories</p>
           <p class="text-3xl font-bold text-white"><?= $total_cats ?></p>
-          <p class="text-xs text-emerald-400 mt-1">component groups</p>
+          <p class="text-xs text-emerald-400 mt-1" data-i18n-text="dashboard.stat_component_groups">component groups</p>
         </div>
       </div>
 
@@ -533,19 +534,19 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input type="text" name="q" id="search-input" value="<?= htmlspecialchars($search) ?>"
-            placeholder="Search name, model, location…" class="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm">
+            data-i18n-placeholder="dashboard.search_placeholder" placeholder="Search name, model, location…" class="input-field w-full rounded-xl pl-10 pr-4 py-2.5 text-sm">
         </div>
         <div class="flex gap-3">
           <select name="cat" id="cat-filter"
             class="input-field flex-1 sm:flex-none rounded-xl px-4 py-2.5 text-sm sm:min-w-[150px]">
-            <option value="">All Categories</option>
+            <option value="" data-i18n-text="dashboard.all_categories">All Categories</option>
             <?php foreach ($cats as $c): ?>
               <option value="<?= htmlspecialchars($c) ?>" <?= $cat_filter === $c ? 'selected' : '' ?>>
                 <?= htmlspecialchars($c) ?></option>
             <?php endforeach; ?>
           </select>
           <button type="submit"
-            class="btn-primary px-4 py-2.5 rounded-xl text-sm font-medium text-white">Filter</button>
+            class="btn-primary px-4 py-2.5 rounded-xl text-sm font-medium text-white" data-i18n-text="common.filter">Filter</button>
           <?php if ($search || $cat_filter): ?>
             <a href="dashboard.php"
               class="px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all">Clear</a>
@@ -814,6 +815,8 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       const isLight = html.classList.toggle('light');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
+    // ── i18n ──────────────────────────────────────────────────────────────
+    localizationController.init();
 
     // ── Toast auto-dismiss ────────────────────────────────────────────────
     const toastEl = document.getElementById('toast');

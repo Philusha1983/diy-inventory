@@ -181,6 +181,7 @@ ob_end_flush();
   <meta name="description" content="AI-powered project discovery based on your current component inventory.">
   <link rel="stylesheet" href="assets/app.css">
   <script>if(localStorage.getItem('theme')==='light')document.getElementById('html-root').classList.add('light');</script>
+  <script src="assets/i18n.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .project-card {
@@ -229,7 +230,7 @@ ob_end_flush();
 <div id="loading-overlay">
   <div class="spinner-ring"></div>
   <div>
-    <p class="text-white font-semibold text-center mb-1">Analysing your inventory…</p>
+    <p class="text-white font-semibold text-center mb-1" data-i18n-text="projects.loading">Analysing your inventory…</p>
     <p class="text-slate-400 text-sm text-center">This takes 15–40 seconds</p>
   </div>
   <div class="loading-dots"><span></span><span></span><span></span></div>
@@ -242,7 +243,7 @@ ob_end_flush();
       <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>
       </div>
-      <div><p class="font-semibold text-white text-sm">DIY Lab</p><p class="text-xs text-slate-500">Inventory System</p></div>
+      <div><p class="font-semibold text-white text-sm" data-i18n-text="nav.brand_name">DIY Lab</p><p class="text-xs text-slate-500" data-i18n-text="nav.brand_sub">Inventory System</p></div>
     </div>
   </div>
   <nav class="flex-1 p-4 space-y-1">
@@ -274,8 +275,8 @@ ob_end_flush();
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div>
-        <h1 class="text-lg lg:text-xl font-bold text-white">Creative Engine</h1>
-        <p class="text-xs text-slate-500 mt-0.5">AI-powered project discovery from your inventory</p>
+        <h1 class="text-lg lg:text-xl font-bold text-white" data-i18n-text="projects.title">Creative Engine</h1>
+        <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="projects.subtitle">AI-powered project discovery from your inventory</p>
       </div>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
@@ -441,6 +442,7 @@ function renderProjects(projects, provider, fromCache = false) {
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
 function toggleTheme(){const h=document.getElementById('html-root');const l=h.classList.toggle('light');localStorage.setItem('theme',l?'light':'dark');}
+localizationController.init();
 </script>
 </body>
 </html>
