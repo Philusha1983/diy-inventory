@@ -79,15 +79,15 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 
 ## 📸 Screenshots
 
-> The app uses a dark glassmorphism aesthetic with an electric purple + cyan gradient palette.
+> The app uses a dark glassmorphism aesthetic with an electric purple + cyan gradient palette. A light mode is also available via the sidebar toggle.
 
-> Screenshots taken from a live install with 52 components across 3 storage locations.
+> Screenshots taken from a live install. Lab name, logo, and tagline are fully customisable via User Settings.
 
 ### Login
-![Login — dark glassmorphism full-screen gate](docs/screenshots/01_login.png)
+![Login — dynamic lab name and custom logo shown on the login gate](docs/screenshots/01_login.png)
 
 ### Inventory Dashboard
-![Dashboard — sortable table with stats cards, search, and filter](docs/screenshots/02_dashboard.png)
+![Dashboard — sortable table with stats cards, search, filter, and RTL Hebrew i18n active](docs/screenshots/02_dashboard.png)
 
 ### Location Manager
 ![Locations — storage containers with Manifest, QR, and Label buttons](docs/screenshots/03_locations.png)
@@ -102,7 +102,10 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 ![Lab Assistant — inventory-aware chat showing a real conversation with code snippets and step-by-step guidance](docs/screenshots/06_chat.png)
 
 ### Item Detail View
-![Item Detail — image gallery, component info panel, and technical specifications for an ESP32-S3 Development Board with LCD](docs/screenshots/07_item_details.png)
+![Item Detail — image gallery, component info panel, and technical specifications](docs/screenshots/07_item_details.png)
+
+### User Settings
+![User Settings — logo upload drop zone with current logo preview, Lab Name, Tag Line, Change Password, and AI configuration sections](docs/screenshots/08_user_settings.png)
 
 ---
 
@@ -517,6 +520,16 @@ The app is fully responsive and optimised for phones and tablets:
 - All forms stack to **single-column layouts** on small screens
 - The **chat interface** fills the full viewport on mobile
 - Headers show abbreviated labels (e.g., "Add" instead of "Add Component") to save space
+
+### Mobile Screenshots (390 × 844 — iPhone 14)
+
+| Dashboard | Item Detail |
+|:---------:|:-----------:|
+| ![Dashboard mobile — stat cards stacked, hamburger menu, component card list](docs/screenshots/mobile_01_dashboard.png) | ![Item Detail mobile — full-width image gallery, component info below](docs/screenshots/mobile_02_item_detail.png) |
+
+| Location Manager | User Settings |
+|:----------------:|:-------------:|
+| ![Locations mobile — location cards with QR and label buttons](docs/screenshots/mobile_03_locations.png) | ![User Settings mobile — logo drop zone, lab name, and tag line fields stacked](docs/screenshots/mobile_04_user_settings.png) |
 
 ---
 
