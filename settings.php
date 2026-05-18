@@ -182,115 +182,28 @@ $has_key          = !empty($settings['api_key']);
       </div>
       <?php endif; ?>
 
-      <!-- Status badge -->
-      <div class="glass rounded-2xl p-5 mb-6 flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-white">API Status</p>
-          <p class="text-xs text-slate-500 mt-0.5">
-            Provider: <span class="text-slate-300"><?= ucfirst($current_provider) ?></span>
-          </p>
-        </div>
-        <?php if ($has_key): ?>
-        <span class="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> API Key Saved
-        </span>
-        <?php else: ?>
-        <span class="flex items-center gap-1.5 text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-full">
-          <span class="w-2 h-2 rounded-full bg-red-400"></span> No API Key
-        </span>
-        <?php endif; ?>
-      </div>
-
-      <form method="POST" class="glass rounded-2xl p-6 space-y-6">
-        <input type="hidden" name="action" value="save_config">
-
-        <!-- Language Selection -->
-        <div>
-          <label class="form-label" data-i18n-text="settings.lang_section">Language</label>
-          <div class="relative">
-            <select id="lang-select"
-              class="input-field w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer"
-              onchange="localizationController.loadLocale(this.value)">
-              <option value="en">🇬🇧 English</option>
-              <option value="he">🇮🇱 עברית (Hebrew)</option>
-              <option value="es">🇪🇸 Español (Spanish)</option>
-            </select>
-            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      <!-- 1. Language -->
+      <div class="glass rounded-2xl p-6 mb-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+            </svg>
           </div>
-          <p class="text-xs text-slate-600 mt-1.5">Changes apply instantly and persist across sessions.</p>
-        </div>
-
-        <!-- Provider selection -->
-        <div>
-          <label class="form-label" data-i18n-text="settings.ai_provider">AI Provider</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="provider-cards">
-            <label class="provider-card <?= $current_provider === 'gemini' ? 'selected' : '' ?>" data-provider="gemini">
-              <input type="radio" name="ai_provider" value="gemini" <?= $current_provider === 'gemini' ? 'checked' : '' ?> class="hidden">
-              <div class="flex items-center gap-3 mb-2">
-                <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                  <span class="text-lg">G</span>
-                </div>
-                <div>
-                  <p class="font-semibold text-white text-sm">Gemini</p>
-                  <p class="text-xs text-slate-500">Google</p>
-                </div>
-              </div>
-              <p class="text-xs text-slate-500">gemini-1.5-flash — Vision + text</p>
-            </label>
-            <label class="provider-card <?= $current_provider === 'openai' ? 'selected' : '' ?>" data-provider="openai">
-              <input type="radio" name="ai_provider" value="openai" <?= $current_provider === 'openai' ? 'checked' : '' ?> class="hidden">
-              <div class="flex items-center gap-3 mb-2">
-                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                  <span class="text-lg">⊕</span>
-                </div>
-                <div>
-                  <p class="font-semibold text-white text-sm">OpenAI</p>
-                  <p class="text-xs text-slate-500">GPT-4o</p>
-                </div>
-              </div>
-              <p class="text-xs text-slate-500">gpt-4o — Vision + text</p>
-            </label>
+          <div>
+            <p class="text-sm font-semibold text-white" data-i18n-text="settings.lang_section">Language</p>
+            <p class="text-xs text-slate-500 mt-0.5">Interface language — changes apply instantly</p>
           </div>
         </div>
-
-        <!-- API Key -->
-        <div>
-          <label for="api_key" class="form-label" data-i18n-text="settings.api_key_label">API Key</label>
-          <div class="relative">
-            <input type="password" id="api_key" name="api_key"
-              placeholder="<?= $has_key ? '●●●●●●●●●●●● (key saved — re-enter to change)' : 'Enter your API key…' ?>"
-              autocomplete="off"
-              class="input-field w-full rounded-xl px-4 py-3 pr-12 text-sm font-mono">
-            <button type="button" id="toggle-key" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors" aria-label="Toggle API key visibility">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            </button>
-          </div>
-          <p class="text-xs text-slate-600 mt-1.5">Key is stored in your database, not in code. Leave blank to keep existing key.</p>
-        </div>
-
-        <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
-          💾 <span data-i18n-text="settings.save_config">Save Configuration</span>
-        </button>
-      </form>
-
-      <!-- Help -->
-      <div class="glass rounded-2xl p-5 mt-6 space-y-3">
-        <h3 class="text-sm font-semibold text-white" data-i18n-text="settings.where_to_get_key">Where to get your API key</h3>
-        <div class="space-y-2 text-sm">
-          <div class="flex items-center gap-3">
-            <span class="text-blue-400 font-medium w-16">Gemini</span>
-            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
-               class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
-              aistudio.google.com/app/apikey &rarr;
-            </a>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-emerald-400 font-medium w-16">OpenAI</span>
-            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener"
-               class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
-              platform.openai.com/api-keys &rarr;
-            </a>
-          </div>
+        <div class="relative">
+          <select id="lang-select"
+            class="input-field w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer"
+            onchange="localizationController.loadLocale(this.value)">
+            <option value="en">🇬🇧 English</option>
+            <option value="he">🇮🇱 עברית (Hebrew)</option>
+            <option value="es">🇪🇸 Español (Spanish)</option>
+          </select>
+          <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
       </div>
 
@@ -482,6 +395,108 @@ $has_key          = !empty($settings['api_key']);
         </form>
       </div>
 
+
+      <!-- 4. AI Configuration -->
+      <div class="glass rounded-2xl p-6 mt-6">
+        <div class="flex items-center justify-between gap-3 mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white" data-i18n-text="settings.page_title">AI Configuration</p>
+              <p class="text-xs text-slate-500 mt-0.5">Provider: <span class="text-slate-300"><?= ucfirst($current_provider) ?></span></p>
+            </div>
+          </div>
+          <?php if ($has_key): ?>
+          <span class="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full flex-shrink-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> API Key Saved
+          </span>
+          <?php else: ?>
+          <span class="flex items-center gap-1.5 text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-full flex-shrink-0">
+            <span class="w-2 h-2 rounded-full bg-red-400"></span> No API Key
+          </span>
+          <?php endif; ?>
+        </div>
+
+        <form method="POST" class="space-y-6">
+          <input type="hidden" name="action" value="save_config">
+        <!-- Provider selection -->
+        <div>
+          <label class="form-label" data-i18n-text="settings.ai_provider">AI Provider</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="provider-cards">
+            <label class="provider-card <?= $current_provider === 'gemini' ? 'selected' : '' ?>" data-provider="gemini">
+              <input type="radio" name="ai_provider" value="gemini" <?= $current_provider === 'gemini' ? 'checked' : '' ?> class="hidden">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                  <span class="text-lg">G</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-white text-sm">Gemini</p>
+                  <p class="text-xs text-slate-500">Google</p>
+                </div>
+              </div>
+              <p class="text-xs text-slate-500">gemini-1.5-flash — Vision + text</p>
+            </label>
+            <label class="provider-card <?= $current_provider === 'openai' ? 'selected' : '' ?>" data-provider="openai">
+              <input type="radio" name="ai_provider" value="openai" <?= $current_provider === 'openai' ? 'checked' : '' ?> class="hidden">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <span class="text-lg">⊕</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-white text-sm">OpenAI</p>
+                  <p class="text-xs text-slate-500">GPT-4o</p>
+                </div>
+              </div>
+              <p class="text-xs text-slate-500">gpt-4o — Vision + text</p>
+            </label>
+          </div>
+        </div>
+
+        <!-- API Key -->
+        <div>
+          <label for="api_key" class="form-label" data-i18n-text="settings.api_key_label">API Key</label>
+          <div class="relative">
+            <input type="password" id="api_key" name="api_key"
+              placeholder="<?= $has_key ? '●●●●●●●●●●●● (key saved — re-enter to change)' : 'Enter your API key…' ?>"
+              autocomplete="off"
+              class="input-field w-full rounded-xl px-4 py-3 pr-12 text-sm font-mono">
+            <button type="button" id="toggle-key" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors" aria-label="Toggle API key visibility">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
+          </div>
+          <p class="text-xs text-slate-600 mt-1.5">Key is stored in your database, not in code. Leave blank to keep existing key.</p>
+        </div>
+
+        <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
+          💾 <span data-i18n-text="settings.save_config">Save Configuration</span>
+        </button>
+      </form>
+
+        </form>
+
+        <!-- Where to get your API key -->
+        <div class="mt-5 pt-5 border-t border-white/5 space-y-2">
+          <p class="text-xs font-semibold text-slate-400" data-i18n-text="settings.where_to_get_key">Where to get your API key</p>
+          <div class="flex items-center gap-3">
+            <span class="text-blue-400 font-medium text-xs w-16">Gemini</span>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+               class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
+              aistudio.google.com/app/apikey &rarr;
+            </a>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-emerald-400 font-medium text-xs w-16">OpenAI</span>
+            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener"
+               class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
+              platform.openai.com/api-keys &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
