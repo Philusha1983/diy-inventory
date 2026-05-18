@@ -63,6 +63,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $lab_tagline      = trim($_POST['lab_tagline'] ?? 'Inventory & AI Orchestrator');
     $lab_mini_tagline = trim($_POST['lab_mini_tagline'] ?? 'Inventory System');
     $lab_logo_url     = trim($_POST['lab_logo_url'] ?? '');
+
+    // ── Handle logo file upload (overrides URL field if a file was chosen) ────
+    if (!empty($_FILES['lab_logo_file']['tmp_name']) && $_FILES['lab_logo_file']['error'] === UPLOAD_ERR_OK) {
+        $file     = $_FILES['lab_logo_file'];
+        $allowed  = ['image/jpeg','image/png','image/webp','image/gif'];
+        $mime     = mime_content_type($file['tmp_name']);
+
+        if (!in_array($mime, $allowed, true)) {
+            $message = 'Logo upload failed: only JPEG, PNG, WebP, or GIF images are allowed.';
+            goto skip_personalization_save;
+        }
+        if ($file['size'] > 5 * 1024 * 1024) {
+            $message = 'Logo upload failed: file must be under 5 MB.';
+            goto skip_personalization_save;
+        }
+
+        @ini_set('memory_limit', '256M');
+        $raw = @file_get_contents($file['tmp_name']);
+        $src = @imagecreatefromstring($raw);
+        if (!$src) {
+            $message = 'Logo upload failed: could not decode image.';
+            goto skip_personalization_save;
+        }
+
+        // Crop to square (centre crop), then resize to 256×256
+        $orig_w = imagesx($src);
+        $orig_h = imagesy($src);
+        $side   = min($orig_w, $orig_h);
+        $off_x  = (int)(($orig_w - $side) / 2);
+        $off_y  = (int)(($orig_h - $side) / 2);
+
+        $square = imagecreatetruecolor(256, 256);
+        imagealphablending($square, false);
+        imagesavealpha($square, true);
+        $white = imagecolorallocate($square, 255, 255, 255);
+        imagefill($square, 0, 0, $white);
+        imagecopyresampled($square, $src, 0, 0, $off_x, $off_y, 256, 256, $side, $side);
+
+        $logo_dir = 'uploads/logo/';
+        if (!is_dir($logo_dir)) mkdir($logo_dir, 0755, true);
+
+        // Delete previous uploaded logo if it exists
+        $prev = $settings['lab_logo_url'] ?? '';
+        if ($prev && str_starts_with($prev, 'uploads/logo/') && file_exists($prev)) {
+            @unlink($prev);
+        }
+
+        $dest = $logo_dir . 'logo_' . time() . '.jpg';
+        imagejpeg($square, $dest, 90);
+        $lab_logo_url = $dest;  // store relative path
+    }
+
+    // ── Handle "Remove logo" request ──────────────────────────────────────────
+    if (!empty($_POST['remove_logo'])) {
+        $prev = $settings['lab_logo_url'] ?? '';
+        if ($prev && str_starts_with($prev, 'uploads/logo/') && file_exists($prev)) {
+            @unlink($prev);
+        }
+        $lab_logo_url = '';
+    }
+
     foreach ([
         'lab_name'         => $lab_name,
         'lab_tagline'      => $lab_tagline,
@@ -73,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             ->execute([$key, $val, $val]);
     }
     $message = 'Personalization saved!';
+    skip_personalization_save:
 }
 
 // Fetch current settings
@@ -222,30 +284,77 @@ $has_key          = !empty($settings['api_key']);
           </div>
         </div>
 
-        <form method="POST" class="space-y-5" id="form-personalization">
+        <form method="POST" enctype="multipart/form-data" class="space-y-5" id="form-personalization">
           <input type="hidden" name="action" value="save_personalization">
+          <input type="hidden" name="remove_logo" id="remove_logo_flag" value="">
 
-          <!-- Logo URL -->
+          <!-- ── Logo Upload ─────────────────────────────────────────── -->
           <div>
-            <label for="lab_logo_url" class="form-label">Logo URL
-              <span class="text-slate-600 font-normal ml-1">(optional — leave blank for default icon)</span>
-            </label>
-            <div class="flex items-center gap-3">
-              <!-- Live preview -->
-              <div id="logo-preview-wrap" class="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden border border-white/10 bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
-                <?php if (!empty($settings['lab_logo_url'])): ?>
-                  <img id="logo-preview-img" src="<?= htmlspecialchars($settings['lab_logo_url']) ?>" alt="Logo" class="w-full h-full object-cover">
-                <?php else: ?>
-                  <svg id="logo-preview-svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>
+            <label class="form-label">Lab Logo</label>
+
+            <!-- Current logo + remove -->
+            <?php $cur_logo = $settings['lab_logo_url'] ?? ''; ?>
+            <div id="logo-current-wrap" class="<?= empty($cur_logo) ? 'hidden' : '' ?> mb-3 flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/8">
+              <div id="logo-current-thumb" class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
+                <?php if (!empty($cur_logo)): ?>
+                  <img id="logo-current-img" src="<?= htmlspecialchars($cur_logo) ?>" alt="Current logo" class="w-full h-full object-cover">
                 <?php endif; ?>
               </div>
-              <input type="url" id="lab_logo_url" name="lab_logo_url"
-                value="<?= htmlspecialchars($settings['lab_logo_url'] ?? '') ?>"
-                placeholder="https://example.com/logo.png"
-                class="input-field flex-1 rounded-xl px-4 py-3 text-sm"
-                oninput="previewLogo(this.value)">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-white">Current logo</p>
+                <p class="text-xs text-slate-500 truncate mt-0.5"><?= htmlspecialchars(basename($cur_logo)) ?></p>
+              </div>
+              <button type="button" id="btn-remove-logo"
+                onclick="removeLogo()"
+                class="flex-shrink-0 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/60 px-3 py-1.5 rounded-lg transition-all">
+                🗑️ Remove
+              </button>
             </div>
-            <p class="text-xs text-slate-600 mt-1.5">Displayed in the sidebar and login screen. Recommended: square image, at least 80×80 px.</p>
+
+            <!-- Drop zone -->
+            <div id="logo-dropzone"
+              class="relative flex flex-col items-center justify-center gap-2 border-2 border-dashed border-white/15 rounded-xl p-6 cursor-pointer transition-all duration-200 hover:border-purple-500/60 hover:bg-purple-500/5"
+              onclick="document.getElementById('lab_logo_file').click()"
+              ondragover="event.preventDefault();this.classList.add('border-purple-500/70','bg-purple-500/8')"
+              ondragleave="this.classList.remove('border-purple-500/70','bg-purple-500/8')"
+              ondrop="handleLogoDrop(event)">
+              <!-- Preview inside dropzone (shown after file pick) -->
+              <div id="dz-preview" class="hidden flex-col items-center gap-2">
+                <img id="dz-preview-img" src="" alt="Preview" class="w-20 h-20 rounded-xl object-cover border border-white/15 shadow-lg">
+                <p id="dz-preview-name" class="text-xs text-slate-400 max-w-full truncate"></p>
+              </div>
+              <!-- Placeholder (hidden when preview shown) -->
+              <div id="dz-placeholder" class="flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <p class="text-sm text-slate-400">Drop an image or <span class="text-purple-400 font-medium">click to browse</span></p>
+                <p class="text-xs text-slate-600">JPEG · PNG · WebP · GIF &mdash; max 5 MB &mdash; auto-cropped to square</p>
+              </div>
+              <input type="file" id="lab_logo_file" name="lab_logo_file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                class="hidden" onchange="handleLogoFile(this.files[0])">
+            </div>
+
+            <!-- URL fallback (collapsed by default) -->
+            <div class="mt-2">
+              <button type="button" id="btn-toggle-url"
+                class="text-xs text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1"
+                onclick="toggleLogoUrl()">
+                <svg id="url-chevron" class="w-3 h-3 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                Or paste an image URL instead
+              </button>
+              <div id="logo-url-row" class="hidden mt-2">
+                <input type="url" id="lab_logo_url" name="lab_logo_url"
+                  value="<?= htmlspecialchars($cur_logo) ?>"
+                  placeholder="https://example.com/logo.png"
+                  class="input-field w-full rounded-xl px-4 py-3 text-sm"
+                  oninput="previewLogoUrl(this.value)">
+                <p class="text-xs text-slate-600 mt-1">Paste a direct image URL. Uploading a file above takes priority over this field.</p>
+              </div>
+            </div>
           </div>
 
           <!-- Lab Name -->
@@ -542,17 +651,84 @@ $has_key          = !empty($settings['api_key']);
       hint.className = 'text-xs mt-1.5 text-red-400';
     }
   }
-  // Live logo URL preview
-  function previewLogo(url) {
-    const wrap = document.getElementById('logo-preview-wrap');
+  // ── Logo upload helpers ────────────────────────────────────────────────
+  function handleLogoFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img   = document.getElementById('dz-preview-img');
+      const name  = document.getElementById('dz-preview-name');
+      const prev  = document.getElementById('dz-preview');
+      const place = document.getElementById('dz-placeholder');
+      img.src = e.target.result;
+      name.textContent = file.name;
+      prev.classList.remove('hidden');
+      prev.classList.add('flex');
+      place.classList.add('hidden');
+      // Clear URL field so the file takes priority
+      const urlField = document.getElementById('lab_logo_url');
+      if (urlField) urlField.value = '';
+      // Cancel any remove_logo flag
+      document.getElementById('remove_logo_flag').value = '';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleLogoDrop(e) {
+    e.preventDefault();
+    const dz = document.getElementById('logo-dropzone');
+    dz.classList.remove('border-purple-500/70','bg-purple-500/8');
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    // Feed the file into the hidden input so it submits with the form
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    document.getElementById('lab_logo_file').files = dt.files;
+    handleLogoFile(file);
+  }
+
+  function toggleLogoUrl() {
+    const row     = document.getElementById('logo-url-row');
+    const chevron = document.getElementById('url-chevron');
+    const hidden  = row.classList.toggle('hidden');
+    chevron.style.transform = hidden ? '' : 'rotate(90deg)';
+  }
+
+  function previewLogoUrl(url) {
+    // When URL is typed, show it in the dropzone preview
     if (!url) {
-      wrap.innerHTML = '<svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>';
-      return;
+      resetDzPreview(); return;
     }
     const img = new Image();
-    img.onload  = () => { wrap.innerHTML = `<img src="${url}" class="w-full h-full object-cover" alt="Logo">`; };
-    img.onerror = () => { wrap.innerHTML = '<svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>'; };
+    img.onload = () => {
+      document.getElementById('dz-preview-img').src = url;
+      document.getElementById('dz-preview-name').textContent = url;
+      document.getElementById('dz-preview').classList.remove('hidden');
+      document.getElementById('dz-preview').classList.add('flex');
+      document.getElementById('dz-placeholder').classList.add('hidden');
+    };
+    img.onerror = () => resetDzPreview();
     img.src = url;
+  }
+
+  function resetDzPreview() {
+    document.getElementById('dz-preview').classList.add('hidden');
+    document.getElementById('dz-preview').classList.remove('flex');
+    document.getElementById('dz-placeholder').classList.remove('hidden');
+  }
+
+  function removeLogo() {
+    document.getElementById('remove_logo_flag').value = '1';
+    // Clear the file input
+    const fi = document.getElementById('lab_logo_file');
+    fi.value = '';
+    // Clear the URL input
+    const urlField = document.getElementById('lab_logo_url');
+    if (urlField) urlField.value = '';
+    // Hide the current logo strip
+    document.getElementById('logo-current-wrap').classList.add('hidden');
+    // Reset dropzone to placeholder
+    resetDzPreview();
   }
   function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
   function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}

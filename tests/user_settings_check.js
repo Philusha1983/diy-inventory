@@ -19,6 +19,11 @@
  * 14.  Auto-migration: lab_password seed in settings.php
  * 15.  HTTP smoke test — server responds on port 8080
  * 16.  HTTP smoke test — settings.php accessible (with session — expect redirect or 200)
+ * 17.  Logo upload — form is multipart/form-data
+ * 18.  Logo upload — file input + remove_logo hidden field present
+ * 19.  Logo upload — PHP upload handler validates MIME, size, and processes with GD
+ * 20.  Logo upload — saves to uploads/logo/, stores path in lab_logo_url
+ * 21.  Logo upload — URL fallback field retained; JS helpers present
  * 17.  No residual hardcoded "AI Settings" text in sidebar link text
  * 18.  settings.php page title tag says "User Settings"
  *
@@ -328,8 +333,162 @@ if (settingsSrc) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-section('15–16. HTTP smoke tests (server on :8080)');
+section('17. Logo upload — form enctype is multipart/form-data');
 
+if (settingsSrc) {
+  settingsSrc.includes('enctype="multipart/form-data"') &&
+  settingsSrc.includes('id="form-personalization"')
+    ? pass('settings.php — personalization form has enctype="multipart/form-data"')
+    : fail('settings.php', 'Missing enctype="multipart/form-data" on personalization form');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+section('18. Logo upload — file input + remove_logo hidden field');
+
+if (settingsSrc) {
+  settingsSrc.includes('name="lab_logo_file"') &&
+  settingsSrc.includes('type="file"')
+    ? pass('settings.php — file input name="lab_logo_file" present')
+    : fail('settings.php', 'Missing <input type="file" name="lab_logo_file">');
+
+  settingsSrc.includes('name="remove_logo"') &&
+  settingsSrc.includes('id="remove_logo_flag"')
+    ? pass('settings.php — hidden remove_logo field present')
+    : fail('settings.php', 'Missing hidden input name="remove_logo"');
+
+  settingsSrc.includes('id="logo-dropzone"')
+    ? pass('settings.php — drop zone element (#logo-dropzone) present')
+    : fail('settings.php', 'Missing drop zone div id="logo-dropzone"');
+
+  settingsSrc.includes('id="logo-current-wrap"')
+    ? pass('settings.php — current logo strip (#logo-current-wrap) present')
+    : fail('settings.php', 'Missing current logo strip id="logo-current-wrap"');
+
+  settingsSrc.includes('btn-remove-logo')
+    ? pass('settings.php — Remove logo button present')
+    : fail('settings.php', 'Missing remove logo button');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+section('19. Logo upload — PHP handler: MIME check, size limit, GD processing');
+
+if (settingsSrc) {
+  settingsSrc.includes('lab_logo_file') &&
+  settingsSrc.includes('UPLOAD_ERR_OK')
+    ? pass('settings.php — upload error check (UPLOAD_ERR_OK) present')
+    : fail('settings.php', 'Missing UPLOAD_ERR_OK check in upload handler');
+
+  settingsSrc.includes('mime_content_type(')
+    ? pass('settings.php — MIME type validation via mime_content_type()')
+    : fail('settings.php', 'Missing MIME type validation');
+
+  settingsSrc.includes('5 * 1024 * 1024')
+    ? pass('settings.php — 5 MB file size limit enforced')
+    : fail('settings.php', 'Missing 5 MB file size limit check');
+
+  settingsSrc.includes('imagecreatefromstring(')
+    ? pass('settings.php — GD imagecreatefromstring() used for decode')
+    : fail('settings.php', 'Missing imagecreatefromstring() — GD decode not present');
+
+  settingsSrc.includes('imagecopyresampled(')
+    ? pass('settings.php — imagecopyresampled() used for resize')
+    : fail('settings.php', 'Missing imagecopyresampled() — resize not present');
+
+  settingsSrc.includes('imagejpeg(')
+    ? pass('settings.php — imagejpeg() used to save output')
+    : fail('settings.php', 'Missing imagejpeg() — JPEG save not present');
+
+  // Centre-crop logic
+  settingsSrc.includes('$side   = min($orig_w, $orig_h)')
+    ? pass('settings.php — centre-crop to square logic present')
+    : fail('settings.php', 'Missing centre-crop square logic');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+section('20. Logo upload — saves to uploads/logo/ and cleans up old file');
+
+if (settingsSrc) {
+  settingsSrc.includes("'uploads/logo/'")
+    ? pass("settings.php — saves logo to 'uploads/logo/' directory")
+    : fail('settings.php', "Missing 'uploads/logo/' save path");
+
+  settingsSrc.includes("'logo_' . time()")
+    ? pass('settings.php — timestamped filename (logo_<timestamp>.jpg)')
+    : fail('settings.php', "Missing timestamped filename pattern 'logo_' . time()");
+
+  settingsSrc.includes('str_starts_with($prev, \'uploads/logo/\')') &&
+  settingsSrc.includes('@unlink(')
+    ? pass('settings.php — old logo file deleted before saving new one')
+    : fail('settings.php', 'Missing old logo cleanup (unlink)');
+
+  settingsSrc.includes('goto skip_personalization_save')
+    ? pass('settings.php — goto label used for clean error exit on upload failure')
+    : fail('settings.php', 'Missing goto skip_personalization_save error-exit pattern');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+section('21. Logo upload — URL fallback retained; JS helpers present');
+
+if (settingsSrc) {
+  settingsSrc.includes('name="lab_logo_url"')
+    ? pass('settings.php — URL fallback input (name="lab_logo_url") still present')
+    : fail('settings.php', 'URL fallback input name="lab_logo_url" removed — should be kept');
+
+  settingsSrc.includes('id="logo-url-row"')
+    ? pass('settings.php — collapsible URL row (#logo-url-row) present')
+    : fail('settings.php', 'Missing collapsible URL row id="logo-url-row"');
+
+  const jsHelpers = [
+    ['handleLogoFile(',  'handleLogoFile() — file pick handler'],
+    ['handleLogoDrop(',  'handleLogoDrop() — drag-and-drop handler'],
+    ['toggleLogoUrl(',   'toggleLogoUrl() — URL collapse toggle'],
+    ['previewLogoUrl(',  'previewLogoUrl() — URL live preview'],
+    ['removeLogo(',      'removeLogo() — remove logo action'],
+    ['resetDzPreview(',  'resetDzPreview() — dropzone reset helper'],
+  ];
+  for (const [token, label] of jsHelpers) {
+    settingsSrc.includes(token)
+      ? pass(`settings.php — JS: ${label}`)
+      : fail(`settings.php`, `Missing JS function: ${token}`);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+section('22. logout.php — dedicated logout endpoint exists');
+
+const logoutSrc = readFile('logout.php');
+if (!logoutSrc) {
+  fail('logout.php exists', 'File not found');
+} else {
+  logoutSrc.includes('session_destroy()')
+    ? pass('logout.php — session_destroy() called')
+    : fail('logout.php', 'Missing session_destroy()');
+
+  logoutSrc.includes('session_unset()')
+    ? pass('logout.php — session_unset() called')
+    : fail('logout.php', 'Missing session_unset()');
+
+  logoutSrc.includes("header('Location: index.php')")
+    ? pass('logout.php — redirects to index.php')
+    : fail('logout.php', "Missing header('Location: index.php')");
+
+  // All sidebar pages should link to logout.php, not dashboard.php?logout=1
+  for (const page of SIDEBAR_PAGES) {
+    const src = readFile(page);
+    if (!src) continue;
+    const hasNew = src.includes('href="logout.php"');
+    const hasOld = src.includes('logout=1');
+    if (hasNew && !hasOld) {
+      pass(`${page} — logout link → logout.php (old ?logout=1 removed)`);
+    } else if (!hasNew) {
+      fail(`${page} — logout link`, 'href="logout.php" not found');
+    } else if (hasOld) {
+      fail(`${page} — old logout link`, '?logout=1 pattern still present');
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 (async () => {
   // Test 15: Server responds
   const root = await httpGet(`${BASE_URL}/`);
