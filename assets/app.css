@@ -1,3 +1,103 @@
+/* ══════════════════════════════════════════════════════════════
+   RTL LAYOUT OVERRIDES — applied when <html dir="rtl">
+   Strategy: JS in i18n.js manages the sidebar class swap.
+   CSS here handles everything else: margins, alignment, accents.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Sidebar: JS removes -translate-x-full / lg:translate-x-0
+        and adds .rtl-visible / .rtl-hidden instead.
+        CSS anchors it to the RIGHT edge of viewport. ───────── */
+html[dir="rtl"] #sidebar {
+  left: auto !important;
+  right: 0 !important;
+  border-right: none;
+  border-left: 1px solid rgba(255,255,255,.05);
+  /* Default: off-screen to the right */
+  transform: translateX(100%) !important;
+}
+/* Desktop: always visible on large screens */
+@media (min-width: 1024px) {
+  html[dir="rtl"] #sidebar {
+    transform: translateX(0) !important;
+  }
+}
+/* Mobile: open state toggled by JS adding .sidebar-open */
+html[dir="rtl"] #sidebar.sidebar-open {
+  transform: translateX(0) !important;
+}
+
+/* ── 2. Main content: mirror margin to right ─────────────────── */
+@media (min-width: 1024px) {
+  html[dir="rtl"] .lg\:ml-64 {
+    margin-left: 0 !important;
+    margin-right: 16rem !important;
+  }
+}
+
+/* ── 3. Chat panel (full-screen layout): mirror left offset ───── */
+@media (min-width: 1024px) {
+  html[dir="rtl"] #chat-panel {
+    left: 0 !important;
+    right: 16rem !important;
+  }
+}
+
+/* ── 4. Nav links: reverse icon/text order ───────────────────── */
+html[dir="rtl"] .nav-link {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+/* ── 5. Sidebar brand row ─────────────────────────────────────── */
+html[dir="rtl"] #sidebar > div:first-child .flex {
+  flex-direction: row-reverse;
+}
+
+/* ── 6. Header flex rows ──────────────────────────────────────── */
+html[dir="rtl"] header > .flex {
+  flex-direction: row-reverse;
+}
+
+/* ── 7. Stat card accent bars: gradient from right ───────────── */
+html[dir="rtl"] .stat-card.purple::before { background: linear-gradient(270deg, #7c3aed, transparent); }
+html[dir="rtl"] .stat-card.cyan::before   { background: linear-gradient(270deg, #06b6d4, transparent); }
+html[dir="rtl"] .stat-card.emerald::before{ background: linear-gradient(270deg, #10b981, transparent); }
+
+/* ── 8. Search icon: flip to right side ──────────────────────── */
+html[dir="rtl"] .input-field.pl-10 {
+  padding-left: 1rem;
+  padding-right: 2.5rem;
+}
+html[dir="rtl"] .relative > svg.absolute.left-3\.5 {
+  left: auto;
+  right: .875rem;
+}
+
+/* ── 9. Table alignment ───────────────────────────────────────── */
+html[dir="rtl"] th.text-left { text-align: right; }
+html[dir="rtl"] td { text-align: right; }
+
+/* ── 10. Form labels ──────────────────────────────────────────── */
+html[dir="rtl"] .form-label { text-align: right; }
+
+/* ── 11. Text alignment utility ───────────────────────────────── */
+html[dir="rtl"] .text-left { text-align: right; }
+
+/* ── 12. Sidebar hamburger margin ────────────────────────────── */
+html[dir="rtl"] button.-ml-1 {
+  margin-left: 0;
+  margin-right: -.25rem;
+}
+
+/* ── 13. Mobile card actions ─────────────────────────────────── */
+html[dir="rtl"] .mobile-card .grid.grid-cols-3 { direction: rtl; }
+
+/* ── 14. Bulk bar stays centered ─────────────────────────────── */
+html[dir="rtl"] #bulk-bar {
+  left: 50%;
+  right: auto;
+}
+
 /* ── btn-secondary: outlined variant used for Bulk Import etc ── */
 .btn-secondary {
   color: #c4b5fd;                            /* purple-300 */

@@ -55,6 +55,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added — Internationalization (i18n)
+- **3-language support**: English (default), Hebrew (RTL), Spanish (LTR)
+- **`assets/i18n.js`** — zero-dependency ES6 `localizationController` module with:
+  - Async JSON locale loader (`loadLocale(langCode)`)
+  - Dot-notation key resolver with `{{param}}` interpolation (`t('key', {p:v})`)
+  - Automatic RTL/LTR switching via `document.documentElement.dir`
+  - DOM walker applying `data-i18n`, `data-i18n-text`, `data-i18n-placeholder`, `data-i18n-title`, `data-i18n-aria` attributes
+  - `localStorage` persistence under key `diy_inventory_lang`
+  - Browser language auto-detection as fallback
+- **`assets/locales/en.json`** — 141-key English source dictionary across 10 namespaces (nav, common, login, settings, dashboard, inventory, brewing, projects, chat, locations)
+- **`assets/locales/he.json`** — Full Hebrew translation (141/141 keys, 100% coverage)
+- **`assets/locales/es.json`** — Full Spanish translation (141/141 keys, 100% coverage)
+- **Language selector** in `settings.php` — dropdown with flag emojis, instant no-reload switching
+- **RTL CSS block** prepended to `assets/app.css` — scoped `html[dir="rtl"]` overrides for sidebar, main margin, nav links, stat card accents, search icon, table alignment, markdown blockquotes, and form labels
+- **`npm run validate:i18n`** — coverage check script; exits non-zero and lists missing keys if any locale is incomplete
+- `data-i18n*` attributes added to `dashboard.php` and `settings.php` (sidebar nav, stat cards, header, search bar, buttons)
+
 ### Planned
 - Location hierarchy: Area → Shelf → Container relational structure
 - Multi-user support with per-user inventory

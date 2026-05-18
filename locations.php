@@ -31,6 +31,7 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
   <meta name="description" content="Manage and browse physical storage locations in your DIY lab inventory.">
   <link rel="stylesheet" href="assets/app.css">
   <script>if(localStorage.getItem('theme')==='light')document.getElementById('html-root').classList.add('light');</script>
+  <script src="assets/i18n.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -74,7 +75,7 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
       <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>
       </div>
-      <div><p class="font-semibold text-white text-sm">DIY Lab</p><p class="text-xs text-slate-500">Inventory System</p></div>
+      <div><p class="font-semibold text-white text-sm" data-i18n-text="nav.brand_name">DIY Lab</p><p class="text-xs text-slate-500" data-i18n-text="nav.brand_sub">Inventory System</p></div>
     </div>
   </div>
   <nav class="flex-1 p-4 space-y-1">
@@ -101,13 +102,13 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
     <div class="theme-toggle-wrap mb-2" onclick="toggleTheme()" role="button" aria-label="Toggle light mode" title="Toggle light/dark mode">
       <span class="theme-toggle-label">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        Light Mode
+        <span data-i18n-text="nav.light_mode">Light Mode</span>
       </span>
       <span class="toggle-pill"></span>
     </div>
     <a href="dashboard.php?logout=1" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-slate-500 hover:text-red-400 transition-colors text-sm">
       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-      Logout
+      <span data-i18n-text="nav.logout">Logout</span>
     </a>
   </div>
 </div>
@@ -119,7 +120,7 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div>
-        <h1 class="text-lg lg:text-xl font-bold text-white">📍 Locations</h1>
+        <h1 class="text-lg lg:text-xl font-bold text-white" data-i18n-text="locations.title">📍 Locations</h1>
         <p class="text-xs text-slate-500 mt-0.5"><?= count($locs) ?> storage location<?= count($locs)!==1?'s':'' ?> · Generate QR stickers for containers</p>
       </div>
     </div>
@@ -273,6 +274,7 @@ function filterLocs(q) {
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
 function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
 function toggleTheme(){const h=document.getElementById('html-root');const l=h.classList.toggle('light');localStorage.setItem('theme',l?'light':'dark');}
+localizationController.init();
 </script>
 </body>
 </html>

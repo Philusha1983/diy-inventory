@@ -43,6 +43,7 @@ $has_key          = !empty($settings['api_key']);
   <meta name="description" content="Configure your AI provider and API credentials for the DIY Lab Inventory system.">
   <link rel="stylesheet" href="assets/app.css">
   <script>if(localStorage.getItem('theme')==='light')document.getElementById('html-root').classList.add('light');</script>
+  <script src="assets/i18n.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     .provider-card {
@@ -63,27 +64,27 @@ $has_key          = !empty($settings['api_key']);
         <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg>
         </div>
-        <div><p class="font-semibold text-white text-sm">DIY Lab</p><p class="text-xs text-slate-500">Inventory System</p></div>
+        <div><p class="font-semibold text-white text-sm" data-i18n-text="nav.brand_name">DIY Lab</p><p class="text-xs text-slate-500" data-i18n-text="nav.brand_sub">Inventory System</p></div>
       </div>
     </div>
     <nav class="flex-1 p-4 space-y-1">
-      <a href="dashboard.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> Dashboard</a>
-      <a href="add_item.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Add Component</a>
-      <a href="projects.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707"/></svg> Creative Engine</a>
-      <a href="chat.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg> Lab Assistant</a>
-      <a href="settings.php" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-600/15 text-purple-300 text-sm font-medium"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> AI Settings</a>
+      <a href="dashboard.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm" data-i18n="nav.dashboard"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> Dashboard</a>
+      <a href="add_item.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm" data-i18n="nav.add_component"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Add Component</a>
+      <a href="projects.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm" data-i18n="nav.creative_engine"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707"/></svg> Creative Engine</a>
+      <a href="chat.php" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm" data-i18n="nav.lab_assistant"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg> Lab Assistant</a>
+      <a href="settings.php" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-600/15 text-purple-300 text-sm font-medium" data-i18n="nav.ai_settings"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> AI Settings</a>
     </nav>
     <div class="p-4 border-t border-white/5">
       <div class="theme-toggle-wrap mb-2" onclick="toggleTheme()" role="button" aria-label="Toggle light mode" title="Toggle light/dark mode">
         <span class="theme-toggle-label">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-          Light Mode
+          <span data-i18n-text="nav.light_mode">Light Mode</span>
         </span>
         <span class="toggle-pill"></span>
       </div>
-      <a href="dashboard.php?logout=1" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-slate-500 hover:text-red-400 transition-colors text-sm">
+      <a href="dashboard.php?logout=1" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-slate-500 hover:text-red-400 transition-colors text-sm" data-i18n="nav.logout">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-        Logout
+        <span data-i18n-text="nav.logout">Logout</span>
       </a>
     </div>
   </div>
@@ -96,8 +97,8 @@ $has_key          = !empty($settings['api_key']);
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <div>
-          <h1 class="text-lg lg:text-xl font-bold text-white">AI Configuration</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Manage your AI provider and credentials</p>
+          <h1 class="text-lg lg:text-xl font-bold text-white" data-i18n-text="settings.page_title">AI Configuration</h1>
+          <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="settings.page_subtitle">Manage your AI provider and credentials</p>
         </div>
       </div>
     </header>
@@ -132,9 +133,25 @@ $has_key          = !empty($settings['api_key']);
 
       <form method="POST" class="glass rounded-2xl p-6 space-y-6">
 
+        <!-- Language Selection -->
+        <div>
+          <label class="form-label" data-i18n-text="settings.lang_section">Language</label>
+          <div class="relative">
+            <select id="lang-select"
+              class="input-field w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer"
+              onchange="localizationController.loadLocale(this.value)">
+              <option value="en">🇬🇧 English</option>
+              <option value="he">🇮🇱 עברית (Hebrew)</option>
+              <option value="es">🇪🇸 Español (Spanish)</option>
+            </select>
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <p class="text-xs text-slate-600 mt-1.5">Changes apply instantly and persist across sessions.</p>
+        </div>
+
         <!-- Provider selection -->
         <div>
-          <label class="form-label">AI Provider</label>
+          <label class="form-label" data-i18n-text="settings.ai_provider">AI Provider</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="provider-cards">
             <label class="provider-card <?= $current_provider === 'gemini' ? 'selected' : '' ?>" data-provider="gemini">
               <input type="radio" name="ai_provider" value="gemini" <?= $current_provider === 'gemini' ? 'checked' : '' ?> class="hidden">
@@ -167,7 +184,7 @@ $has_key          = !empty($settings['api_key']);
 
         <!-- API Key -->
         <div>
-          <label for="api_key" class="form-label">API Key</label>
+          <label for="api_key" class="form-label" data-i18n-text="settings.api_key_label">API Key</label>
           <div class="relative">
             <input type="password" id="api_key" name="api_key"
               placeholder="<?= $has_key ? '●●●●●●●●●●●● (key saved — re-enter to change)' : 'Enter your API key…' ?>"
@@ -181,13 +198,13 @@ $has_key          = !empty($settings['api_key']);
         </div>
 
         <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
-          💾 Save Configuration
+          💾 <span data-i18n-text="settings.save_config">Save Configuration</span>
         </button>
       </form>
 
       <!-- Help -->
       <div class="glass rounded-2xl p-5 mt-6 space-y-3">
-        <h3 class="text-sm font-semibold text-white">Where to get your API key</h3>
+        <h3 class="text-sm font-semibold text-white" data-i18n-text="settings.where_to_get_key">Where to get your API key</h3>
         <div class="space-y-2 text-sm">
           <div class="flex items-center gap-3">
             <span class="text-blue-400 font-medium w-16">Gemini</span>
@@ -225,7 +242,9 @@ $has_key          = !empty($settings['api_key']);
   });
   function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}
   function closeSidebar(){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('sidebar-overlay').classList.add('hidden');document.body.style.overflow='';}
-function toggleTheme(){const h=document.getElementById('html-root');const l=h.classList.toggle('light');localStorage.setItem('theme',l?'light':'dark');}
+  function toggleTheme(){const h=document.getElementById('html-root');const l=h.classList.toggle('light');localStorage.setItem('theme',l?'light':'dark');}
+  // Initialise i18n engine
+  localizationController.init();
   </script>
 </body>
 </html>
