@@ -68,7 +68,9 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 💡 **Creative Engine** | Click **Brainstorm Projects** to have the AI analyse your entire inventory and return 5 tailored project ideas with complexity, duration, skill domain, and missing-part shopping links. Results are **cached in the DB** — navigating away and returning shows the last ideas instantly at zero API cost. Click **Regenerate** any time for fresh suggestions. |
 | 📐 **Project Blueprints** | One-click generation of a full technical guide (wiring, BOM, and firmware code) for any suggested project. |
 | 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory — including cached product documentation — and answers questions like "what can I build with my extra LEDs?". |
-| ⚙️ **AI Settings UI** | Switch between **Gemini** and **OpenAI** and save your API key through the web UI — no code editing required. |
+| ⚙️ **User Settings** | A comprehensive settings hub with four ordered sections: **Language** selector, **Personalization** (Lab Name, Tag Line, Mini Tag Line, Logo), **Change Password** (bcrypt-secured), and **AI Configuration** (provider + API key). All settings are persisted in the database — no code editing required. |
+| 🎨 **Lab Personalization** | Customise your lab's identity from the UI: set a **Lab Name**, **Tag Line** (login screen subtitle), **Mini Tag Line** (sidebar label), and **Logo URL** (custom image shown in sidebar and login screen, with live preview). Default branding falls back gracefully to the built-in gradient icon if no logo is set. Changes propagate instantly to all pages including the login gate. |
+| 🔑 **Secure Password Management** | Change the lab password directly from User Settings — no file editing required. The current password is verified before accepting a change; the new password is hashed with **`PASSWORD_BCRYPT`** and stored in the database. A live "passwords match" hint guides the user during entry. |
 | 🌗 **Light / Dark Theme** | Toggle between dark (default) and light mode via the sidebar switch. Preference is persisted in `localStorage` across sessions and page reloads — survives logout. All colours meet **WCAG 2.1 AA** contrast requirements in both themes. |
 | 🌍 **Multi-Language UI** | Full internationalisation (i18n) across all pages — switch between **English 🇬🇧**, **Hebrew 🇮🇱 (RTL)**, and **Spanish 🇪🇸** from the Settings page. Language persists in `localStorage`. Hebrew activates complete RTL layout mirroring (sidebar, margins, flex order, text alignment). Add new languages with a single JSON file. |
 | 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view (with checkboxes for bulk selection), and adaptive layouts for phones and tablets. |
@@ -144,21 +146,23 @@ diy-inventory/
 ├── project_blueprint.php        # AI-generated build guides
 ├── chat.php                     # Lab Assistant chat UI
 ├── chat_api.php                 # Chat backend — injects inventory + enrichment context
-├── settings.php                 # AI provider + API key configuration UI (+ language selector)
+├── settings.php                 # User Settings hub — Language, Personalization, Change Password, AI config
+├── site_config.php              # Shared branding loader — fetches lab_name, lab_tagline, lab_mini_tagline, lab_logo_url once per request and exposes $site_* variables to all sidebar pages
 ├── identify_api.php             # AI vision endpoint (used by add_item.php)
 ├── ai_helper.php                # Central AI proxy — call_ai_api() + enrichment context builder
 ├── image_helper.php             # Image processing — imagecreatefromstring, resize full+thumb
 ├── db.php                       # PDO database connection (git-ignored, copy from db.php.example)
-├── schema.sql                   # Database schema + seed data
+├── schema.sql                   # Database schema + seed data (incl. lab_name, lab_tagline, lab_mini_tagline, lab_logo_url, lab_password)
 ├── php.ini                      # PHP upload/memory limits for built-in server
 ├── .htaccess                    # PHP limits for Apache deployments
 ├── assets/app.css               # Global stylesheet — Tailwind base + theme tokens + WCAG light-mode + RTL overrides
 ├── assets/i18n.js               # Localisation engine — async locale loader, t(), RTL sidebar patching, BiDi isolation
-├── assets/locales/en.json       # English locale — 141 translation keys across 9 namespaces
-├── assets/locales/he.json       # Hebrew locale — 141 keys, full RTL support
-├── assets/locales/es.json       # Spanish locale — 141 keys
+├── assets/locales/en.json       # English locale — 142 translation keys across 9 namespaces
+├── assets/locales/he.json       # Hebrew locale — 142 keys, full RTL support
+├── assets/locales/es.json       # Spanish locale — 142 keys
 ├── contrast_audit.js            # Dev utility — audits all page colours against WCAG 2.1 AA ratios
 ├── tests/pre_merge_check.js     # Pre-merge test suite — 47 automated checks covering i18n, RTL CSS, locale parity
+├── tests/user_settings_check.js # User Settings QA suite — 72 automated checks: personalization fields, bcrypt security, dynamic branding, HTTP smoke tests
 ├── uploads/                     # Component photos (auto-created, git-ignored)
 └── docs/                        # Original design & phase documentation
 ```
@@ -269,7 +273,17 @@ This creates two tables:
 | Table | Purpose |
 |-------|---------|
 | `inventory` | All components — name, model, category, quantity, status, specs, image paths, location, product URL, datasheet URL, notes, purchase price, and cached enrichment data |
-| `settings` | Key-value store for AI provider and API key |
+| `settings` | Key-value store for all configuration — AI provider, API key, lab branding (`lab_name`, `lab_tagline`, `lab_mini_tagline`, `lab_logo_url`), and the bcrypt-hashed login password (`lab_password`) |
+
+**Personalization keys seeded by default:**
+
+| Key | Default value |
+|-----|---------------|
+| `lab_name` | `DIY Lab` |
+| `lab_tagline` | `Inventory & AI Orchestrator` |
+| `lab_mini_tagline` | `Inventory System` |
+| `lab_logo_url` | *(empty — uses built-in gradient icon)* |
+| `lab_password` | *(empty — defaults to `1234` until changed via UI)* |
 
 **4. Verify database credentials in `db.php`**
 
@@ -333,9 +347,10 @@ GPT-4o also supports vision and text. This is a paid service.
 
 Once the app is running:
 1. Open `http://localhost:8080/settings.php`
-2. Select **Gemini** or **OpenAI**
-3. Paste your key in the **API Key** field
-4. Click **Save Configuration**
+2. Scroll to the **AI Configuration** section (section 4)
+3. Select **Gemini** or **OpenAI**
+4. Paste your key in the **API Key** field
+5. Click **Save Configuration**
 
 The key is stored in the `settings` database table — never hardcoded in files.
 
@@ -370,7 +385,7 @@ Open your browser at: **`http://localhost:8080`**
 
 **Default password:** `1234`
 
-> To change the password, edit `index.php` and replace `'1234'` in the authentication check with your chosen password. For a stronger approach, replace with a `password_hash()` / `password_verify()` pair.
+> To change the password, go to **User Settings → Change Lab Password**. Enter the current password and choose a new one (minimum 6 characters). The new password is stored as a **bcrypt hash** in the database — no file editing required.
 
 ### Access from a phone or tablet (same Wi-Fi)
 
@@ -551,7 +566,8 @@ Deploy on a regular hosting account — no root access, everything via panel UI 
 
 | Risk | Mitigation |
 |------|-----------|
-| Weak password | Change the default `1234` in `index.php` before sharing the app |
+| Weak password | Change the default `1234` via **User Settings → Change Lab Password** — no file editing needed |
+| Password storage | Passwords are hashed with **`PASSWORD_BCRYPT`** via PHP's `password_hash()` and verified with `password_verify()` — never stored as plaintext |
 | API key exposure | Keys are stored in the DB, not in files. Never commit `db.php` with credentials to a public repo. |
 | File upload abuse | Image MIME types verified; all uploads are re-encoded through PHP GD, stripping any embedded malicious data. |
 | SQL injection | All database queries use **PDO prepared statements** throughout. |
@@ -584,21 +600,23 @@ uploads/
 | `bulk_action.php` | Handles bulk POST actions: `set_category`, `set_status`, `set_location`, `delete` (with image cleanup), `export_csv` |
 | `enrich_api.php` | Fetches a product URL, strips HTML, and caches the plain-text content in `enriched_data` for AI injection |
 | `identify_api.php` | API endpoint called by the Auto-Identify button (POST, returns JSON) |
-| `settings.php` | UI to set AI provider and save/update API key |
+| `settings.php` | **User Settings** hub — four ordered sections: Language, Personalization (branding), Change Password (bcrypt), AI Configuration (provider + key) |
+| `site_config.php` | Shared branding loader — reads `lab_*` keys from DB once per request and provides `$site_name`, `$site_tagline`, `$site_mini_tagline`, `$site_logo_url` to every sidebar page |
 | `projects.php` | Creative Engine — sends inventory + enrichment context to AI, renders project cards |
 | `project_blueprint.php` | Generates and renders a full build guide for a chosen project |
 | `chat.php` | Lab Assistant chat UI (WebSocket-free, AJAX polling) |
 | `chat_api.php` | Chat backend — injects inventory + cached product documentation into every AI message |
-| `schema.sql` | Database schema + seed data for `settings` table |
+| `schema.sql` | Database schema + seed data — includes `lab_name`, `lab_tagline`, `lab_mini_tagline`, `lab_logo_url`, `lab_password` setting keys |
 | `php.ini` | Raises PHP upload limits (`25M`) for built-in server — pass with `-c php.ini` |
 | `.htaccess` | Same limits for Apache-based deployments |
 | `assets/app.css` | Global stylesheet — Tailwind base, design tokens (`btn-primary`, `btn-secondary`, badge colours), `html.light` scoped WCAG 2.1 AA overrides, and `html[dir="rtl"]` RTL layout mirroring |
 | `assets/i18n.js` | Zero-dependency localisation engine — async JSON locale loading, `t(key, params)` resolver, `_patchSidebar()` RTL sidebar fix, `_isolateLTRContent()` BiDi isolation, `localStorage` persistence |
-| `assets/locales/en.json` | English locale — 141 keys across 9 namespaces (`nav`, `common`, `login`, `settings`, `dashboard`, `inventory`, `chat`, `projects`, `locations`) |
-| `assets/locales/he.json` | Hebrew locale — 141 keys with full RTL support |
-| `assets/locales/es.json` | Spanish locale — 141 keys |
+| `assets/locales/en.json` | English locale — 142 keys across 9 namespaces (`nav`, `common`, `login`, `settings`, `dashboard`, `inventory`, `chat`, `projects`, `locations`) |
+| `assets/locales/he.json` | Hebrew locale — 142 keys with full RTL support |
+| `assets/locales/es.json` | Spanish locale — 142 keys |
 | `contrast_audit.js` | Dev-only utility — runs in the browser console to measure contrast ratios for all rendered text against WCAG 2.1 AA (4.5:1 normal / 3:1 large text) |
 | `tests/pre_merge_check.js` | Pre-merge test suite — 47 automated checks: locale parity, i18n.js API, data-i18n coverage, RTL CSS rules, bare-text audit, CHANGELOG validation |
+| `tests/user_settings_check.js` | User Settings QA suite — 72 automated checks across 18 test groups: personalization UI fields, save handlers, dynamic branding in all 9 sidebar pages, bcrypt security, schema seed keys, auto-migration, and HTTP smoke tests |
 | `uploads/` | Auto-created directory for component images |
 | `docs/` | Original design documents and phase guides |
 
@@ -617,7 +635,7 @@ The error message in the red box tells you exactly what went wrong:
 
 | Error message | Cause | Fix |
 |---------------|-------|-----|
-| *No API key configured* | Key not saved yet | Go to ⚙️ AI Settings → paste key → Save |
+| *No API key configured* | Key not saved yet | Go to **User Settings → AI Configuration** → paste key → Save |
 | *Invalid API key* | Wrong or revoked key | Re-create key at aistudio.google.com |
 | *The AI model could not be found* | Key project doesn't have Gemini API enabled | Enable Gemini API in Google Cloud Console for the project |
 | *API rate limit reached / quota exhausted* | Free-tier daily limit hit | Wait until midnight Pacific, or use a paid-tier key |
@@ -625,7 +643,7 @@ The error message in the red box tells you exactly what went wrong:
 | *No images received* | Files weren't attached | Re-select files and try again |
 
 ### AI features return no response (general)
-- Check the **AI Settings** page — ensure a provider is selected and the API key is saved
+- Check the **User Settings** page (section 4 — AI Configuration) — ensure a provider is selected and the API key is saved
 - Gemini key format: starts with `AIza...`
 - OpenAI key format: starts with `sk-...`
 - Verify your key has quota remaining at [aistudio.google.com](https://aistudio.google.com)
@@ -730,7 +748,8 @@ Contributions are welcome! Here are good starting points:
 - **Scheduled cron import** — auto-run the bulk importer via cron instead of the browser
 - **Location hierarchy** — nested `Area → Unit → Container` relational structure
 - **PWA / offline mode** — service worker + IndexedDB cache for mobile-first use
-- **New locale** — add a language by creating `assets/locales/<code>.json` (copy `en.json`, translate all 141 keys) and adding one `<option>` to the language selector in `settings.php`. Run `npm run validate:i18n` to confirm 100% coverage.
+- **New locale** — add a language by creating `assets/locales/<code>.json` (copy `en.json`, translate all 142 keys) and adding one `<option>` to the language selector in `settings.php`. Run `npm run validate:i18n` to confirm 100% coverage.
+- **Avatar / logo upload** — replace the Logo URL field in Personalization with a direct file upload stored in `uploads/`
 
 Please open an issue to discuss major changes before submitting a PR.
 

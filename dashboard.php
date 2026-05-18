@@ -426,7 +426,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
         </span>
         <span class="toggle-pill" id="toggle-pill"></span>
       </div>
-      <a href="?logout=1"
+      <a href="logout.php"
         onclick="<?php if (isset($_GET['logout'])) {
           session_destroy();
           header('Location: index.php');
@@ -445,14 +445,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 
   <!-- ── Main Content ─────────────────────────────────────────────────────── -->
   <main class="lg:ml-64 min-h-screen">
-    <?php
-    // Handle logout
-    if (isset($_GET['logout'])) {
-      session_destroy();
-      header('Location: index.php');
-      exit;
-    }
-    ?>
+
 
     <!-- Header -->
     <header
