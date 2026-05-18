@@ -69,7 +69,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 📐 **Project Blueprints** | One-click generation of a full technical guide (wiring, BOM, and firmware code) for any suggested project. |
 | 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory — including cached product documentation — and answers questions like "what can I build with my extra LEDs?". |
 | ⚙️ **User Settings** | A comprehensive settings hub with four ordered sections: **Language** selector, **Personalization** (Lab Name, Tag Line, Mini Tag Line, Logo), **Change Password** (bcrypt-secured), and **AI Configuration** (provider + API key). All settings are persisted in the database — no code editing required. |
-| 🎨 **Lab Personalization** | Customise your lab's identity from the UI: set a **Lab Name**, **Tag Line** (login screen subtitle), **Mini Tag Line** (sidebar label), and **Logo URL** (custom image shown in sidebar and login screen, with live preview). Default branding falls back gracefully to the built-in gradient icon if no logo is set. Changes propagate instantly to all pages including the login gate. |
+| 🎨 **Lab Personalization** | Customise your lab's identity from the UI: set a **Lab Name**, **Tag Line** (login screen subtitle), **Mini Tag Line** (sidebar label), and **Logo** (upload a file or paste a URL). Uploaded logos are centre-cropped to a square and resized to 256×256 px by PHP GD, then stored in `uploads/logo/`. Changes propagate instantly to all pages including the login gate. Default branding falls back to the built-in gradient icon. |
 | 🔑 **Secure Password Management** | Change the lab password directly from User Settings — no file editing required. The current password is verified before accepting a change; the new password is hashed with **`PASSWORD_BCRYPT`** and stored in the database. A live "passwords match" hint guides the user during entry. |
 | 🌗 **Light / Dark Theme** | Toggle between dark (default) and light mode via the sidebar switch. Preference is persisted in `localStorage` across sessions and page reloads — survives logout. All colours meet **WCAG 2.1 AA** contrast requirements in both themes. |
 | 🌍 **Multi-Language UI** | Full internationalisation (i18n) across all pages — switch between **English 🇬🇧**, **Hebrew 🇮🇱 (RTL)**, and **Spanish 🇪🇸** from the Settings page. Language persists in `localStorage`. Hebrew activates complete RTL layout mirroring (sidebar, margins, flex order, text alignment). Add new languages with a single JSON file. |
@@ -116,17 +116,17 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | **Fonts** | Google Fonts — Inter, JetBrains Mono |
 | **Markdown** | marked.js (CDN) — for blueprint rendering |
 | **AI Providers** | Google Gemini 2.5 Flash · OpenAI GPT-4o |
-| **Image Storage** | Local filesystem (`uploads/` directory) — auto-resized to 1200px max |
-| **Image Processing** | PHP GD (built-in) — JPEG, PNG, WebP, GIF input; JPEG output |
+| **Image Storage** | Local filesystem (`uploads/` directory) — component photos auto-resized to 1200px max; logo uploads stored in `uploads/logo/` as 256×256 px JPEG |
+| **Image Processing** | PHP GD (built-in) — JPEG, PNG, WebP, GIF input; JPEG output. `imagedestroy()` removed for PHP 8.5 compatibility (no-op since 8.0). |
 | **HTTP Client** | PHP cURL (built-in) |
 
 ---
 
 ## 📁 Project Structure
 
-```
 diy-inventory/
 ├── index.php                    # Login / password gate
+├── logout.php                   # Session teardown + redirect to login
 ├── dashboard.php                # Main inventory dashboard (sorting, bulk actions, print labels)
 ├── add_item.php                 # Add & edit components (AI identify + AJAX submit + enrichment)
 ├── item_details.php             # Single component detail + image gallery + print label button
@@ -135,6 +135,7 @@ diy-inventory/
 ├── bulk_import.php              # Bulk Import Hub — choose CSV, ZIP, or Image Wizard
 ├── bulk_import_csv.php          # CSV/TSV import — column auto-map + optional URL enrichment
 ├── bulk_import_zip.php          # ZIP upload — flat ZIP or subfolder-per-component, AI pipeline
+├── bulk_import_folder.php       # Folder-based import — browse a local folder structure via the browser
 ├── bulk_import_wizard.php       # Image Group Wizard — drag photos, group, AI identify
 ├── bulk_import_wizard_worker.php# Wizard AI worker — receives images, calls Gemini, inserts item
 ├── bulk_import_worker.php       # Legacy folder worker — processes ONE folder per call
@@ -146,24 +147,33 @@ diy-inventory/
 ├── project_blueprint.php        # AI-generated build guides
 ├── chat.php                     # Lab Assistant chat UI
 ├── chat_api.php                 # Chat backend — injects inventory + enrichment context
-├── settings.php                 # User Settings hub — Language, Personalization, Change Password, AI config
-├── site_config.php              # Shared branding loader — fetches lab_name, lab_tagline, lab_mini_tagline, lab_logo_url once per request and exposes $site_* variables to all sidebar pages
+├── settings.php                 # User Settings hub — Language, Personalization (logo upload), Change Password, AI config
+├── site_config.php              # Shared branding loader — fetches lab_name, lab_tagline, lab_mini_tagline, lab_logo_url once per request
 ├── identify_api.php             # AI vision endpoint (used by add_item.php)
 ├── ai_helper.php                # Central AI proxy — call_ai_api() + enrichment context builder
-├── image_helper.php             # Image processing — imagecreatefromstring, resize full+thumb
+├── image_helper.php             # Image processing — imagecreatefromstring, resize full+thumb (PHP 8.5 compatible)
 ├── db.php                       # PDO database connection (git-ignored, copy from db.php.example)
+├── db.php.example               # Safe credential template — copy to db.php and fill in your values
 ├── schema.sql                   # Database schema + seed data (incl. lab_name, lab_tagline, lab_mini_tagline, lab_logo_url, lab_password)
 ├── php.ini                      # PHP upload/memory limits for built-in server
 ├── .htaccess                    # PHP limits for Apache deployments
+├── tailwind.config.js           # Tailwind CSS content scan config
+├── package.json                 # npm scripts: build:css, watch:css, validate:i18n
+├── CHANGELOG.md                 # Changelog — all releases and unreleased work
+├── CONTRIBUTING.md              # Contributor guide — setup, PR process, code style
+├── SECURITY.md                  # Security policy and vulnerability reporting
+├── DEPLOYMENT.md                # Full deployment guide — VPS, shared hosting, migration
 ├── assets/app.css               # Global stylesheet — Tailwind base + theme tokens + WCAG light-mode + RTL overrides
+├── assets/input.css             # Tailwind source file — compiled to app.css via npm run build:css
 ├── assets/i18n.js               # Localisation engine — async locale loader, t(), RTL sidebar patching, BiDi isolation
 ├── assets/locales/en.json       # English locale — 142 translation keys across 9 namespaces
 ├── assets/locales/he.json       # Hebrew locale — 142 keys, full RTL support
 ├── assets/locales/es.json       # Spanish locale — 142 keys
 ├── contrast_audit.js            # Dev utility — audits all page colours against WCAG 2.1 AA ratios
 ├── tests/pre_merge_check.js     # Pre-merge test suite — 47 automated checks covering i18n, RTL CSS, locale parity
-├── tests/user_settings_check.js # User Settings QA suite — 72 automated checks: personalization fields, bcrypt security, dynamic branding, HTTP smoke tests
+├── tests/user_settings_check.js # User Settings QA suite — 109 automated checks: logo upload, personalization fields, bcrypt security, dynamic branding, logout endpoint, HTTP smoke tests
 ├── uploads/                     # Component photos (auto-created, git-ignored)
+├── uploads/logo/                # Lab logo uploads (auto-created, git-ignored)
 └── docs/                        # Original design & phase documentation
 ```
 
@@ -600,7 +610,9 @@ uploads/
 | `bulk_action.php` | Handles bulk POST actions: `set_category`, `set_status`, `set_location`, `delete` (with image cleanup), `export_csv` |
 | `enrich_api.php` | Fetches a product URL, strips HTML, and caches the plain-text content in `enriched_data` for AI injection |
 | `identify_api.php` | API endpoint called by the Auto-Identify button (POST, returns JSON) |
-| `settings.php` | **User Settings** hub — four ordered sections: Language, Personalization (branding), Change Password (bcrypt), AI Configuration (provider + key) |
+| `bulk_import_folder.php` | Folder-based import — browse a server-side folder structure and trigger AI identification per subfolder |
+| `settings.php` | **User Settings** hub — four ordered sections: Language, Personalization (logo upload + URL fallback + remove), Change Password (bcrypt), AI Configuration (provider + key) |
+| `logout.php` | Dedicated logout endpoint — `session_unset()` + `session_destroy()` + session cookie expiry + redirect to `index.php`. All sidebar pages link here. |
 | `site_config.php` | Shared branding loader — reads `lab_*` keys from DB once per request and provides `$site_name`, `$site_tagline`, `$site_mini_tagline`, `$site_logo_url` to every sidebar page |
 | `projects.php` | Creative Engine — sends inventory + enrichment context to AI, renders project cards |
 | `project_blueprint.php` | Generates and renders a full build guide for a chosen project |
@@ -616,8 +628,10 @@ uploads/
 | `assets/locales/es.json` | Spanish locale — 142 keys |
 | `contrast_audit.js` | Dev-only utility — runs in the browser console to measure contrast ratios for all rendered text against WCAG 2.1 AA (4.5:1 normal / 3:1 large text) |
 | `tests/pre_merge_check.js` | Pre-merge test suite — 47 automated checks: locale parity, i18n.js API, data-i18n coverage, RTL CSS rules, bare-text audit, CHANGELOG validation |
-| `tests/user_settings_check.js` | User Settings QA suite — 72 automated checks across 18 test groups: personalization UI fields, save handlers, dynamic branding in all 9 sidebar pages, bcrypt security, schema seed keys, auto-migration, and HTTP smoke tests |
+| `tests/user_settings_check.js` | User Settings QA suite — **109 automated checks** across 22 test groups: logo upload pipeline, personalization UI, save handlers, dynamic branding in all 9 sidebar pages, bcrypt security, schema seed keys, auto-migration, dedicated logout endpoint, and HTTP smoke tests |
 | `uploads/` | Auto-created directory for component images |
+| `uploads/logo/` | Auto-created directory for uploaded lab logos (created on first logo upload) |
+| `db.php.example` | Safe credential template — copy to `db.php` and fill in your MySQL host, database name, username, and password |
 | `docs/` | Original design documents and phase guides |
 
 ---
@@ -725,7 +739,7 @@ This was caused by two issues now fixed in `projects.php`:
 | Synchronous form POST — any timeout/truncation reloaded page with empty state | No error shown | Converted to AJAX fetch; errors now appear in a red banner |
 
 If you still see no results, check the red error banner that now appears above the results area. Common causes:
-- No API key → go to ⚙️ AI Settings
+- No API key → go to **User Settings → AI Configuration**
 - Rate limit hit → wait 60 s then click Regenerate
 - Inventory is empty → add components first
 
@@ -741,7 +755,9 @@ If you still see no results, check the red error banner that now appears above t
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here are good starting points:
+Contributions are welcome! Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full contributor guide, including local setup, PR process, and code style.
+
+Good starting points for new contributors:
 
 - **Multi-user support** — replace the single password with a proper user table
 - **Pagination** — add page controls to the dashboard for very large inventories
@@ -749,9 +765,11 @@ Contributions are welcome! Here are good starting points:
 - **Location hierarchy** — nested `Area → Unit → Container` relational structure
 - **PWA / offline mode** — service worker + IndexedDB cache for mobile-first use
 - **New locale** — add a language by creating `assets/locales/<code>.json` (copy `en.json`, translate all 142 keys) and adding one `<option>` to the language selector in `settings.php`. Run `npm run validate:i18n` to confirm 100% coverage.
-- **Avatar / logo upload** — replace the Logo URL field in Personalization with a direct file upload stored in `uploads/`
 
 Please open an issue to discuss major changes before submitting a PR.
+
+> [!NOTE]
+> Security issues should be reported privately. See **[SECURITY.md](SECURITY.md)** for the responsible disclosure policy.
 
 ---
 

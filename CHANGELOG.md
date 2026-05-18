@@ -64,17 +64,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - DOM walker applying `data-i18n`, `data-i18n-text`, `data-i18n-placeholder`, `data-i18n-title`, `data-i18n-aria` attributes
   - `localStorage` persistence under key `diy_inventory_lang`
   - Browser language auto-detection as fallback
-- **`assets/locales/en.json`** — 141-key English source dictionary across 10 namespaces (nav, common, login, settings, dashboard, inventory, brewing, projects, chat, locations)
-- **`assets/locales/he.json`** — Full Hebrew translation (141/141 keys, 100% coverage)
-- **`assets/locales/es.json`** — Full Spanish translation (141/141 keys, 100% coverage)
+- **`assets/locales/en.json`** — 142-key English source dictionary across 9 namespaces (`nav`, `common`, `login`, `settings`, `dashboard`, `inventory`, `projects`, `chat`, `locations`)
+- **`assets/locales/he.json`** — Full Hebrew translation (142/142 keys, 100% coverage)
+- **`assets/locales/es.json`** — Full Spanish translation (142/142 keys, 100% coverage)
 - **Language selector** in `settings.php` — dropdown with flag emojis, instant no-reload switching
-- **RTL CSS block** prepended to `assets/app.css` — scoped `html[dir="rtl"]` overrides for sidebar, main margin, nav links, stat card accents, search icon, table alignment, markdown blockquotes, and form labels
+- **RTL CSS block** in `assets/app.css` — scoped `html[dir="rtl"]` overrides for sidebar, main margin, nav links, stat card accents, search icon, table alignment, markdown blockquotes, and form labels
 - **`npm run validate:i18n`** — coverage check script; exits non-zero and lists missing keys if any locale is incomplete
-- `data-i18n*` attributes added to `dashboard.php` and `settings.php` (sidebar nav, stat cards, header, search bar, buttons)
+
+### Added — Light / Dark Theme
+- **Theme toggle** in every page's sidebar — switch between dark (default) and light mode without page reload
+- Preference persisted in `localStorage` under key `theme` — survives logout and page reloads
+- Full `html.light` CSS override block in `assets/app.css` — all colours verified at **WCAG 2.1 AA** contrast ratios (4.5:1 normal text, 3:1 large text)
+- `contrast_audit.js` utility — run in the browser DevTools console to measure contrast ratios live
+
+### Added — User Settings Hub
+- **Settings page renamed** from "AI Settings" to **"User Settings"** across all 9 PHP pages, sidebar nav links, `data-i18n` keys, and all 3 locale files (`nav.user_settings` key added — 141 → 142 keys)
+- **Settings sections reordered** for logical UX flow: Language → Personalization → Change Password → AI Configuration
+- **`site_config.php`** — centralised branding loader; reads `lab_name`, `lab_tagline`, `lab_mini_tagline`, `lab_logo_url` from the `settings` table once per request and exposes `$site_*` variables to every sidebar-bearing page
+
+### Added — Lab Personalization
+- **Lab Name** — replaces all hardcoded "DIY Lab" text in sidebars and the login screen header
+- **Tag Line** — subtitle shown on the login screen below the lab name
+- **Mini Tag Line** — compact subtitle shown in the sidebar under the lab name
+- **Logo upload** — drag-and-drop or click-to-browse file upload (JPEG / PNG / WebP / GIF, max 5 MB); PHP GD centre-crops to square and resizes to 256×256 px JPEG; saved to `uploads/logo/`; old logo file deleted automatically on replacement
+- **Logo URL fallback** — collapsed "paste URL instead" option for external image links
+- **Remove logo** — one-click removal with immediate file deletion and sidebar reset to gradient icon
+- **Live preview** — FileReader-powered instant preview inside the drop zone before saving
+- All branding variables propagate to the login screen (`index.php`) and every page sidebar dynamically
+
+### Added — Secure Password Management
+- **Change Lab Password** section in User Settings — no file editing required
+- Current password verified with `password_verify()` before accepting change
+- New password hashed with `password_hash($new, PASSWORD_BCRYPT)` and stored in the `settings` table (`lab_password` key)
+- `index.php` login gate uses `password_verify()` with a safe plaintext-fallback guard for fresh installs
+- Live "passwords match" hint during confirm-password entry
+
+### Added — Dedicated Logout
+- **`logout.php`** — standalone logout endpoint; calls `session_unset()` + `session_destroy()` + expires the session cookie, then redirects to `index.php`
+- All sidebar "Logout" links across all 9 pages now point to `logout.php` (previously pointed to `dashboard.php?logout=1`, which silently failed because headers were already sent)
+
+### Added — QA Test Suites
+- **`tests/user_settings_check.js`** — 109 automated checks across 22 groups: page rename, sidebar key migration, i18n locale parity, `site_config.php` variables, dynamic branding in all 9 pages, personalization UI fields, save handlers, bcrypt security, schema seeds, auto-migration, logo upload pipeline (MIME, GD, file path, cleanup), JS helper functions, logout endpoint, HTTP smoke tests
+
+### Fixed
+- **Sidebar duplicate logo icon** — batch branding script had left a phantom hardcoded SVG icon before the new conditional block on 5 pages (`add_item.php`, `chat.php`, `item_details.php`, `container_manifest.php`, `project_blueprint.php`); removed
+- **Logout redirect** — `dashboard.php?logout=1` handler was placed after HTML output, so `header()` was silently ignored; replaced with dedicated `logout.php` endpoint
+- **PHP 8.5 deprecation** — removed `imagedestroy()` calls from `settings.php`; GD resources are freed automatically by the PHP garbage collector since PHP 8.0
 
 ### Planned
 - Location hierarchy: Area → Shelf → Container relational structure
 - Multi-user support with per-user inventory
-- Dark / light theme toggle
 - Pagination for very large inventories (>500 items)
 - Scheduled cron-based enrichment
