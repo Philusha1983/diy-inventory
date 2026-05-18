@@ -6,6 +6,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-CDN-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 ![AI](https://img.shields.io/badge/AI-Gemini%20%7C%20GPT--4o-8B5CF6?style=flat-square&logo=openai&logoColor=white)
+![i18n](https://img.shields.io/badge/i18n-EN%20%7C%20HE%20%7C%20ES-f59e0b?style=flat-square&logo=googletranslate&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ---
@@ -69,6 +70,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 💬 **Lab Assistant Chat** | A context-aware chat interface. The AI knows your inventory — including cached product documentation — and answers questions like "what can I build with my extra LEDs?". |
 | ⚙️ **AI Settings UI** | Switch between **Gemini** and **OpenAI** and save your API key through the web UI — no code editing required. |
 | 🌗 **Light / Dark Theme** | Toggle between dark (default) and light mode via the sidebar switch. Preference is persisted in `localStorage` across sessions and page reloads — survives logout. All colours meet **WCAG 2.1 AA** contrast requirements in both themes. |
+| 🌍 **Multi-Language UI** | Full internationalisation (i18n) across all pages — switch between **English 🇬🇧**, **Hebrew 🇮🇱 (RTL)**, and **Spanish 🇪🇸** from the Settings page. Language persists in `localStorage`. Hebrew activates complete RTL layout mirroring (sidebar, margins, flex order, text alignment). Add new languages with a single JSON file. |
 | 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view (with checkboxes for bulk selection), and adaptive layouts for phones and tablets. |
 
 ---
@@ -142,7 +144,7 @@ diy-inventory/
 ├── project_blueprint.php        # AI-generated build guides
 ├── chat.php                     # Lab Assistant chat UI
 ├── chat_api.php                 # Chat backend — injects inventory + enrichment context
-├── settings.php                 # AI provider + API key configuration UI
+├── settings.php                 # AI provider + API key configuration UI (+ language selector)
 ├── identify_api.php             # AI vision endpoint (used by add_item.php)
 ├── ai_helper.php                # Central AI proxy — call_ai_api() + enrichment context builder
 ├── image_helper.php             # Image processing — imagecreatefromstring, resize full+thumb
@@ -150,8 +152,13 @@ diy-inventory/
 ├── schema.sql                   # Database schema + seed data
 ├── php.ini                      # PHP upload/memory limits for built-in server
 ├── .htaccess                    # PHP limits for Apache deployments
-├── assets/app.css               # Global stylesheet — Tailwind base + theme tokens + WCAG light-mode overrides
+├── assets/app.css               # Global stylesheet — Tailwind base + theme tokens + WCAG light-mode + RTL overrides
+├── assets/i18n.js               # Localisation engine — async locale loader, t(), RTL sidebar patching, BiDi isolation
+├── assets/locales/en.json       # English locale — 141 translation keys across 9 namespaces
+├── assets/locales/he.json       # Hebrew locale — 141 keys, full RTL support
+├── assets/locales/es.json       # Spanish locale — 141 keys
 ├── contrast_audit.js            # Dev utility — audits all page colours against WCAG 2.1 AA ratios
+├── tests/pre_merge_check.js     # Pre-merge test suite — 47 automated checks covering i18n, RTL CSS, locale parity
 ├── uploads/                     # Component photos (auto-created, git-ignored)
 └── docs/                        # Original design & phase documentation
 ```
@@ -353,6 +360,11 @@ php -c php.ini -S 0.0.0.0:8080
 > npm run build:css
 > ```
 > Or watch for changes during development: `npm run watch:css`
+
+> **i18n validation:** Before committing new UI elements, verify all locale files have 100% key coverage:
+> ```bash
+> npm run validate:i18n
+> ```
 
 Open your browser at: **`http://localhost:8080`**
 
@@ -580,8 +592,13 @@ uploads/
 | `schema.sql` | Database schema + seed data for `settings` table |
 | `php.ini` | Raises PHP upload limits (`25M`) for built-in server — pass with `-c php.ini` |
 | `.htaccess` | Same limits for Apache-based deployments |
-| `assets/app.css` | Global stylesheet — Tailwind base, design tokens (`btn-primary`, `btn-secondary`, badge colours), and `html.light` scoped overrides ensuring WCAG 2.1 AA contrast in light mode |
+| `assets/app.css` | Global stylesheet — Tailwind base, design tokens (`btn-primary`, `btn-secondary`, badge colours), `html.light` scoped WCAG 2.1 AA overrides, and `html[dir="rtl"]` RTL layout mirroring |
+| `assets/i18n.js` | Zero-dependency localisation engine — async JSON locale loading, `t(key, params)` resolver, `_patchSidebar()` RTL sidebar fix, `_isolateLTRContent()` BiDi isolation, `localStorage` persistence |
+| `assets/locales/en.json` | English locale — 141 keys across 9 namespaces (`nav`, `common`, `login`, `settings`, `dashboard`, `inventory`, `chat`, `projects`, `locations`) |
+| `assets/locales/he.json` | Hebrew locale — 141 keys with full RTL support |
+| `assets/locales/es.json` | Spanish locale — 141 keys |
 | `contrast_audit.js` | Dev-only utility — runs in the browser console to measure contrast ratios for all rendered text against WCAG 2.1 AA (4.5:1 normal / 3:1 large text) |
+| `tests/pre_merge_check.js` | Pre-merge test suite — 47 automated checks: locale parity, i18n.js API, data-i18n coverage, RTL CSS rules, bare-text audit, CHANGELOG validation |
 | `uploads/` | Auto-created directory for component images |
 | `docs/` | Original design documents and phase guides |
 
@@ -713,6 +730,7 @@ Contributions are welcome! Here are good starting points:
 - **Scheduled cron import** — auto-run the bulk importer via cron instead of the browser
 - **Location hierarchy** — nested `Area → Unit → Container` relational structure
 - **PWA / offline mode** — service worker + IndexedDB cache for mobile-first use
+- **New locale** — add a language by creating `assets/locales/<code>.json` (copy `en.json`, translate all 141 keys) and adding one `<option>` to the language selector in `settings.php`. Run `npm run validate:i18n` to confirm 100% coverage.
 
 Please open an issue to discuss major changes before submitting a PR.
 
