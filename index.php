@@ -11,11 +11,28 @@ if (isset($_SESSION['authenticated'])) {
     exit;
 }
 
-$password = '1234'; // ← Change this to something stronger before deploying
-$error    = '';
+// Load DB to read the lab password + personalization from settings table
+require 'db.php';
+$stmt = $pdo->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('lab_password','lab_name','lab_tagline','lab_logo_url')");
+$_idx = [];
+if ($stmt) foreach ($stmt->fetchAll() as $r) $_idx[$r['setting_key']] = $r['setting_value'];
+
+$stored_hash = $_idx['lab_password'] ?? null;
+$use_hash    = !empty($stored_hash);
+
+// Personalization
+$site_name     = !empty($_idx['lab_name'])    ? $_idx['lab_name']    : 'DIY Lab';
+$site_tagline  = !empty($_idx['lab_tagline']) ? $_idx['lab_tagline'] : 'Inventory & AI Orchestrator';
+$site_logo_url = $_idx['lab_logo_url'] ?? '';
+
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    if ($_POST['pass'] === $password) {
+    $entered = $_POST['pass'] ?? '';
+    $valid   = $use_hash
+        ? password_verify($entered, $stored_hash)
+        : ($entered === '1234');
+    if ($valid) {
         $_SESSION['authenticated'] = true;
         header('Location: dashboard.php');
         exit;
@@ -76,19 +93,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     <div class="flex justify-center mb-8">
       <div class="relative float-anim">
         <div class="pulse-ring"></div>
+        <?php if (!empty($site_logo_url)): ?>
+          <img src="<?= htmlspecialchars($site_logo_url) ?>" alt="Logo"
+            class="w-20 h-20 rounded-2xl object-cover glow-purple">
+        <?php else: ?>
         <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center glow-purple">
           <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.3 24.3 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.798-1.332 2.798H4.13c-1.362 0-2.332-1.798-1.332-2.798L4 14.5"/>
           </svg>
         </div>
+        <?php endif; ?>
       </div>
     </div>
 
     <!-- Card -->
     <div class="glass rounded-3xl p-8 glow-purple">
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-white mb-2">DIY Lab</h1>
-        <p class="text-slate-400 text-sm">Inventory & AI Orchestrator</p>
+        <h1 class="text-3xl font-bold text-white mb-2"><?= htmlspecialchars($site_name) ?></h1>
+        <p class="text-slate-400 text-sm"><?= htmlspecialchars($site_tagline) ?></p>
       </div>
 
       <?php if ($error): ?>

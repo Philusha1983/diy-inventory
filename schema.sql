@@ -35,4 +35,11 @@ INSERT IGNORE INTO `settings` (`setting_key`, `setting_value`) VALUES
   ('api_key',        ''),         -- Active provider's API key (set in Settings UI)
   ('gemini_api_key', ''),         -- Google Gemini API key
   ('gemini_model',   'gemini-2.0-flash'),
-  ('openai_api_key', '');         -- OpenAI API key
+  ('openai_api_key', ''),         -- OpenAI API key
+  ('lab_password',   '$2y$12$Xl3UzNWiKjmSPFGMwwU4w.p2aL/tqhqT9GFOkbJKrFDEMHnXN.7B2'), -- Default: 1234 (bcrypt). Change via Settings UI.
+  -- Personalization (all editable via User Settings)
+  ('lab_name',         'DIY Lab'),
+  ('lab_tagline',      'Inventory & AI Orchestrator'),
+  ('lab_mini_tagline', 'Inventory System'),
+  ('lab_logo_url',     '');       -- Leave blank to use default SVG logo
+
