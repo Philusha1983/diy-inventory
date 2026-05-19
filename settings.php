@@ -12,6 +12,13 @@ $message_type = 'success';
 $pw_message   = '';
 $pw_type      = 'success';
 
+// --- Save integrations ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_integrations') {
+    $admin_email = trim($_POST['admin_email'] ?? '');
+    $pdo->prepare("INSERT INTO settings (setting_key, setting_value) VALUES ('admin_email', ?) ON DUPLICATE KEY UPDATE setting_value = ?")->execute([$admin_email, $admin_email]);
+    $message = 'Bug reporting settings saved successfully!';
+}
+
 // --- AI provider / API key save ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_config') {
     $provider = $_POST['ai_provider'] ?? 'gemini';
@@ -460,6 +467,36 @@ $has_key          = !empty($settings['api_key']);
             style="background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 4px 20px rgba(220,38,38,.25);"
             onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
             🔐 Update Password
+          </button>
+        </form>
+      </div>
+
+
+      <!-- Bug Reporting Section -->
+      <div class="glass rounded-2xl p-6 mt-6 border border-emerald-500/10">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-white">Bug Reporting & Notifications</p>
+            <p class="text-xs text-slate-500 mt-0.5">Configure where local bug reports should be sent</p>
+          </div>
+        </div>
+
+        <form method="POST" class="space-y-4">
+          <input type="hidden" name="action" value="save_integrations">
+          
+          <div>
+            <label class="form-label">Admin Email</label>
+            <input type="email" name="admin_email" value="<?= htmlspecialchars($settings['admin_email'] ?? '') ?>" placeholder="Leave blank for system default" class="input-field w-full rounded-xl px-4 py-3 text-sm">
+            <p class="text-xs text-slate-600 mt-1.5">When users submit a ticket via the sidebar, an email notification with the screenshot will be sent here.</p>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl font-semibold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/10 text-sm shadow-lg shadow-emerald-900/10 mt-2 transition-colors">
+            🔗 Save Notification Settings
           </button>
         </form>
       </div>
