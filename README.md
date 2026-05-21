@@ -186,133 +186,85 @@ diy-inventory/
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation & Setup Wizard
 
-### macOS (Homebrew)
+The DIY Lab Inventory & AI Orchestrator features a simple, web-based installation wizard (similar to WordPress) that guides you through the setup.
 
-This is the recommended method for local development on macOS.
+### 1. Prerequisites
+Ensure you have PHP 8.0+ and MySQL 8.0+ (or MariaDB) installed on your system.
 
-**1. Install Homebrew** (if not already installed)
+#### macOS (Homebrew)
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-**2. Install PHP and MySQL**
-```bash
+# Install PHP and MySQL
 brew install php mysql
-```
-
-**3. Start MySQL**
-```bash
+# Start MySQL
 brew services start mysql
 ```
 
-**4. Secure MySQL** (optional but recommended — sets a root password)
+#### Linux (Ubuntu)
 ```bash
-mysql_secure_installation
-```
-
-**5. Clone the repository**
-```bash
-git clone https://github.com/YOUR_USERNAME/diy-inventory.git
-cd diy-inventory
-```
-
-**6. Create the uploads directory**
-```bash
-mkdir -p uploads
-chmod 755 uploads
-```
-
----
-
-### Linux / Ubuntu
-
-```bash
-# Install dependencies
 sudo apt update
-sudo apt install php php-mysql php-curl php-json mysql-server -y
-
-# Start MySQL
+sudo apt install php php-mysql php-curl php-gd php-mbstring mysql-server -y
 sudo systemctl start mysql
-sudo systemctl enable mysql
+```
 
-# Secure MySQL
-sudo mysql_secure_installation
+#### Windows
+Download and start **Apache** and **MySQL** via [XAMPP](https://www.apachefriends.org/).
 
-# Clone repo
+### 2. Clone the Repository
+```bash
 git clone https://github.com/YOUR_USERNAME/diy-inventory.git
 cd diy-inventory
-mkdir -p uploads && chmod 755 uploads
 ```
 
----
-
-### Windows (XAMPP)
-
-1. Download and install [XAMPP](https://www.apachefriends.org/) (includes PHP + MySQL + phpMyAdmin).
-2. Clone or download this repo into `C:\xampp\htdocs\diy-inventory\`.
-3. Start **Apache** and **MySQL** from the XAMPP Control Panel.
-4. Create the `uploads/` folder inside the project directory.
-5. Access the app at `http://localhost/diy-inventory/`.
-
----
-
-## 🗄 Database Setup
-
-**1. Log into MySQL**
+### 3. Start the PHP Built-in Server
+Run the built-in server from the project root directory:
 ```bash
-# macOS / Linux
-mysql -u root -p
-
-# If no password was set (fresh install)
-mysql -u root
+php -c php.ini -S localhost:8080
 ```
 
-**2. Create the database**
+### 4. Run the Installation Wizard
+Open your web browser and navigate to:
+👉 **`http://localhost:8080`**
+
+Since the application is not yet configured, you will be automatically redirected to the Setup Wizard at `/install/index.php`. The wizard will:
+1. Validate your server environment (PHP version, required extensions) and directory write permissions.
+2. Prompt for database credentials and verify them.
+3. Automatically create the database (if it doesn't exist), run `schema.sql` to import the tables, and write `config.php`.
+4. Walk you through creating the administrator login credentials.
+5. Securely disable/rename the `install/` directory and redirect you to the main login screen.
+
+---
+
+## 🗄 Manual Database Setup (Fallback)
+
+If you prefer to configure the system manually, or if the Setup Wizard encounters file system write-permission restrictions:
+
+**1. Create the Database**
+Log into MySQL and run:
 ```sql
 CREATE DATABASE diy_lab_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE diy_lab_db;
 ```
 
-**3. Apply the schema**
+**2. Apply the Schema**
 ```bash
 # From the project root
 mysql -u root -p diy_lab_db < schema.sql
 ```
 
-Or paste the contents of `schema.sql` directly into phpMyAdmin's SQL tab.
-
-This creates two tables:
-
-| Table | Purpose |
-|-------|---------|
-| `inventory` | All components — name, model, category, quantity, status, specs, image paths, location, product URL, datasheet URL, notes, purchase price, and cached enrichment data |
-| `settings` | Key-value store for all configuration — AI provider, API key, lab branding (`lab_name`, `lab_tagline`, `lab_mini_tagline`, `lab_logo_url`), and the bcrypt-hashed login password (`lab_password`) |
-
-**Personalization keys seeded by default:**
-
-| Key | Default value |
-|-----|---------------|
-| `lab_name` | `DIY Lab` |
-| `lab_tagline` | `Inventory & AI Orchestrator` |
-| `lab_mini_tagline` | `Inventory System` |
-| `lab_logo_url` | *(empty — uses built-in gradient icon)* |
-| `lab_password` | *(empty — defaults to `1234` until changed via UI)* |
-
-**4. Verify database credentials in `db.php`**
-
-The default credentials are:
+**3. Manually Generate `config.php`**
+Create a file named `config.php` in the root folder of the project with the following contents:
 ```php
-$host = '127.0.0.1';
-$db   = 'diy_lab_db';
-$user = 'root';
-$pass = '';          // Change this if you set a MySQL root password
+<?php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'diy_lab_db');
+define('DB_USER', 'root');
+define('DB_PASS', 'YOUR_DATABASE_PASSWORD');
+define('SITE_URL', 'http://localhost:8080');
 ```
 
-If you set a MySQL root password during `mysql_secure_installation`, update `$pass` accordingly.
-
 ---
+
 
 ## 🔑 Getting API Keys
 
@@ -615,7 +567,9 @@ uploads/
 | File | Role |
 |------|------|
 | `index.php` | Login page with session-based password gate |
-| `db.php` | PDO connection wrapper — required by all pages |
+| `db.php` | PDO connection wrapper — handles setup redirect and loads config |
+| `install/index.php` | Web-based WordPress-like Setup Wizard |
+| `package.php` | Production packaging script (creates diy-inventory.zip) |
 | `ai_helper.php` | Central AI proxy: `call_ai_api($prompt, $images)` + `build_enrichment_context()` — fetches key from DB, handles Gemini & OpenAI |
 | `dashboard.php` | Inventory list with search, filter, column sorting, bulk actions (checkboxes + floating bar), and stats |
 | `add_item.php` | Add/Edit form + AI Auto-Identify drag-drop zone + product URL/datasheet/notes/price fields |
@@ -645,6 +599,7 @@ uploads/
 | `contrast_audit.js` | Dev-only utility — runs in the browser console to measure contrast ratios for all rendered text against WCAG 2.1 AA (4.5:1 normal / 3:1 large text) |
 | `tests/pre_merge_check.js` | Pre-merge test suite — 47 automated checks: locale parity, i18n.js API, data-i18n coverage, RTL CSS rules, bare-text audit, CHANGELOG validation |
 | `tests/user_settings_check.js` | User Settings QA suite — **109 automated checks** across 22 test groups: logo upload pipeline, personalization UI, save handlers, dynamic branding in all 9 sidebar pages, bcrypt security, schema seed keys, auto-migration, dedicated logout endpoint, and HTTP smoke tests |
+| `tests/install_validation_test.php` | Automated Setup Wizard validation suite — checks environment checker, config generator, masking, and DB error handling |
 | `uploads/` | Auto-created directory for component images |
 | `uploads/logo/` | Auto-created directory for uploaded lab logos (created on first logo upload) |
 | `db.php.example` | Safe credential template — copy to `db.php` and fill in your MySQL host, database name, username, and password |
