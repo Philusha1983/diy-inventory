@@ -432,6 +432,28 @@
 
   <!-- Scripts -->
   <script>
+    // 0. Hero video — enforce mute at all times (cross-browser safety net)
+    (function () {
+      const video = document.getElementById('hero-video');
+      if (!video) return;
+
+      // Set muted property directly (covers Safari which sometimes ignores the HTML attribute)
+      video.muted = true;
+      video.volume = 0;
+
+      // Re-enforce on every play event in case the browser resets state
+      video.addEventListener('play', function () {
+        video.muted = true;
+        video.volume = 0;
+      });
+
+      // Also enforce once metadata is loaded
+      video.addEventListener('loadedmetadata', function () {
+        video.muted = true;
+        video.volume = 0;
+      });
+    })();
+
     // 1. Dynamic GitHub Release Fetching
     async function fetchLatestRelease() {
       const fallbackUrl = 'https://github.com/Philusha1983/diy-inventory/releases/latest';
