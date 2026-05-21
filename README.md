@@ -6,7 +6,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-CDN-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 ![AI](https://img.shields.io/badge/AI-Gemini%20%7C%20GPT--4o-8B5CF6?style=flat-square&logo=openai&logoColor=white)
-![i18n](https://img.shields.io/badge/i18n-EN%20%7C%20HE%20%7C%20ES-f59e0b?style=flat-square&logo=googletranslate&logoColor=white)
+![i18n](https://img.shields.io/badge/i18n-EN%20%7C%20HE%20%7C%20ES%20%7C%20UK-f59e0b?style=flat-square&logo=googletranslate&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ---
@@ -72,7 +72,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 🎨 **Lab Personalization** | Customise your lab's identity from the UI: set a **Lab Name**, **Tag Line** (login screen subtitle), **Mini Tag Line** (sidebar label), and **Logo** (upload a file or paste a URL). Uploaded logos are centre-cropped to a square and resized to 256×256 px by PHP GD, then stored in `uploads/logo/`. Changes propagate instantly to all pages including the login gate. Default branding falls back to the built-in gradient icon. |
 | 🔑 **Secure Password Management** | Change the lab password directly from User Settings — no file editing required. The current password is verified before accepting a change; the new password is hashed with **`PASSWORD_BCRYPT`** and stored in the database. A live "passwords match" hint guides the user during entry. |
 | 🌗 **Light / Dark Theme** | Toggle between dark (default) and light mode via the sidebar switch. Preference is persisted in `localStorage` across sessions and page reloads — survives logout. All colours meet **WCAG 2.1 AA** contrast requirements in both themes. |
-| 🌍 **Multi-Language UI** | Full internationalisation (i18n) across all pages — switch between **English 🇬🇧**, **Hebrew 🇮🇱 (RTL)**, and **Spanish 🇪🇸** from the Settings page. Language persists in `localStorage`. Hebrew activates complete RTL layout mirroring (sidebar, margins, flex order, text alignment). Add new languages with a single JSON file. |
+| 🌍 **Multi-Language UI** | Full internationalisation (i18n) across all pages — switch between **English 🇬🇧**, **Hebrew 🇮🇱 (RTL)**, **Spanish 🇪🇸**, and **Ukrainian 🇺🇦** from the Settings page. Language persists in `localStorage`. Hebrew activates complete RTL layout mirroring (sidebar, margins, flex order, text alignment). Add new languages with a single JSON file. |
 | 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view (with checkboxes for bulk selection), and adaptive layouts for phones and tablets. |
 
 ---
@@ -172,6 +172,7 @@ diy-inventory/
 ├── assets/locales/en.json       # English locale — 142 translation keys across 9 namespaces
 ├── assets/locales/he.json       # Hebrew locale — 142 keys, full RTL support
 ├── assets/locales/es.json       # Spanish locale — 142 keys
+├── assets/locales/uk.json       # Ukrainian locale — 142 keys
 ├── contrast_audit.js            # Dev utility — audits all page colours against WCAG 2.1 AA ratios
 ├── tests/pre_merge_check.js     # Pre-merge test suite — 47 automated checks covering i18n, RTL CSS, locale parity
 ├── tests/user_settings_check.js # User Settings QA suite — 109 automated checks: logo upload, personalization fields, bcrypt security, dynamic branding, logout endpoint, HTTP smoke tests
@@ -639,6 +640,7 @@ uploads/
 | `assets/locales/en.json` | English locale — 142 keys across 9 namespaces (`nav`, `common`, `login`, `settings`, `dashboard`, `inventory`, `chat`, `projects`, `locations`) |
 | `assets/locales/he.json` | Hebrew locale — 142 keys with full RTL support |
 | `assets/locales/es.json` | Spanish locale — 142 keys |
+| `assets/locales/uk.json` | Ukrainian locale — 142 keys |
 | `contrast_audit.js` | Dev-only utility — runs in the browser console to measure contrast ratios for all rendered text against WCAG 2.1 AA (4.5:1 normal / 3:1 large text) |
 | `tests/pre_merge_check.js` | Pre-merge test suite — 47 automated checks: locale parity, i18n.js API, data-i18n coverage, RTL CSS rules, bare-text audit, CHANGELOG validation |
 | `tests/user_settings_check.js` | User Settings QA suite — **109 automated checks** across 22 test groups: logo upload pipeline, personalization UI, save handlers, dynamic branding in all 9 sidebar pages, bcrypt security, schema seed keys, auto-migration, dedicated logout endpoint, and HTTP smoke tests |
