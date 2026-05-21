@@ -26,6 +26,7 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
 <!DOCTYPE html>
 <html lang="en" id="html-root">
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Locations — DIY Lab</title>
@@ -194,7 +195,8 @@ function printContainerQR(locName, itemTypes, totalQty, locEncoded) {
   new QRCode(tmp, { text: qrText, width:130, height:130,
     colorDark:'#111', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
   setTimeout(() => {
-    const html = `<!DOCTYPE html><html><head><style>
+    const html = `<!DOCTYPE html><html><head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><style>
       body{margin:2cm;font-family:sans-serif;background:#fff;}
       .sticker{display:inline-flex;align-items:center;gap:16px;border:2px dashed #aaa;padding:16px;border-radius:8px;}
       .title{font-size:16px;font-weight:700;color:#111;}

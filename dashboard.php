@@ -71,6 +71,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 <html lang="en" id="html-root">
 
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — DIY Lab Inventory</title>

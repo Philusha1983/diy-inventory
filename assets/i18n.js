@@ -12,7 +12,7 @@ const localizationController = (() => {
   let _lang     = 'en';
 
   const STORAGE_KEY = 'diy_inventory_lang';
-  const LOCALES_PATH = '/assets/locales/';
+  const LOCALES_PATH = 'assets/locales/';
   const RTL_LANGS   = ['he', 'ar', 'fa', 'ur'];
   const SUPPORTED   = ['en', 'he', 'es', 'uk'];
 

@@ -176,6 +176,7 @@ ob_end_flush();
 <!DOCTYPE html>
 <html lang="en" id="html-root">
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Creative Engine — DIY Lab</title>

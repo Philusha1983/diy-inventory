@@ -34,6 +34,7 @@ ksort($by_category);
 <!DOCTYPE html>
 <html lang="en" id="html-root">
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📦 <?= htmlspecialchars($loc) ?> — Container Manifest</title>
@@ -311,7 +312,8 @@ function printSticker() {
       colorDark:'#111', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M
     });
   }
-  const html = `<!DOCTYPE html><html><head><style>
+  const html = `<!DOCTYPE html><html><head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><style>
     body{margin:2cm;font-family:sans-serif;}
     .sticker{display:flex;align-items:center;gap:16px;border:2px dashed #aaa;padding:16px;width:fit-content;border-radius:8px;}
     .title{font-size:16px;font-weight:700;}

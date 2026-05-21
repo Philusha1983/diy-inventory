@@ -67,6 +67,7 @@ $guide_markdown = extract_ai_text($response, $provider);
 <!DOCTYPE html>
 <html lang="en" id="html-root">
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $project_title ?> — Blueprint</title>
