@@ -129,7 +129,7 @@ ksort($by_category);
         🖨️ Print Manifest
       </button>
       <button onclick="toggleSticker()" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold text-white no-print" data-i18n-text="container_manifest.container_qr_sticker_1">
-        📄 Container QR Sticker
+        <span data-i18n-text="container_manifest.container_qr">📄 Container QR Sticker</span>
       </button>
     </div>
   </header>
@@ -145,7 +145,7 @@ ksort($by_category);
         </div>
       </div>
       <div style="text-align:right;font-size:8pt;color:#777;">
-        <div>Printed: <?= date('d M Y, H:i') ?></div>
+        <div><span data-i18n-text="container_manifest.printed">Printed: </span><?= date('d M Y, H:i') ?></div>
         <div style="margin-top:2pt;" data-i18n-text="container_manifest.diy_lab_inventory">DIY Lab Inventory</div>
       </div>
     </div>
@@ -157,23 +157,23 @@ ksort($by_category);
     <div id="sticker-panel" class="hidden mb-6 glass rounded-2xl p-6">
       <div class="flex flex-col lg:flex-row gap-6 items-start">
         <div>
-          <p class="text-sm font-semibold text-white mb-3">📄 Container QR Sticker — <?= htmlspecialchars($loc) ?></p>
+          <p class="text-sm font-semibold text-white mb-3"><span data-i18n-text="container_manifest.container_qr">📄 Container QR Sticker</span> — <?= htmlspecialchars($loc) ?></p>
           <div class="sticker-preview" id="sticker-preview-box">
             <div id="container-qr"></div>
             <div class="sticker-info">
               <div class="sticker-title">📦 <?= htmlspecialchars($loc) ?></div>
-              <div class="sticker-sub"><?= $total_items ?> types · <?= $total_qty ?> units</div>
+              <div class="sticker-sub"><?= $total_items ?> types · <?= $total_qty ?> <span data-i18n-text="container_manifest.units">units</span></div>
               <div class="sticker-sub" style="margin-top:4px;color:#7c3aed;font-weight:600;" data-i18n-text="container_manifest.scan_for_live_manifest">Scan for live manifest →</div>
             </div>
           </div>
         </div>
         <div class="flex-1">
-          <p class="text-xs text-slate-500 mb-3">This QR code links to the live manifest for <strong class="text-slate-300"><?= htmlspecialchars($loc) ?></strong>. Print it, laminate it, and stick it on the container. Scanning with any phone camera shows the current contents in real-time.</p>
+          <p class="text-xs text-slate-500 mb-3"><span data-i18n-text="container_manifest.qr_links">This QR code links to the live manifest for</span> <strong class="text-slate-300"><?= htmlspecialchars($loc) ?></strong>. <span data-i18n-text="container_manifest.qr_desc_2">Print it, laminate it, and stick it on the container. Scanning with any phone camera shows the current contents in real-time.</span></p>
           <div class="flex gap-2 flex-wrap">
             <button onclick="printSticker()" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold text-white" data-i18n-text="container_manifest.print_sticker">🖨️ Print Sticker</button>
             <a href="print_labels.php?loc=<?= urlencode($loc) ?>" target="_blank"
                class="px-4 py-2 rounded-lg text-sm font-semibold text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 transition-all">
-               🏷️ Print Item Labels Instead
+               <span data-i18n-text="container_manifest.print_item_labels"><span data-i18n-text="container_manifest.print_labels_instead">🏷️ Print Item Labels Instead</span></span>
             </a>
           </div>
         </div>
@@ -184,7 +184,7 @@ ksort($by_category);
     <div class="text-center py-16 text-slate-500">
       <p class="text-3xl mb-3">📭</p>
       <p class="font-semibold" data-i18n-text="container_manifest.no_components_at_this_location">No components at this location</p>
-      <p class="text-sm mt-1">Items with location "<?= htmlspecialchars($loc) ?>" will appear here.</p>
+      <p class="text-sm mt-1"><span data-i18n-text="container_manifest.items_with_loc">Items with location "</span><?= htmlspecialchars($loc) ?>" <span data-i18n-text="container_manifest.will_appear">will appear here.</span></p>
     </div>
     <?php else: ?>
 
@@ -266,7 +266,7 @@ ksort($by_category);
     <div id="print-qr"></div>
     <div class="sticker-info">
       <div class="sticker-title" style="font-size:16px;">📦 <?= htmlspecialchars($loc) ?></div>
-      <div class="sticker-sub" style="font-size:11px;"><?= $total_items ?> types · <?= $total_qty ?> units</div>
+      <div class="sticker-sub" style="font-size:11px;"><?= $total_items ?> types · <?= $total_qty ?> <span data-i18n-text="container_manifest.units">units</span></div>
       <div class="sticker-sub" style="font-size:10px;color:#7c3aed;font-weight:700;margin-top:4px;" data-i18n-text="container_manifest.scan_for_live_manifest">Scan for live manifest →</div>
     </div>
   </div>
@@ -324,7 +324,7 @@ function printSticker() {
     ${document.getElementById('print-qr').innerHTML}
     <div>
       <div class="title">📦 <?= htmlspecialchars(addslashes($loc)) ?></div>
-      <div class="sub"><?= $total_items ?> types · <?= $total_qty ?> units</div>
+      <div class="sub"><?= $total_items ?> types · <?= $total_qty ?> <span data-i18n-text="container_manifest.units">units</span></div>
       <div class="sub accent">Scan to view full manifest</div>
       <div class="url">${manifestUrl}</div>
     </div>

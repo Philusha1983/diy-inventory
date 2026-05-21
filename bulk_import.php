@@ -81,8 +81,8 @@ unset($_SESSION['zip_import_skipped']);
 
   <?php if ($zip_added): ?>
   <div class="flash-ok">
-    ✅ ZIP extracted — <strong><?= $zip_added ?> folder<?= $zip_added!==1?'s':'' ?></strong> added to the import queue.
-    <?php if ($zip_skipped): ?> Skipped: <?= implode(', ', array_map('htmlspecialchars', $zip_skipped)) ?>.<?php endif; ?>
+    <span data-i18n-text="bulk_import.zip_extracted">✅ ZIP extracted — </span><strong><?= $zip_added ?> <span data-i18n-text="bulk_import.folders">folder(s)</span></strong> <span data-i18n-text="bulk_import.added_to_queue">added to the import queue.</span>
+    <?php if ($zip_skipped): ?> <span data-i18n-text="bulk_import.skipped">Skipped:</span> <?= implode(', ', array_map('htmlspecialchars', $zip_skipped)) ?>.<?php endif; ?>
     <a href="bulk_import_folder.php" style="color:#4ade80;font-weight:700;margin-left:8px;" data-i18n-text="bulk_import.start_ai_import">Start AI Import →</a>
   </div>
   <?php endif; ?>

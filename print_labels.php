@@ -119,7 +119,7 @@ $sz = $sizes[$label_size] ?? $sizes['medium'];
       <?php if ($item['model']): ?>
       <div class="label-model"><?= htmlspecialchars($item['model']) ?></div>
       <?php endif; ?>
-      <div class="label-meta">Qty: <?= (int)$item['quantity'] ?> · <?= htmlspecialchars($item['category']) ?></div>
+      <div class="label-meta"><span data-i18n-text="common.qty">Qty: </span><?= (int)$item['quantity'] ?> · <?= htmlspecialchars($item['category']) ?></div>
       <?php if ($item['location']): ?>
       <div class="label-loc">📍 <?= htmlspecialchars($item['location']) ?></div>
       <?php endif; ?>
@@ -151,7 +151,7 @@ items.forEach(item => {
     item.name,
     item.model   ? `Model: ${item.model}`       : null,
     `Category: ${item.category}`,
-    `Qty: ${item.quantity}`,
+    `<span data-i18n-text="common.qty">Qty: </span>${item.quantity}`,
     item.location ? `Location: ${item.location}` : null,
     '---',
     url,

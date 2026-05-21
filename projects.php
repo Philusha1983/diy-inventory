@@ -253,7 +253,7 @@ ob_end_flush();
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
       <?php if ($has_cache): ?>
-      <span class="text-xs text-slate-500 hidden sm:block">Generated <?= htmlspecialchars($cache_age) ?></span>
+      <span class="text-xs text-slate-500 hidden sm:block"><span data-i18n-text="projects.generated">Generated </span><?= htmlspecialchars($cache_age) ?></span>
       <?php endif; ?>
       <button id="discover-btn" onclick="brainstorm()"
         class="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
@@ -287,7 +287,7 @@ ob_end_flush();
         <p class="text-white font-bold text-xl mb-2" data-i18n-text="projects.ready_to_discover">Ready to Discover</p>
         <p class="text-slate-400 text-sm mb-6"><?= $item_count ?> <span data-i18n-text="projects.components_in_your_lab">components in your lab.</span><br><span data-i18n-text="projects.click_below_to_let_ai">Click below to let AI suggest creative projects.</span></p>
         <div class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white btn-primary shadow-lg shadow-purple-900/30 text-sm" data-i18n-text="projects.generate_project_ideas">✨ Generate Project Ideas</div>
-        <p class="text-xs text-slate-600 mt-4">Takes 15–40 seconds · Uses <?= ucfirst($provider) ?></p>
+        <p class="text-xs text-slate-600 mt-4"><span data-i18n-text="projects.takes_seconds">Takes 15–40 seconds</span> · Uses <?= ucfirst($provider) ?></p>
       </div>
       <?php endif; ?>
     </div>
@@ -371,7 +371,7 @@ function esc(s) {
 }
 
 function renderProjects(projects, provider, fromCache = false) {
-  // If fresh results arrived, clear the "Generated X ago" notice strip
+  // If fresh results arrived, clear the "<span data-i18n-text="projects.generated">Generated </span>X ago" notice strip
   if (!fromCache) {
     const notice = document.querySelector('#results-area .border-purple-500\\/20');
     if (notice) notice.remove();

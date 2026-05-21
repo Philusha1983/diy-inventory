@@ -1,0 +1,1730 @@
+{
+  "add_item.upload_component_photos_and_le": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "p",
+    "original": "Upload component photos and let AI fill in the details automatically.",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mb-4\">Upload component photos and let AI fill in the details automatically.</p>"
+  },
+  "add_item.drop_photos_here_or": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "p",
+    "original": "Drop photos here or",
+    "originalHtml": "<p class=\"text-sm text-slate-400\">Drop photos here or <span class=\"text-purple-400\">browse</span></p>"
+  },
+  "add_item.multiple_angles_better_accurac": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "p",
+    "original": "Multiple angles = better accuracy (top, labels, packaging)",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1\">Multiple angles = better accuracy (top, labels, packaging)</p>"
+  },
+  "add_item.add_urls_and_the_ai_will_fetch": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "p",
+    "original": "Add URLs and the AI will fetch additional specs, pinouts, and code examples automatically.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mb-4\">Add URLs and the AI will fetch additional specs, pinouts, and code examples automatically.</p>"
+  },
+  "add_item.upload_the_photos_from_ai_iden": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "p",
+    "original": "Upload the photos from AI identification to save them with this item.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1.5\">Upload the photos from AI identification to save them with this item.</p>"
+  },
+  "add_item.browse": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "span",
+    "original": "browse",
+    "originalHtml": "<span class=\"text-purple-400\">browse</span>"
+  },
+  "add_item.optional_used_to_enrich_ai_con": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "span",
+    "original": "— optional, used to enrich AI context",
+    "originalHtml": "<span class=\"text-xs font-normal text-slate-500 ml-1\">— optional, used to enrich AI context</span>"
+  },
+  "add_item.ai_auto_identify": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "h2",
+    "original": "AI Auto-Identify",
+    "originalHtml": "<h2 class=\"font-semibold text-white mb-1 flex items-center gap-2\">\n          <span class=\"text-xl\">✨</span> AI Auto-Identify\n        </h2>"
+  },
+  "add_item.product_details": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "h3",
+    "original": "Product Details",
+    "originalHtml": "<h3 class=\"text-sm font-semibold text-slate-300 mb-1 flex items-center gap-2\">\n            <span class=\"text-base\">🔗</span> Product Details\n            <span class=\"text-xs font-normal text-slate-500 ml-1\">— optional, used to enrich AI context</span>\n          </h3>"
+  },
+  "add_item.cancel": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "a",
+    "original": "Cancel",
+    "originalHtml": "<a href=\"dashboard.php\" class=\"px-5 py-3 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 hover:text-white transition-all\">\n            Cancel\n          </a>"
+  },
+  "add_item.upload_component_photos": {
+    "file": "/Users/philipsl/Desktop/diy inventory/add_item.php",
+    "tag": "label",
+    "original": "Upload Component Photos",
+    "originalHtml": "<label class=\"form-label\">Upload Component Photos</label>"
+  },
+  "bulk_import.easiest_no_ai_cost": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "span",
+    "original": "Easiest · No AI cost",
+    "originalHtml": "<span class=\"card-badge badge-easy\">Easiest · No AI cost</span>"
+  },
+  "bulk_import.medium_uses_ai": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "span",
+    "original": "Medium · Uses AI",
+    "originalHtml": "<span class=\"card-badge badge-med\">Medium · Uses AI</span>"
+  },
+  "bulk_import.most_flexible_uses_ai": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "span",
+    "original": "Most flexible · Uses AI",
+    "originalHtml": "<span class=\"card-badge badge-adv\">Most flexible · Uses AI</span>"
+  },
+  "bulk_import.bulk_import": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "h1",
+    "original": "📦 Bulk Import",
+    "originalHtml": "<h1>📦 Bulk Import</h1>"
+  },
+  "bulk_import.which_method_should_i_use": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "h3",
+    "original": "Which method should I use?",
+    "originalHtml": "<h3>Which method should I use?</h3>"
+  },
+  "bulk_import.dashboard": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "a",
+    "original": "← Dashboard",
+    "originalHtml": "<a href=\"dashboard.php\">← Dashboard</a>"
+  },
+  "bulk_import.start_ai_import": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "a",
+    "original": "Start AI Import →",
+    "originalHtml": "<a href=\"bulk_import_folder.php\" style=\"color:#4ade80;font-weight:700;margin-left:8px;\">Start AI Import →</a>"
+  },
+  "bulk_import.choose_import_method": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "Choose Import Method",
+    "originalHtml": "<div class=\"page-title\">Choose Import Method</div>"
+  },
+  "bulk_import.three_ways_to_add_multiple_com": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "Three ways to add multiple components at once. Pick the one that fits your data.",
+    "originalHtml": "<div class=\"page-sub\">Three ways to add multiple components at once. Pick the one that fits your data.</div>"
+  },
+  "bulk_import.zip_extracted_added_to_the_imp": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "✅ ZIP extracted —  added to the import queue.\n     Skipped: .",
+    "originalHtml": "<div class=\"flash-ok\">\n    ✅ ZIP extracted — <strong> folder</strong> added to the import queue.\n     Skipped: .\n    <a href=\"bulk_import_folder.php\" style=\"color:#4ade80;font-weight:700;margin-left:8px;\">Start AI Import →</a>\n  </div>"
+  },
+  "bulk_import.csv_spreadsheet": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "CSV / Spreadsheet",
+    "originalHtml": "<div class=\"card-title\">CSV / Spreadsheet</div>"
+  },
+  "bulk_import.upload_a_csv_or_tsv_file_from_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "Upload a CSV or TSV file from Excel, Google Sheets, Notion, or any inventory tool.\n        Column names are auto-detected. No AI required — fastest import method.",
+    "originalHtml": "<div class=\"card-desc\">\n        Upload a CSV or TSV file from Excel, Google Sheets, Notion, or any inventory tool.\n        Column names are auto-detected. No AI required — fastest import method.\n      </div>"
+  },
+  "bulk_import.zip_of_photo_folders": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "ZIP of Photo Folders",
+    "originalHtml": "<div class=\"card-title\">ZIP of Photo Folders</div>"
+  },
+  "bulk_import.create_a_zip_where_each_subfol": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "Create a ZIP where each subfolder contains photos of one component.\n        Upload it here — the AI identifies each component from its photos.\n        Matches the existing folder-import workflow.",
+    "originalHtml": "<div class=\"card-desc\">\n        Create a ZIP where each subfolder contains photos of one component.\n        Upload it here — the AI identifies each component from its photos.\n        Matches the existing folder-import workflow.\n      </div>"
+  },
+  "bulk_import.image_group_wizard": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "Image Group Wizard",
+    "originalHtml": "<div class=\"card-title\">Image Group Wizard</div>"
+  },
+  "bulk_import.drag_photos_directly_into_your": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "div",
+    "original": "Drag photos directly into your browser and group them by component.\n        No folder structure needed — just drop your photos and let AI do the rest.\n        Best for ad-hoc imports straight from a camera roll.",
+    "originalHtml": "<div class=\"card-desc\">\n        Drag photos directly into your browser and group them by component.\n        No folder structure needed — just drop your photos and let AI do the rest.\n        Best for ad-hoc imports straight from a camera roll.\n      </div>"
+  },
+  "bulk_import.you_have_a_spreadsheet_of_part": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "li",
+    "original": "You have a spreadsheet of parts —",
+    "originalHtml": "<li>You have a spreadsheet of parts — <strong>CSV Import</strong></li>"
+  },
+  "bulk_import.you_have_photos_organised_in_f": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "li",
+    "original": "You have photos organised in folders on your computer —",
+    "originalHtml": "<li>You have photos organised in folders on your computer — <strong>ZIP Import</strong></li>"
+  },
+  "bulk_import.you_want_to_photograph_compone": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import.php",
+    "tag": "li",
+    "original": "You want to photograph components one-by-one right now —",
+    "originalHtml": "<li>You want to photograph components one-by-one right now — <strong>Image Wizard</strong></li>"
+  },
+  "bulk_import_csv.accepts_or_any_plain_text_deli": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "p",
+    "original": "Accepts , , or any plain-text delimited file. The first row must be column headers. Commas, tabs, semicolons, and pipe  delimiters are all auto-detected.",
+    "originalHtml": "<p>Accepts <strong>.csv</strong>, <strong>.tsv</strong>, or any plain-text delimited file. The first row must be column headers. Commas, tabs, semicolons, and pipe <code>|</code> delimiters are all auto-detected.</p>"
+  },
+  "bulk_import_csv.recognised_column_names_auto_m": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "p",
+    "original": "Recognised column names (auto-mapped):",
+    "originalHtml": "<p style=\"font-size:.8rem;color:var(--muted);margin-bottom:8px;\">Recognised column names (auto-mapped):</p>"
+  },
+  "bulk_import_csv.required_unrecognised_columns_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "p",
+    "original": "✦ Required. Unrecognised columns can be manually mapped in step 2.",
+    "originalHtml": "<p style=\"font-size:.72rem;color:var(--muted);margin-bottom:20px;\">✦ Required. Unrecognised columns can be manually mapped in step 2.</p>"
+  },
+  "bulk_import_csv.auto_mapped_columns_are_pre_se": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "p",
+    "original": "Auto-mapped columns are pre-selected (shown in green below the header). Adjust any that were not recognised. Columns left as  will be ignored.",
+    "originalHtml": "<p>Auto-mapped columns are pre-selected (shown in green below the header). Adjust any that were not recognised. Columns left as <em>— skip —</em> will be ignored.</p>"
+  },
+  "bulk_import_csv.name": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "name ✦",
+    "originalHtml": "<span class=\"col-tag required\">name ✦</span>"
+  },
+  "bulk_import_csv.model_part_number": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "model / part number",
+    "originalHtml": "<span class=\"col-tag\">model / part number</span>"
+  },
+  "bulk_import_csv.category_type": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "category / type",
+    "originalHtml": "<span class=\"col-tag\">category / type</span>"
+  },
+  "bulk_import_csv.quantity_qty": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "quantity / qty",
+    "originalHtml": "<span class=\"col-tag\">quantity / qty</span>"
+  },
+  "bulk_import_csv.location_bin_shelf": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "location / bin / shelf",
+    "originalHtml": "<span class=\"col-tag\">location / bin / shelf</span>"
+  },
+  "bulk_import_csv.status": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "status",
+    "originalHtml": "<span class=\"col-tag\">status</span>"
+  },
+  "bulk_import_csv.notes_description": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "notes / description",
+    "originalHtml": "<span class=\"col-tag\">notes / description</span>"
+  },
+  "bulk_import_csv.price_cost": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "price / cost",
+    "originalHtml": "<span class=\"col-tag\">price / cost</span>"
+  },
+  "bulk_import_csv.product_url_link": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "product url / link",
+    "originalHtml": "<span class=\"col-tag\">product url / link</span>"
+  },
+  "bulk_import_csv.datasheet_pdf": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "datasheet / pdf",
+    "originalHtml": "<span class=\"col-tag\">datasheet / pdf</span>"
+  },
+  "bulk_import_csv.specs_specifications": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "specs / specifications",
+    "originalHtml": "<span class=\"col-tag\">specs / specifications</span>"
+  },
+  "bulk_import_csv.skipped": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "skipped",
+    "originalHtml": "<span style=\"color:var(--yellow)\"> skipped</span>"
+  },
+  "bulk_import_csv.failed": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "failed",
+    "originalHtml": "<span style=\"color:var(--red)\"> failed</span>"
+  },
+  "bulk_import_csv.queued_for_enrichment": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "queued for enrichment",
+    "originalHtml": "<span style=\"color:#67e8f9\"> queued for enrichment</span>"
+  },
+  "bulk_import_csv.enriching": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "span",
+    "original": "⏳ enriching…",
+    "originalHtml": "<span style=\"font-size:.72rem;color:#67e8f9;margin-left:6px;\">⏳ enriching…</span>"
+  },
+  "bulk_import_csv.csv_import": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "h1",
+    "original": "📊 CSV Import",
+    "originalHtml": "<h1>📊 CSV Import</h1>"
+  },
+  "bulk_import_csv.upload_your_spreadsheet": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "h2",
+    "original": "Upload your spreadsheet",
+    "originalHtml": "<h2>Upload your spreadsheet</h2>"
+  },
+  "bulk_import_csv.map_columns_inventory_fields": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "h2",
+    "original": "Map columns → inventory fields",
+    "originalHtml": "<h2>Map columns → inventory fields</h2>"
+  },
+  "bulk_import_csv.import_complete": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "h2",
+    "original": "✅ Import complete",
+    "originalHtml": "<h2>✅ Import complete</h2>"
+  },
+  "bulk_import_csv.preview_first_rows_of_data": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "h3",
+    "original": "Preview (first  rows of data)",
+    "originalHtml": "<h3 style=\"font-size:.85rem;color:var(--muted);margin:20px 0 10px;\">Preview (first  rows of data)</h3>"
+  },
+  "bulk_import_csv.import_to_inventory": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "button",
+    "original": "✅ Import to Inventory",
+    "originalHtml": "<button type=\"submit\" class=\"btn btn-primary\" onclick=\"buildMapping()\">✅ Import to Inventory</button>"
+  },
+  "bulk_import_csv.import_hub": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "a",
+    "original": "← Import Hub",
+    "originalHtml": "<a href=\"bulk_import.php\">← Import Hub</a>"
+  },
+  "bulk_import_csv.start_over": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "a",
+    "original": "← Start over",
+    "originalHtml": "<a href=\"bulk_import_csv.php\" class=\"btn btn-secondary\">← Start over</a>"
+  },
+  "bulk_import_csv.view_inventory": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "a",
+    "original": "View Inventory →",
+    "originalHtml": "<a href=\"dashboard.php\" class=\"btn btn-primary\">View Inventory →</a>"
+  },
+  "bulk_import_csv.import_another_file": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "a",
+    "original": "Import another file",
+    "originalHtml": "<a href=\"bulk_import_csv.php\" class=\"btn btn-secondary\">Import another file</a>"
+  },
+  "bulk_import_csv.1_upload": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "1 Upload",
+    "originalHtml": "<div class=\"step \">1 Upload</div>"
+  },
+  "bulk_import_csv.2_preview_map": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "2 Preview & Map",
+    "originalHtml": "<div class=\"step \">2 Preview &amp; Map</div>"
+  },
+  "bulk_import_csv.3_done": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "3 Done",
+    "originalHtml": "<div class=\"step \">3 Done</div>"
+  },
+  "bulk_import_csv.export_from_google_sheets_file": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "💡  Export from Google Sheets → File → Download → CSV. From Excel → Save As → CSV UTF-8.",
+    "originalHtml": "<div class=\"info-box\">\n      💡 <strong>Tip:</strong> Export from Google Sheets → File → Download → CSV. From Excel → Save As → CSV UTF-8.\n    </div>"
+  },
+  "bulk_import_csv.click_to_select_file_or_drag_d": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "Click to select file or drag & drop here",
+    "originalHtml": "<div style=\"font-weight:600;\">Click to select file or drag &amp; drop here</div>"
+  },
+  "bulk_import_csv.csv_tsv_or_any_delimited_text_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "CSV, TSV, or any delimited text file · max 10 MB",
+    "originalHtml": "<div class=\"hint\">CSV, TSV, or any delimited text file · max 10 MB</div>"
+  },
+  "bulk_import_csv.auto_enrich_via_product_url_af": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "🔗 Auto-enrich via Product URL after import",
+    "originalHtml": "<div style=\"font-size:.875rem;font-weight:600;color:;\">\n              🔗 Auto-enrich via Product URL after import\n            </div>"
+  },
+  "bulk_import_csv.running_enrichment_for_items": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_csv.php",
+    "tag": "div",
+    "original": "🔗 Running enrichment for  items…",
+    "originalHtml": "<div id=\"enrich-status\" style=\"font-size:.82rem;color:#67e8f9;margin-bottom:16px;\">🔗 Running enrichment for  items…</div>"
+  },
+  "bulk_import_folder.items": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "span",
+    "original": "items",
+    "originalHtml": "<span class=\"badge\"> items</span>"
+  },
+  "bulk_import_folder.15_rpm_free_tier": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "span",
+    "original": "(≤15 RPM free tier)",
+    "originalHtml": "<span style=\"color:var(--muted);font-size:.72rem\">(≤15 RPM free tier)</span>"
+  },
+  "bulk_import_folder.bulk_import": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "h1",
+    "original": "📦 Bulk Import",
+    "originalHtml": "<h1>📦 Bulk Import</h1>"
+  },
+  "bulk_import_folder.import_complete": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "h2",
+    "original": "🎉 Import complete!",
+    "originalHtml": "<h2>🎉 Import complete!</h2>"
+  },
+  "bulk_import_folder.start_import": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "button",
+    "original": "▶ Start Import",
+    "originalHtml": "<button class=\"btn btn-start\" id=\"btn-start\" onclick=\"startImport()\">▶ Start Import</button>"
+  },
+  "bulk_import_folder.pause": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "button",
+    "original": "⏸ Pause",
+    "originalHtml": "<button class=\"btn btn-pause\" id=\"btn-pause\" onclick=\"pauseImport()\" style=\"display:none\">⏸ Pause</button>"
+  },
+  "bulk_import_folder.dashboard": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "a",
+    "original": "← Dashboard",
+    "originalHtml": "<a href=\"dashboard.php\">← Dashboard</a>"
+  },
+  "bulk_import_folder.view_inventory": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "a",
+    "original": "View Inventory →",
+    "originalHtml": "<a href=\"dashboard.php\" class=\"cta\">View Inventory →</a>"
+  },
+  "bulk_import_folder.delay_between_calls": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "label",
+    "original": "Delay between calls:",
+    "originalHtml": "<label>Delay between calls:</label>"
+  },
+  "bulk_import_folder.total": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "div",
+    "original": "Total",
+    "originalHtml": "<div class=\"stat-label\">Total</div>"
+  },
+  "bulk_import_folder.imported": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "div",
+    "original": "Imported",
+    "originalHtml": "<div class=\"stat-label\">Imported</div>"
+  },
+  "bulk_import_folder.skipped": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "div",
+    "original": "Skipped",
+    "originalHtml": "<div class=\"stat-label\">Skipped</div>"
+  },
+  "bulk_import_folder.failed": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "div",
+    "original": "Failed",
+    "originalHtml": "<div class=\"stat-label\">Failed</div>"
+  },
+  "bulk_import_folder.ready_items_queued": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "div",
+    "original": "Ready —  items queued",
+    "originalHtml": "<div class=\"status-text\" id=\"status-text\">Ready —  items queued</div>"
+  },
+  "bulk_import_folder.image_pending": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_folder.php",
+    "tag": "div",
+    "original": "📁  image · pending",
+    "originalHtml": "<div class=\"item-meta\" id=\"meta-\">📁  image · pending</div>"
+  },
+  "bulk_import_wizard.drop_photos_here_or_click_to_s": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "p",
+    "original": "Drop photos here or click to select",
+    "originalHtml": "<p style=\"font-weight:600;font-size:1rem;color:var(--text);margin-bottom:6px;\">Drop photos here or click to select</p>"
+  },
+  "bulk_import_wizard.each_batch_you_drop_becomes_a_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "p",
+    "original": "Each batch you drop becomes a new component group. Drop multiple batches for multiple components.",
+    "originalHtml": "<p>Each batch you drop becomes a new component group. Drop multiple batches for multiple components.</p>"
+  },
+  "bulk_import_wizard.image_group_wizard": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "h1",
+    "original": "🧙 Image Group Wizard",
+    "originalHtml": "<h1>🧙 Image Group Wizard</h1>"
+  },
+  "bulk_import_wizard.add_another_component_group": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "button",
+    "original": "+ Add another component group",
+    "originalHtml": "<button class=\"btn btn-secondary\" onclick=\"addGroup([], 'Component ' + (groups.length+1))\">\n      + Add another component group\n    </button>"
+  },
+  "bulk_import_wizard.import_all_via_ai": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "button",
+    "original": "🤖 Import All via AI",
+    "originalHtml": "<button class=\"btn btn-primary\" id=\"btn-run\" onclick=\"runImport()\">🤖 Import All via AI</button>"
+  },
+  "bulk_import_wizard.clear": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "button",
+    "original": "✕ Clear",
+    "originalHtml": "<button class=\"btn btn-secondary\" onclick=\"clearAll()\">✕ Clear</button>"
+  },
+  "bulk_import_wizard.import_hub": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_wizard.php",
+    "tag": "a",
+    "original": "← Import Hub",
+    "originalHtml": "<a href=\"bulk_import.php\">← Import Hub</a>"
+  },
+  "bulk_import_zip.each_subfolder_in_the_zip_beco": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "p",
+    "original": "Each subfolder in the ZIP becomes one inventory item. The AI analyses the photos and description (if present) to identify the component — the same pipeline as the existing folder import.",
+    "originalHtml": "<p>Each subfolder in the ZIP becomes one inventory item. The AI analyses the photos and description (if present) to identify the component — the same pipeline as the existing folder import.</p>"
+  },
+  "bulk_import_zip.supported_zip_structures": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "p",
+    "original": "Supported ZIP structures:",
+    "originalHtml": "<p style=\"font-size:.82rem;color:var(--muted);margin-bottom:8px;\">Supported ZIP structures:</p>"
+  },
+  "bulk_import_zip.uploading_and_extracting": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "p",
+    "original": "Uploading and extracting…",
+    "originalHtml": "<p style=\"font-size:.85rem;color:var(--muted);margin-bottom:8px;\">Uploading and extracting…</p>"
+  },
+  "bulk_import_zip.esp32_c3": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "span",
+    "original": "ESP32-C3/",
+    "originalHtml": "<span style=\"color:#4ade80;\">ESP32-C3/</span>"
+  },
+  "bulk_import_zip.sg90_servo": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "span",
+    "original": "SG90 Servo/",
+    "originalHtml": "<span style=\"color:#4ade80;\">SG90 Servo/</span>"
+  },
+  "bulk_import_zip.optional": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "span",
+    "original": "← optional",
+    "originalHtml": "<span class=\"comment\">← optional</span>"
+  },
+  "bulk_import_zip.zip_import": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "h1",
+    "original": "📦 ZIP Import",
+    "originalHtml": "<h1>📦 ZIP Import</h1>"
+  },
+  "bulk_import_zip.upload_a_zip_of_component_fold": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "h2",
+    "original": "Upload a ZIP of component folders",
+    "originalHtml": "<h2>Upload a ZIP of component folders</h2>"
+  },
+  "bulk_import_zip.import_hub": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "a",
+    "original": "← Import Hub",
+    "originalHtml": "<a href=\"bulk_import.php\">← Import Hub</a>"
+  },
+  "bulk_import_zip.subfolder_mode_multiple_compon": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "📁 Subfolder mode (multiple components)",
+    "originalHtml": "<div style=\"font-size:.72rem;color:#67e8f9;font-weight:600;margin-bottom:6px;\">📁 Subfolder mode (multiple components)</div>"
+  },
+  "bulk_import_zip.my_parts_zip_image_01_jpg_desc": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "my-parts.zip\n          ├── \n          │   ├── image_01.jpg\n          │   └── description.txt\n          └── \n              └── image_01.jpg",
+    "originalHtml": "<div class=\"structure-box\" style=\"font-size:.75rem;\">\n          my-parts.zip<br>\n          ├── <span style=\"color:#4ade80;\">ESP32-C3/</span><br>\n          │   ├── image_01.jpg<br>\n          │   └── description.txt<br>\n          └── <span style=\"color:#4ade80;\">SG90 Servo/</span><br>\n          &nbsp;&nbsp;&nbsp;&nbsp;└── image_01.jpg\n        </div>"
+  },
+  "bulk_import_zip.flat_mode_single_component": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "🖼️ Flat mode (single component)",
+    "originalHtml": "<div style=\"font-size:.72rem;color:#a78bfa;font-weight:600;margin-bottom:6px;\">🖼️ Flat mode (single component)</div>"
+  },
+  "bulk_import_zip.my_sensor_zip_photo1_jpg_photo": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "my-sensor.zip\n          ├── photo1.jpg\n          ├── photo2.jpg\n          ├── photo3.jpg\n          └── description.txt",
+    "originalHtml": "<div class=\"structure-box\" style=\"font-size:.75rem;\">\n          my-sensor.zip<br>\n          ├── photo1.jpg<br>\n          ├── photo2.jpg<br>\n          ├── photo3.jpg<br>\n          └── description.txt <span class=\"comment\">← optional</span>\n        </div>"
+  },
+  "bulk_import_zip.images_directly_in_the_root_on": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "💡  (images directly in the root) = one component named after the ZIP file.\n       (one folder per component) = multiple components imported at once.\n       is optional but improves AI accuracy. Lines like:",
+    "originalHtml": "<div class=\"info-box\">\n      💡 <strong>Flat ZIP</strong> (images directly in the root) = one component named after the ZIP file.<br>\n      <strong>Subfolder ZIP</strong> (one folder per component) = multiple components imported at once.<br>\n      <strong>description.txt</strong> is optional but improves AI accuracy. Lines like: <code>Product Name: ESP32-C3 | Category: Microcontroller</code>\n    </div>"
+  },
+  "bulk_import_zip.click_to_select_zip_or_drag_dr": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "Click to select ZIP or drag & drop here",
+    "originalHtml": "<div style=\"font-weight:600;\">Click to select ZIP or drag &amp; drop here</div>"
+  },
+  "bulk_import_zip.max_size_depends_on_your_php_u": {
+    "file": "/Users/philipsl/Desktop/diy inventory/bulk_import_zip.php",
+    "tag": "div",
+    "original": "Max size depends on your PHP upload_max_filesize setting",
+    "originalHtml": "<div class=\"hint\">Max size depends on your PHP upload_max_filesize setting</div>"
+  },
+  "chat.inventory_aware": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "p",
+    "original": "· Inventory-aware",
+    "originalHtml": "<p class=\"text-xs text-emerald-400\"><span data-i18n-text=\"chat.online\">Online</span> · Inventory-aware</p>"
+  },
+  "chat.shift_enter_for_new_line_enter": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "p",
+    "original": "Shift+Enter for new line · Enter to send",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-2 text-center\">Shift+Enter for new line · Enter to send</p>"
+  },
+  "chat.what_can_i_build_with_esp32": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "button",
+    "original": "What can I build with ESP32?",
+    "originalHtml": "<button class=\"chip\" onclick=\"sendChip(this)\">What can I build with ESP32?</button>"
+  },
+  "chat.suggest_a_beginner_iot_project": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "button",
+    "original": "Suggest a beginner IoT project",
+    "originalHtml": "<button class=\"chip\" onclick=\"sendChip(this)\">Suggest a beginner IoT project</button>"
+  },
+  "chat.what_s_the_best_sensor_for_tem": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "button",
+    "original": "What's the best sensor for temperature?",
+    "originalHtml": "<button class=\"chip\" onclick=\"sendChip(this)\">What's the best sensor for temperature?</button>"
+  },
+  "chat.show_me_all_my_microcontroller": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "button",
+    "original": "Show me all my microcontrollers",
+    "originalHtml": "<button class=\"chip\" onclick=\"sendChip(this)\">Show me all my microcontrollers</button>"
+  },
+  "chat.what_components_am_i_missing_f": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "button",
+    "original": "What components am I missing for a robot?",
+    "originalHtml": "<button class=\"chip\" onclick=\"sendChip(this)\">What components am I missing for a robot?</button>"
+  },
+  "chat.start_of_conversation": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "div",
+    "original": "Start of conversation",
+    "originalHtml": "<div class=\"msg-system\">Start of conversation</div>"
+  },
+  "chat.hey_i_m_your_diy_lab_planning_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/chat.php",
+    "tag": "div",
+    "original": "👋 Hey! I'm your DIY Lab Planning Assistant.\n        I have full access to your current inventory. Ask me anything — project ideas, component questions, wiring help, code snippets, or troubleshooting!",
+    "originalHtml": "<div class=\"msg-ai\">\n        👋 Hey! I'm your DIY Lab Planning Assistant.<br><br>\n        I have full access to your current inventory. Ask me anything — project ideas, component questions, wiring help, code snippets, or troubleshooting!\n      </div>"
+  },
+  "container_manifest.component_types_total_units": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "component types ·  total units",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\"> component types ·  total units</p>"
+  },
+  "container_manifest.container_qr_sticker": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "📄 Container QR Sticker —",
+    "originalHtml": "<p class=\"text-sm font-semibold text-white mb-3\">📄 Container QR Sticker — </p>"
+  },
+  "container_manifest.this_qr_code_links_to_the_live": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "This QR code links to the live manifest for . Print it, laminate it, and stick it on the container. Scanning with any phone camera shows the current contents in real-time.",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mb-3\">This QR code links to the live manifest for <strong class=\"text-slate-300\"></strong>. Print it, laminate it, and stick it on the container. Scanning with any phone camera shows the current contents in real-time.</p>"
+  },
+  "container_manifest.no_components_at_this_location": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "No components at this location",
+    "originalHtml": "<p class=\"font-semibold\">No components at this location</p>"
+  },
+  "container_manifest.items_with_location_will_appea": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "Items with location \"\" will appear here.",
+    "originalHtml": "<p class=\"text-sm mt-1\">Items with location \"\" will appear here.</p>"
+  },
+  "container_manifest.component_types": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "Component Types",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-1\">Component Types</p>"
+  },
+  "container_manifest.total_units": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "Total Units",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-1\">Total Units</p>"
+  },
+  "container_manifest.categories": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "Categories",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-1\">Categories</p>"
+  },
+  "container_manifest.print_all_labels": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "p",
+    "original": "Print All Labels",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-1\">Print All Labels</p>"
+  },
+  "container_manifest.verify_item_is_in_container_ge": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "span",
+    "original": "☐ = verify item is in container  |  Generated by DIY Lab Inventory System",
+    "originalHtml": "<span>☐ = verify item is in container &nbsp;|&nbsp; Generated by DIY Lab Inventory System</span>"
+  },
+  "container_manifest.print_manifest": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "button",
+    "original": "🖨️ Print Manifest",
+    "originalHtml": "<button onclick=\"window.print()\" class=\"text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-all no-print\">\n        🖨️ Print Manifest\n      </button>"
+  },
+  "container_manifest.container_qr_sticker_1": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "button",
+    "original": "📄 Container QR Sticker",
+    "originalHtml": "<button onclick=\"toggleSticker()\" class=\"btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold text-white no-print\">\n        📄 Container QR Sticker\n      </button>"
+  },
+  "container_manifest.print_sticker": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "button",
+    "original": "🖨️ Print Sticker",
+    "originalHtml": "<button onclick=\"printSticker()\" class=\"btn-primary px-4 py-2 rounded-lg text-sm font-semibold text-white\">🖨️ Print Sticker</button>"
+  },
+  "container_manifest.print_item_labels": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "a",
+    "original": "🏷️ Print Item Labels",
+    "originalHtml": "<a href=\"print_labels.php?loc=\" target=\"_blank\" class=\"text-xs text-cyan-400 border border-cyan-500/30 px-3 py-1.5 rounded-lg hover:bg-cyan-500/10 transition-all no-print\">\n        🏷️ Print Item Labels\n      </a>"
+  },
+  "container_manifest.print_item_labels_instead": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "a",
+    "original": "🏷️ Print Item Labels Instead",
+    "originalHtml": "<a href=\"print_labels.php?loc=\" target=\"_blank\" class=\"px-4 py-2 rounded-lg text-sm font-semibold text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 transition-all\">\n               🏷️ Print Item Labels Instead\n            </a>"
+  },
+  "container_manifest.view": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "a",
+    "original": "View →",
+    "originalHtml": "<a href=\"item_details.php?id=\" class=\"text-xs text-purple-400 hover:text-purple-300 transition-colors\">View →</a>"
+  },
+  "container_manifest.component": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "th",
+    "original": "Component",
+    "originalHtml": "<th>Component</th>"
+  },
+  "container_manifest.model": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "th",
+    "original": "Model",
+    "originalHtml": "<th>Model</th>"
+  },
+  "container_manifest.category": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "th",
+    "original": "Category",
+    "originalHtml": "<th class=\"hidden sm:table-cell\">Category</th>"
+  },
+  "container_manifest.qty": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "th",
+    "original": "Qty",
+    "originalHtml": "<th>Qty</th>"
+  },
+  "container_manifest.verified": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "th",
+    "original": "Verified",
+    "originalHtml": "<th class=\"col-verify\" style=\"width:60px;text-align:center;\">Verified</th>"
+  },
+  "container_manifest.action": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "th",
+    "original": "Action",
+    "originalHtml": "<th class=\"no-print\">Action</th>"
+  },
+  "container_manifest.component_types_total_units_ca": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "div",
+    "original": "component types ·  total units ·\n           categories",
+    "originalHtml": "<div style=\"font-size:9pt;color:#555;margin-top:3pt;\">\n           component types ·  total units ·\n           categories\n        </div>"
+  },
+  "container_manifest.printed": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "div",
+    "original": "Printed:",
+    "originalHtml": "<div>Printed: </div>"
+  },
+  "container_manifest.diy_lab_inventory": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "div",
+    "original": "DIY Lab Inventory",
+    "originalHtml": "<div style=\"margin-top:2pt;\">DIY Lab Inventory</div>"
+  },
+  "container_manifest.types_units": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "div",
+    "original": "types ·  units",
+    "originalHtml": "<div class=\"sticker-sub\" style=\"font-size:11px;\"> types ·  units</div>"
+  },
+  "container_manifest.scan_for_live_manifest": {
+    "file": "/Users/philipsl/Desktop/diy inventory/container_manifest.php",
+    "tag": "div",
+    "original": "Scan for live manifest →",
+    "originalHtml": "<div class=\"sticker-sub\" style=\"font-size:10px;color:#7c3aed;font-weight:700;margin-top:4px;\">Scan for live manifest →</div>"
+  },
+  "dashboard.components_units": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "p",
+    "original": "components ·  units",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\"> components ·  units</p>"
+  },
+  "dashboard.showing_of_components": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "p",
+    "original": "Showing  of  components",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-4\">\n        Showing  of  components\n        \n      </p>"
+  },
+  "dashboard.category": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "📁 Category",
+    "originalHtml": "<button class=\"bulk-btn purple\" onclick=\"openModal('category')\">📁 Category</button>"
+  },
+  "dashboard.status": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "🔖 Status",
+    "originalHtml": "<button class=\"bulk-btn cyan\" onclick=\"openModal('status')\">🔖 Status</button>"
+  },
+  "dashboard.location": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "📍 Location",
+    "originalHtml": "<button class=\"bulk-btn emerald\" onclick=\"openModal('location')\">📍 Location</button>"
+  },
+  "dashboard.print_labels": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "🏷️ Print\n        Labels",
+    "originalHtml": "<button class=\"bulk-btn cyan\" onclick=\"printSelected()\" title=\"Print QR labels for selected items\">🏷️ Print\n        Labels</button>"
+  },
+  "dashboard.export_csv": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "⬇ Export CSV",
+    "originalHtml": "<button class=\"bulk-btn slate\" onclick=\"submitBulk('export_csv')\">⬇ Export CSV</button>"
+  },
+  "dashboard.delete": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "🗑 Delete",
+    "originalHtml": "<button class=\"bulk-btn red\" onclick=\"confirmDelete()\">🗑 Delete</button>"
+  },
+  "dashboard.apply": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "Apply",
+    "originalHtml": "<button id=\"modal-ok\" onclick=\"applyModal()\" class=\"btn-primary flex-1 py-2.5 rounded-xl font-semibold text-white text-sm\">Apply</button>"
+  },
+  "dashboard.cancel": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "button",
+    "original": "Cancel",
+    "originalHtml": "<button onclick=\"closeModal()\" class=\"flex-1 py-2.5 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 transition-all\">Cancel</button>"
+  },
+  "dashboard.clear": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Clear",
+    "originalHtml": "<a href=\"dashboard.php\" class=\"px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all\">Clear</a>"
+  },
+  "dashboard.view": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "View",
+    "originalHtml": "<a href=\"item_details.php?id=\" class=\"text-xs text-cyan-400 hover:text-cyan-300 transition-colors px-2.5 py-1 rounded-lg border border-cyan-500/20 hover:border-cyan-500/40\">\n                        View\n                      </a>"
+  },
+  "dashboard.edit": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Edit",
+    "originalHtml": "<a href=\"add_item.php?edit=\" class=\"text-xs text-purple-400 hover:text-purple-300 transition-colors px-2.5 py-1 rounded-lg border border-purple-500/20 hover:border-purple-500/40\">\n                        Edit\n                      </a>"
+  },
+  "dashboard.delete_1": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Delete",
+    "originalHtml": "<a href=\"delete_item.php?id=\" onclick=\"return confirm('Delete \\'\\'? This cannot be undone.')\" class=\"text-xs text-red-400 hover:text-red-300 transition-colors px-2.5 py-1 rounded-lg border border-red-500/20 hover:border-red-500/40\">\n                        Delete\n                      </a>"
+  },
+  "dashboard.name": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Name",
+    "originalHtml": "<a href=\"\"> Name</a>"
+  },
+  "dashboard.model": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Model",
+    "originalHtml": "<a href=\"\"> Model</a>"
+  },
+  "dashboard.category_1": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Category",
+    "originalHtml": "<a href=\"\"> Category</a>"
+  },
+  "dashboard.qty": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Qty",
+    "originalHtml": "<a href=\"\"> Qty</a>"
+  },
+  "dashboard.status_1": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Status",
+    "originalHtml": "<a href=\"\"> Status</a>"
+  },
+  "dashboard.location_1": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "a",
+    "original": "Location",
+    "originalHtml": "<a href=\"\"> Location</a>"
+  },
+  "dashboard.new_category": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "label",
+    "original": "New Category",
+    "originalHtml": "<label class=\"form-label\" for=\"val-category\">New Category</label>"
+  },
+  "dashboard.new_status": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "label",
+    "original": "New Status",
+    "originalHtml": "<label class=\"form-label\" for=\"val-status\">New Status</label>"
+  },
+  "dashboard.new_location": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "label",
+    "original": "New Location",
+    "originalHtml": "<label class=\"form-label\" for=\"val-location\">New Location</label>"
+  },
+  "dashboard.img": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "th",
+    "original": "Img",
+    "originalHtml": "<th class=\"text-left px-3 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-12\">Img\n              </th>"
+  },
+  "dashboard.actions": {
+    "file": "/Users/philipsl/Desktop/diy inventory/dashboard.php",
+    "tag": "th",
+    "original": "Actions",
+    "originalHtml": "<th class=\"text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider\">Actions</th>"
+  },
+  "bug_reporter.a_screenshot_helps_us_understa": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "p",
+    "original": "A screenshot helps us understand the issue better.",
+    "originalHtml": "<p class=\"text-sm text-slate-400 mb-3\">A screenshot helps us understand the issue better.</p>"
+  },
+  "bug_reporter.optional": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "span",
+    "original": "(optional)",
+    "originalHtml": "<span class=\"text-slate-500 font-normal\">(optional)</span>"
+  },
+  "bug_reporter.report_a_bug": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "h3",
+    "original": "Report a Bug",
+    "originalHtml": "<h3 class=\"font-semibold text-white text-lg flex items-center gap-2\">\n        <svg class=\"w-5 h-5 text-purple-400\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z\"></path>\n        </svg>\n        Report a Bug\n      </h3>"
+  },
+  "bug_reporter.clear_drawing": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "button",
+    "original": "Clear\n              Drawing",
+    "originalHtml": "<button onclick=\"clearCanvas()\" class=\"text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors\">Clear\n              Drawing</button>"
+  },
+  "bug_reporter.retake": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "button",
+    "original": "Retake",
+    "originalHtml": "<button onclick=\"takeScreenshot()\" class=\"text-xs text-purple-400 hover:text-purple-300 px-2 py-1 rounded bg-purple-500/10 hover:bg-purple-500/20 transition-colors\">Retake</button>"
+  },
+  "bug_reporter.remove": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "button",
+    "original": "Remove",
+    "originalHtml": "<button onclick=\"removeScreenshot()\" class=\"text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-colors\">Remove</button>"
+  },
+  "bug_reporter.take_a_screenshot": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "button",
+    "original": "📸 Take a Screenshot",
+    "originalHtml": "<button type=\"button\" onclick=\"takeScreenshot()\" class=\"btn-secondary px-4 py-2 rounded-xl text-sm font-medium transition-colors border border-purple-500/30 text-purple-300 hover:bg-purple-500/10\">\n              📸 Take a Screenshot\n            </button>"
+  },
+  "bug_reporter.cancel": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "button",
+    "original": "Cancel",
+    "originalHtml": "<button onclick=\"closeBugReporter()\" class=\"px-4 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors\">Cancel</button>"
+  },
+  "bug_reporter.submit_report": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "button",
+    "original": "Submit Report",
+    "originalHtml": "<button onclick=\"submitBugReport()\" id=\"btn-submit-bug\" class=\"px-6 py-2 rounded-xl text-sm font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-900/30 transition-colors flex items-center gap-2\">\n        Submit Report\n      </button>"
+  },
+  "bug_reporter.description": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "label",
+    "original": "Description",
+    "originalHtml": "<label class=\"block text-sm font-medium text-slate-300 mb-1\">Description <span class=\"text-red-400\">*</span></label>"
+  },
+  "bug_reporter.your_email": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "label",
+    "original": "Your Email",
+    "originalHtml": "<label class=\"block text-sm font-medium text-slate-300 mb-1\">Your Email <span class=\"text-slate-500 font-normal\">(optional)</span></label>"
+  },
+  "bug_reporter.screenshot": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "label",
+    "original": "Screenshot",
+    "originalHtml": "<label class=\"block text-sm font-medium text-slate-300\">Screenshot <span class=\"text-slate-500 font-normal\">(optional)</span></label>"
+  },
+  "bug_reporter.capturing_screen": {
+    "file": "/Users/philipsl/Desktop/diy inventory/includes/bug_reporter.php",
+    "tag": "div",
+    "original": "Capturing screen...",
+    "originalHtml": "<div id=\"screenshot-loading\" class=\"text-slate-500 text-sm flex-col items-center hidden m-auto\">\n            <svg class=\"animate-spin h-6 w-6 text-purple-500 mb-2\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\">\n              <circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle>\n              <path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\">\n              </path>\n            </svg>\n            Capturing screen...\n          </div>"
+  },
+  "index.self_hosted_powered_by_gemini_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/index.php",
+    "tag": "p",
+    "original": "Self-hosted · Powered by Gemini & OpenAI",
+    "originalHtml": "<p class=\"text-center text-slate-600 text-xs mt-6\">\n        Self-hosted · Powered by Gemini &amp; OpenAI\n      </p>"
+  },
+  "index.enter_lab": {
+    "file": "/Users/philipsl/Desktop/diy inventory/index.php",
+    "tag": "button",
+    "original": "Enter Lab",
+    "originalHtml": "<button type=\"submit\" name=\"login\" id=\"btn-enter\" class=\"w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-[1.02] active:scale-[.98] shadow-lg shadow-purple-900/40\">\n          Enter Lab\n        </button>"
+  },
+  "index.lab_password": {
+    "file": "/Users/philipsl/Desktop/diy inventory/index.php",
+    "tag": "label",
+    "original": "Lab Password",
+    "originalHtml": "<label for=\"pass\" class=\"block text-sm font-medium text-slate-300 mb-2\">\n            Lab Password\n          </label>"
+  },
+  "item_details.no_photos_yet": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "p",
+    "original": "No photos yet",
+    "originalHtml": "<p class=\"text-sm\">No photos yet</p>"
+  },
+  "item_details.notes": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "p",
+    "original": "Notes",
+    "originalHtml": "<p class=\"text-xs text-slate-500 uppercase tracking-wider mb-2\">Notes</p>"
+  },
+  "item_details.cached_data_used_in_ai_prompts": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "p",
+    "original": "Cached data used in AI prompts:",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mb-2\">Cached data used in AI prompts:</p>"
+  },
+  "item_details.model": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Model",
+    "originalHtml": "<span class=\"info-label\">Model</span>"
+  },
+  "item_details.category": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Category",
+    "originalHtml": "<span class=\"info-label\">Category</span>"
+  },
+  "item_details.quantity": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Quantity",
+    "originalHtml": "<span class=\"info-label\">Quantity</span>"
+  },
+  "item_details.unit": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "unit",
+    "originalHtml": "<span class=\"text-slate-500 text-xs ml-1\">unit</span>"
+  },
+  "item_details.condition": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Condition",
+    "originalHtml": "<span class=\"info-label\">Condition</span>"
+  },
+  "item_details.location": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Location",
+    "originalHtml": "<span class=\"info-label\">Location</span>"
+  },
+  "item_details.added": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Added",
+    "originalHtml": "<span class=\"info-label\">Added</span>"
+  },
+  "item_details.product": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Product",
+    "originalHtml": "<span class=\"info-label\">Product</span>"
+  },
+  "item_details.datasheet": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Datasheet",
+    "originalHtml": "<span class=\"info-label\">Datasheet</span>"
+  },
+  "item_details.price": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Price",
+    "originalHtml": "<span class=\"info-label\">Price</span>"
+  },
+  "item_details.enriched": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "✓ Enriched",
+    "originalHtml": "<span class=\"text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full\">\n                ✓ Enriched \n              </span>"
+  },
+  "item_details.not_yet_enriched": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "span",
+    "original": "Not yet enriched",
+    "originalHtml": "<span class=\"text-xs text-slate-500\">Not yet enriched</span>"
+  },
+  "item_details.component_info": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "h2",
+    "original": "Component Info",
+    "originalHtml": "<h2 class=\"font-semibold text-white mb-4 text-sm uppercase tracking-wider\">Component Info</h2>"
+  },
+  "item_details.product_details": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "h2",
+    "original": "Product Details",
+    "originalHtml": "<h2 class=\"font-semibold text-white mb-3 text-sm uppercase tracking-wider\">Product Details</h2>"
+  },
+  "item_details.ai_enrichment": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "h2",
+    "original": "AI Enrichment",
+    "originalHtml": "<h2 class=\"font-semibold text-white text-sm uppercase tracking-wider flex items-center gap-2\">\n                <span>🤖</span> AI Enrichment\n              </h2>"
+  },
+  "item_details.actions": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "h2",
+    "original": "Actions",
+    "originalHtml": "<h2 class=\"font-semibold text-white mb-3 text-sm uppercase tracking-wider\">Actions</h2>"
+  },
+  "item_details.add_photos": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "a",
+    "original": "Add photos →",
+    "originalHtml": "<a href=\"add_item.php?edit=\" class=\"text-purple-400 text-xs mt-2 hover:underline\">Add photos →</a>"
+  },
+  "item_details.find_projects_using_this_compo": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "a",
+    "original": "Find projects using this component",
+    "originalHtml": "<a href=\"projects.php\" class=\"flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors py-1\">\n                <svg class=\"w-4 h-4\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3\"></path></svg>\n                Find projects using this component\n              </a>"
+  },
+  "item_details.ask_ai_about_this_component": {
+    "file": "/Users/philipsl/Desktop/diy inventory/item_details.php",
+    "tag": "a",
+    "original": "Ask AI about this component",
+    "originalHtml": "<a href=\"chat.php\" class=\"flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 transition-colors py-1\">\n                <svg class=\"w-4 h-4\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z\"></path></svg>\n                Ask AI about this component\n              </a>"
+  },
+  "locations.storage_location_generate_qr_s": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "p",
+    "original": "storage location · Generate QR stickers for containers",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\"> storage location · Generate QR stickers for containers</p>"
+  },
+  "locations.no_locations_set_yet": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "p",
+    "original": "No locations set yet",
+    "originalHtml": "<p class=\"font-semibold text-lg\">No locations set yet</p>"
+  },
+  "locations.add_a_location_when_editing_an": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "p",
+    "original": "Add a location when editing any component to see it here.",
+    "originalHtml": "<p class=\"text-sm mt-1\">Add a location when editing any component to see it here.</p>"
+  },
+  "locations.types": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "p",
+    "original": "types",
+    "originalHtml": "<p class=\"text-xs text-slate-600\"> types</p>"
+  },
+  "locations.print_this_sticker_and_stick_i": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "p",
+    "original": "Print this sticker and stick it on the container. Scanning opens the live manifest.",
+    "originalHtml": "<p class=\"text-xs text-slate-400 mb-2 max-w-xs\">Print this sticker and stick it on the container. Scanning opens the live manifest.</p>"
+  },
+  "locations.component_have_no_location_set": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "span",
+    "original": "⚠️  component have no location set.",
+    "originalHtml": "<span>⚠️ <strong></strong> component have no location set.</span>"
+  },
+  "locations.container_qr": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "button",
+    "original": "📄 Container QR",
+    "originalHtml": "<button class=\"loc-action-btn cyan\" onclick=\"toggleQR(, '', , )\">\n            📄 Container QR\n          </button>"
+  },
+  "locations.print_sticker": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "button",
+    "original": "🖨️ Print Sticker",
+    "originalHtml": "<button onclick=\"printContainerQR('', , , '')\" class=\"loc-action-btn cyan\">🖨️ Print Sticker</button>"
+  },
+  "locations.add_component": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "a",
+    "original": "+ Add Component",
+    "originalHtml": "<a href=\"add_item.php\" class=\"mt-4 inline-block btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-white\">+ Add Component</a>"
+  },
+  "locations.manifest": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "a",
+    "original": "📋 Manifest",
+    "originalHtml": "<a href=\"container_manifest.php?loc=\" class=\"loc-action-btn purple\">📋 Manifest</a>"
+  },
+  "locations.item_labels": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "a",
+    "original": "🏷️ Item Labels",
+    "originalHtml": "<a href=\"print_labels.php?loc=\" target=\"_blank\" class=\"loc-action-btn emerald\">🏷️ Item Labels</a>"
+  },
+  "locations.view": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "a",
+    "original": "View →",
+    "originalHtml": "<a href=\"dashboard.php?filter_loc=unset\" class=\"text-xs border border-amber-500/30 px-3 py-1 rounded-lg hover:bg-amber-500/10 transition-all\">View →</a>"
+  },
+  "locations.types_units": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "div",
+    "original": "types ·  units",
+    "originalHtml": "<div class=\"qs-sub\"> types ·  units</div>"
+  },
+  "locations.scan_for_live_manifest": {
+    "file": "/Users/philipsl/Desktop/diy inventory/locations.php",
+    "tag": "div",
+    "original": "Scan for live manifest →",
+    "originalHtml": "<div class=\"qs-link\">Scan for live manifest →</div>"
+  },
+  "print_labels.label_size": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "span",
+    "original": "Label size:",
+    "originalHtml": "<span class=\"size-label\">Label size:</span>"
+  },
+  "print_labels.label": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "span",
+    "original": "label",
+    "originalHtml": "<span class=\"size-label\"> label</span>"
+  },
+  "print_labels.print": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "button",
+    "original": "🖨️ Print",
+    "originalHtml": "<button class=\"ctrl-btn primary\" onclick=\"window.print()\">🖨️ Print</button>"
+  },
+  "print_labels.back": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "button",
+    "original": "← Back",
+    "originalHtml": "<button class=\"ctrl-btn\" onclick=\"history.back()\">← Back</button>"
+  },
+  "print_labels.small_38_21": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "button",
+    "original": "Small (38×21)",
+    "originalHtml": "<button class=\"ctrl-btn\" onclick=\"setSize('small')\">Small (38×21)</button>"
+  },
+  "print_labels.medium_63_38": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "button",
+    "original": "Medium (63×38)",
+    "originalHtml": "<button class=\"ctrl-btn\" onclick=\"setSize('medium')\">Medium (63×38)</button>"
+  },
+  "print_labels.large_99_57": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "button",
+    "original": "Large (99×57)",
+    "originalHtml": "<button class=\"ctrl-btn\" onclick=\"setSize('large')\">Large (99×57)</button>"
+  },
+  "print_labels.qty": {
+    "file": "/Users/philipsl/Desktop/diy inventory/print_labels.php",
+    "tag": "div",
+    "original": "Qty:  ·",
+    "originalHtml": "<div class=\"label-meta\">Qty:  · </div>"
+  },
+  "project_blueprint.ai_generated_blueprint": {
+    "file": "/Users/philipsl/Desktop/diy inventory/project_blueprint.php",
+    "tag": "p",
+    "original": "AI-Generated Blueprint",
+    "originalHtml": "<p class=\"text-xs text-slate-500\">AI-Generated Blueprint</p>"
+  },
+  "project_blueprint.loading_blueprint": {
+    "file": "/Users/philipsl/Desktop/diy inventory/project_blueprint.php",
+    "tag": "p",
+    "original": "Loading blueprint…",
+    "originalHtml": "<p class=\"text-slate-500 text-sm\">Loading blueprint…</p>"
+  },
+  "project_blueprint.print_save_pdf": {
+    "file": "/Users/philipsl/Desktop/diy inventory/project_blueprint.php",
+    "tag": "span",
+    "original": "Print / Save PDF",
+    "originalHtml": "<span class=\"hidden sm:inline\">Print / Save PDF</span>"
+  },
+  "project_blueprint.back_to_projects": {
+    "file": "/Users/philipsl/Desktop/diy inventory/project_blueprint.php",
+    "tag": "a",
+    "original": "← Back to Projects",
+    "originalHtml": "<a href=\"projects.php\" class=\"text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl transition-all\">\n          ← Back to Projects\n        </a>"
+  },
+  "project_blueprint.discuss_with_lab_assistant": {
+    "file": "/Users/philipsl/Desktop/diy inventory/project_blueprint.php",
+    "tag": "a",
+    "original": "💬 Discuss with Lab Assistant",
+    "originalHtml": "<a href=\"chat.php\" class=\"btn-primary text-sm text-white px-4 py-2 rounded-xl font-medium\">\n          💬 Discuss with Lab Assistant\n        </a>"
+  },
+  "projects.this_takes_15_40_seconds": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "This takes 15–40 seconds",
+    "originalHtml": "<p class=\"text-slate-400 text-sm text-center\">This takes 15–40 seconds</p>"
+  },
+  "projects.no_inventory_yet": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "No inventory yet",
+    "originalHtml": "<p class=\"text-slate-300 font-semibold mb-2\">No inventory yet</p>"
+  },
+  "projects.add_components_first_then_come": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "Add components first, then come back to discover projects.",
+    "originalHtml": "<p class=\"text-slate-500 text-sm mb-4\">Add components first, then come back to discover projects.</p>"
+  },
+  "projects.showing_results_from_regenerat": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "Showing results from . Regenerate any time for fresh ideas.",
+    "originalHtml": "<p class=\"text-sm text-slate-400\">Showing results from <span class=\"text-purple-300 font-medium\"></span>. Regenerate any time for fresh ideas.</p>"
+  },
+  "projects.ready_to_discover": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "Ready to Discover",
+    "originalHtml": "<p class=\"text-white font-bold text-xl mb-2\">Ready to Discover</p>"
+  },
+  "projects.components_in_your_lab_click_b": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "components in your lab.Click below to let AI suggest creative projects.",
+    "originalHtml": "<p class=\"text-slate-400 text-sm mb-6\"> components in your lab.<br>Click below to let AI suggest creative projects.</p>"
+  },
+  "projects.takes_15_40_seconds_uses": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "p",
+    "original": "Takes 15–40 seconds · Uses",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-4\">Takes 15–40 seconds · Uses </p>"
+  },
+  "projects.generated": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "span",
+    "original": "Generated",
+    "originalHtml": "<span class=\"text-xs text-slate-500 hidden sm:block\">Generated </span>"
+  },
+  "projects.regenerate": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "button",
+    "original": "↺ Regenerate",
+    "originalHtml": "<button onclick=\"brainstorm()\" class=\"flex-shrink-0 ml-4 text-xs text-purple-300 border border-purple-500/30 px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all\">↺ Regenerate</button>"
+  },
+  "projects.add_components": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "a",
+    "original": "+ Add Components",
+    "originalHtml": "<a href=\"add_item.php\" class=\"btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm\">+ Add Components</a>"
+  },
+  "projects.generate_project_ideas": {
+    "file": "/Users/philipsl/Desktop/diy inventory/projects.php",
+    "tag": "div",
+    "original": "✨ Generate Project Ideas",
+    "originalHtml": "<div class=\"inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white btn-primary shadow-lg shadow-purple-900/30 text-sm\">✨ Generate Project Ideas</div>"
+  },
+  "settings.manage_your_lab_ai_provider_an": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Manage your Lab, AI provider, and security",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\">Manage your Lab, AI provider, and security</p>"
+  },
+  "settings.interface_language_changes_app": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Interface language — changes apply instantly",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\">Interface language — changes apply instantly</p>"
+  },
+  "settings.personalization": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Personalization",
+    "originalHtml": "<p class=\"text-sm font-semibold text-white\">Personalization</p>"
+  },
+  "settings.customize_your_lab_s_identity_": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Customize your Lab's identity and branding",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\">Customize your Lab's identity and branding</p>"
+  },
+  "settings.current_logo": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Current logo",
+    "originalHtml": "<p class=\"text-sm font-medium text-white\">Current logo</p>"
+  },
+  "settings.drop_an_image_or": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Drop an image or",
+    "originalHtml": "<p class=\"text-sm text-slate-400\">Drop an image or <span class=\"text-purple-400 font-medium\">click to browse</span></p>"
+  },
+  "settings.jpeg_png_webp_gif_max_5_mb_aut": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "JPEG · PNG · WebP · GIF — max 5 MB — auto-cropped to square",
+    "originalHtml": "<p class=\"text-xs text-slate-600\">JPEG · PNG · WebP · GIF — max 5 MB — auto-cropped to square</p>"
+  },
+  "settings.paste_a_direct_image_url_uploa": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Paste a direct image URL. Uploading a file above takes priority over this field.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1\">Paste a direct image URL. Uploading a file above takes priority over this field.</p>"
+  },
+  "settings.shown_in_the_sidebar_and_login": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Shown in the sidebar and login screen header.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1.5\">Shown in the sidebar and login screen header.</p>"
+  },
+  "settings.the_subtitle_shown_below_the_l": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "The subtitle shown below the Lab Name on the login screen.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1.5\">The subtitle shown below the Lab Name on the login screen.</p>"
+  },
+  "settings.short_subtitle_shown_under_the": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Short subtitle shown under the Lab Name in the sidebar.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1.5\">Short subtitle shown under the Lab Name in the sidebar.</p>"
+  },
+  "settings.change_lab_password": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Change Lab Password",
+    "originalHtml": "<p class=\"text-sm font-semibold text-white\">Change Lab Password</p>"
+  },
+  "settings.update_your_login_credentials": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Update your login credentials",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\">Update your login credentials</p>"
+  },
+  "settings.bug_reporting_notifications": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Bug Reporting & Notifications",
+    "originalHtml": "<p class=\"text-sm font-semibold text-white\">Bug Reporting &amp; Notifications</p>"
+  },
+  "settings.configure_where_local_bug_repo": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Configure where local bug reports should be sent",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\">Configure where local bug reports should be sent</p>"
+  },
+  "settings.when_users_submit_a_ticket_via": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "When users submit a ticket via the sidebar, an email notification with the screenshot will be sent here.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1.5\">When users submit a ticket via the sidebar, an email notification with the screenshot will be sent here.</p>"
+  },
+  "settings.provider": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Provider:",
+    "originalHtml": "<p class=\"text-xs text-slate-500 mt-0.5\">Provider: <span class=\"text-slate-300\"></span></p>"
+  },
+  "settings.gemini": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "Gemini",
+    "originalHtml": "<span class=\"text-blue-400 font-medium text-xs w-16\">Gemini</span>"
+  },
+  "settings.google": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Google",
+    "originalHtml": "<p class=\"text-xs text-slate-500\">Google</p>"
+  },
+  "settings.gemini_1_5_flash_vision_text": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "gemini-1.5-flash — Vision + text",
+    "originalHtml": "<p class=\"text-xs text-slate-500\">gemini-1.5-flash — Vision + text</p>"
+  },
+  "settings.openai": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "OpenAI",
+    "originalHtml": "<span class=\"text-emerald-400 font-medium text-xs w-16\">OpenAI</span>"
+  },
+  "settings.gpt_4o": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "GPT-4o",
+    "originalHtml": "<p class=\"text-xs text-slate-500\">GPT-4o</p>"
+  },
+  "settings.gpt_4o_vision_text": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "gpt-4o — Vision + text",
+    "originalHtml": "<p class=\"text-xs text-slate-500\">gpt-4o — Vision + text</p>"
+  },
+  "settings.key_is_stored_in_your_database": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "p",
+    "original": "Key is stored in your database, not in code. Leave blank to keep existing key.",
+    "originalHtml": "<p class=\"text-xs text-slate-600 mt-1.5\">Key is stored in your database, not in code. Leave blank to keep existing key.</p>"
+  },
+  "settings.click_to_browse": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "click to browse",
+    "originalHtml": "<span class=\"text-purple-400 font-medium\">click to browse</span>"
+  },
+  "settings.login_screen": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "(login screen)",
+    "originalHtml": "<span class=\"text-slate-600 font-normal ml-1\">(login screen)</span>"
+  },
+  "settings.sidebar": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "(sidebar)",
+    "originalHtml": "<span class=\"text-slate-600 font-normal ml-1\">(sidebar)</span>"
+  },
+  "settings.min_6_characters": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "(min. 6 characters)",
+    "originalHtml": "<span class=\"text-slate-600 font-normal ml-1\">(min. 6 characters)</span>"
+  },
+  "settings.api_key_saved": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "API Key Saved",
+    "originalHtml": "<span class=\"flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full flex-shrink-0\">\n            <span class=\"w-2 h-2 rounded-full bg-emerald-400 animate-pulse\"></span> API Key Saved\n          </span>"
+  },
+  "settings.no_api_key": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "span",
+    "original": "No API Key",
+    "originalHtml": "<span class=\"flex items-center gap-1.5 text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-full flex-shrink-0\">\n            <span class=\"w-2 h-2 rounded-full bg-red-400\"></span> No API Key\n          </span>"
+  },
+  "settings.user_settings": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "h1",
+    "original": "User Settings",
+    "originalHtml": "<h1 class=\"text-lg lg:text-xl font-bold text-white\">User Settings</h1>"
+  },
+  "settings.remove": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "button",
+    "original": "🗑️ Remove",
+    "originalHtml": "<button type=\"button\" id=\"btn-remove-logo\" onclick=\"removeLogo()\" class=\"flex-shrink-0 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/60 px-3 py-1.5 rounded-lg transition-all\">\n                🗑️ Remove\n              </button>"
+  },
+  "settings.or_paste_an_image_url_instead": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "button",
+    "original": "Or paste an image URL instead",
+    "originalHtml": "<button type=\"button\" id=\"btn-toggle-url\" class=\"text-xs text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1\" onclick=\"toggleLogoUrl()\">\n                <svg id=\"url-chevron\" class=\"w-3 h-3 transition-transform\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path></svg>\n                Or paste an image URL instead\n              </button>"
+  },
+  "settings.save_personalization": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "button",
+    "original": "🎨 Save Personalization",
+    "originalHtml": "<button type=\"submit\" class=\"w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30\">\n            🎨 Save Personalization\n          </button>"
+  },
+  "settings.update_password": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "button",
+    "original": "🔐 Update Password",
+    "originalHtml": "<button type=\"submit\" class=\"w-full py-3 rounded-xl font-semibold text-sm text-white transition-all duration-200\" style=\"background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 4px 20px rgba(220,38,38,.25);\" onmouseover=\"this.style.opacity='.85'\" onmouseout=\"this.style.opacity='1'\">\n            🔐 Update Password\n          </button>"
+  },
+  "settings.save_notification_settings": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "button",
+    "original": "🔗 Save Notification Settings",
+    "originalHtml": "<button type=\"submit\" class=\"w-full py-3 rounded-xl font-semibold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/10 text-sm shadow-lg shadow-emerald-900/10 mt-2 transition-colors\">\n            🔗 Save Notification Settings\n          </button>"
+  },
+  "settings.aistudio_google_com_app_apikey": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "a",
+    "original": "aistudio.google.com/app/apikey →",
+    "originalHtml": "<a href=\"https://aistudio.google.com/app/apikey\" target=\"_blank\" rel=\"noopener\" class=\"text-cyan-400 hover:text-cyan-300 hover:underline text-xs\">\n              aistudio.google.com/app/apikey →\n            </a>"
+  },
+  "settings.platform_openai_com_api_keys": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "a",
+    "original": "platform.openai.com/api-keys →",
+    "originalHtml": "<a href=\"https://platform.openai.com/api-keys\" target=\"_blank\" rel=\"noopener\" class=\"text-cyan-400 hover:text-cyan-300 hover:underline text-xs\">\n              platform.openai.com/api-keys →\n            </a>"
+  },
+  "settings.lab_logo": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Lab Logo",
+    "originalHtml": "<label class=\"form-label\">Lab Logo</label>"
+  },
+  "settings.lab_name": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Lab Name",
+    "originalHtml": "<label for=\"lab_name\" class=\"form-label\">Lab Name</label>"
+  },
+  "settings.tag_line": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Tag Line",
+    "originalHtml": "<label for=\"lab_tagline\" class=\"form-label\">Tag Line\n              <span class=\"text-slate-600 font-normal ml-1\">(login screen)</span>\n            </label>"
+  },
+  "settings.mini_tag_line": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Mini Tag Line",
+    "originalHtml": "<label for=\"lab_mini_tagline\" class=\"form-label\">Mini Tag Line\n              <span class=\"text-slate-600 font-normal ml-1\">(sidebar)</span>\n            </label>"
+  },
+  "settings.current_password": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Current Password",
+    "originalHtml": "<label for=\"current_password\" class=\"form-label\">Current Password</label>"
+  },
+  "settings.new_password": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "New Password",
+    "originalHtml": "<label for=\"new_password\" class=\"form-label\">New Password\n              <span class=\"text-slate-600 font-normal ml-1\">(min. 6 characters)</span>\n            </label>"
+  },
+  "settings.confirm_new_password": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Confirm New Password",
+    "originalHtml": "<label for=\"confirm_password\" class=\"form-label\">Confirm New Password</label>"
+  },
+  "settings.admin_email": {
+    "file": "/Users/philipsl/Desktop/diy inventory/settings.php",
+    "tag": "label",
+    "original": "Admin Email",
+    "originalHtml": "<label class=\"form-label\">Admin Email</label>"
+  }
+}

@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
       <div>
         <div style="font-size:.72rem;color:#67e8f9;font-weight:600;margin-bottom:6px;" data-i18n-text="bulk_import_zip.subfolder_mode_multiple_compon">📁 Subfolder mode (multiple components)</div>
         <div class="structure-box" style="font-size:.75rem;">
-          my-parts.zip<br>
+          <span data-i18n-text="bulk_import_zip.my_parts">my-parts.zip</span><br>
           ├── <span style="color:#4ade80;" data-i18n-text="bulk_import_zip.esp32_c3">ESP32-C3/</span><br>
           │   ├── image_01.jpg<br>
           │   └── description.txt<br>
@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
       <div>
         <div style="font-size:.72rem;color:#a78bfa;font-weight:600;margin-bottom:6px;" data-i18n-text="bulk_import_zip.flat_mode_single_component">🖼️ Flat mode (single component)</div>
         <div class="structure-box" style="font-size:.75rem;">
-          my-sensor.zip<br>
+          <span data-i18n-text="bulk_import_zip.my_sensor">my-sensor.zip</span><br>
           ├── photo1.jpg<br>
           ├── photo2.jpg<br>
           ├── photo3.jpg<br>
@@ -224,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
       </div>
     </div>
     <div class="info-box">
-      💡 <strong>Flat ZIP</strong> (images directly in the root) = one component named after the ZIP file.<br>
+      <span data-i18n-text="bulk_import_zip.pro_tip">💡 <strong>Flat ZIP</strong> (images directly in the root) = one component named after the ZIP file.<br>
       <strong>Subfolder ZIP</strong> (one folder per component) = multiple components imported at once.<br>
       <strong>description.txt</strong> is optional but improves AI accuracy. Lines like: <code>Product Name: ESP32-C3 | Category: Microcontroller</code>
     </div>

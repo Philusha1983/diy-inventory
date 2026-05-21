@@ -505,11 +505,11 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 
               <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-white/5">
                 <a href="item_details.php?id=<?= $item['id'] ?>"
-                  class="text-center text-xs text-cyan-400 border border-cyan-500/20 py-2 rounded-lg hover:bg-cyan-500/10 transition-colors">View</a>
+                  class="text-center text-xs text-cyan-400 border border-cyan-500/20 py-2 rounded-lg hover:bg-cyan-500/10 transition-colors" data-i18n-text="common.view" data-i18n-text="common.view" data-i18n-text="common.view">View</a>
                 <a href="add_item.php?edit=<?= $item['id'] ?>"
-                  class="text-center text-xs text-purple-400 border border-purple-500/20 py-2 rounded-lg hover:bg-purple-500/10 transition-colors">Edit</a>
+                  class="text-center text-xs text-purple-400 border border-purple-500/20 py-2 rounded-lg hover:bg-purple-500/10 transition-colors" data-i18n-text="common.edit" data-i18n-text="common.edit">Edit</a>
                 <a href="delete_item.php?id=<?= $item['id'] ?>" onclick="return confirm('Delete this item?')"
-                  class="text-center text-xs text-red-400 border border-red-500/20 py-2 rounded-lg hover:bg-red-500/10 transition-colors">Delete</a>
+                  class="text-center text-xs text-red-400 border border-red-500/20 py-2 rounded-lg hover:bg-red-500/10 transition-colors" data-i18n-text="common.delete" data-i18n-text="common.delete">Delete</a>
               </div>
             </div>
           <?php endforeach; endif; ?>
@@ -527,22 +527,22 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
               </th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'name' ? 'sorted' : '' ?>">
-                <a href="<?= $sl('name') ?>"><?= $si('name') ?> Name</a></th>
+                <a href="<?= $sl('name') ?>"><?= $si('name') ?> <span data-i18n-text="dashboard.table_name">Name</span></a></th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'model' ? 'sorted' : '' ?>">
-                <a href="<?= $sl('model') ?>"><?= $si('model') ?> Model</a></th>
+                <a href="<?= $sl('model') ?>"><?= $si('model') ?> <span data-i18n-text="dashboard.table_model">Model</span></a></th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'category' ? 'sorted' : '' ?>">
-                <a href="<?= $sl('category') ?>"><?= $si('category') ?> Category</a></th>
+                <a href="<?= $sl('category') ?>"><?= $si('category') ?> <span data-i18n-text="dashboard.table_category">Category</span></a></th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable w-16 <?= $sort_col === 'quantity' ? 'sorted' : '' ?>">
-                <a href="<?= $sl('quantity') ?>"><?= $si('quantity') ?> Qty</a></th>
+                <a href="<?= $sl('quantity') ?>"><?= $si('quantity') ?> <span data-i18n-text="dashboard.table_qty">Qty</span></a></th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'status' ? 'sorted' : '' ?>">
-                <a href="<?= $sl('status') ?>"><?= $si('status') ?> Status</a></th>
+                <a href="<?= $sl('status') ?>"><?= $si('status') ?> <span data-i18n-text="dashboard.table_status">Status</span></a></th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'location' ? 'sorted' : '' ?>">
-                <a href="<?= $sl('location') ?>"><?= $si('location') ?> Location</a></th>
+                <a href="<?= $sl('location') ?>"><?= $si('location') ?> <span data-i18n-text="dashboard.table_location">Location</span></a></th>
               <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider" data-i18n-text="dashboard.actions">Actions</th>
             </tr>
           </thead>
@@ -608,16 +608,16 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
                     <div class="flex items-center gap-2">
                       <a href="item_details.php?id=<?= $item['id'] ?>"
                         class="text-xs text-cyan-400 hover:text-cyan-300 transition-colors px-2.5 py-1 rounded-lg border border-cyan-500/20 hover:border-cyan-500/40">
-                        View
+                        <span data-i18n-text="common.view">View</span>
                       </a>
                       <a href="add_item.php?edit=<?= $item['id'] ?>"
                         class="text-xs text-purple-400 hover:text-purple-300 transition-colors px-2.5 py-1 rounded-lg border border-purple-500/20 hover:border-purple-500/40">
-                        Edit
+                        <span data-i18n-text="common.edit">Edit</span>
                       </a>
                       <a href="delete_item.php?id=<?= $item['id'] ?>"
                         onclick="return confirm('Delete \'<?= htmlspecialchars(addslashes($item['name'])) ?>\'? This cannot be undone.')"
                         class="text-xs text-red-400 hover:text-red-300 transition-colors px-2.5 py-1 rounded-lg border border-red-500/20 hover:border-red-500/40">
-                        Delete
+                        <span data-i18n-text="common.delete">Delete</span>
                       </a>
                     </div>
                   </td>

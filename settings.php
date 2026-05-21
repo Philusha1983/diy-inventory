@@ -592,14 +592,14 @@ $has_key          = !empty($settings['api_key']);
             <span class="text-blue-400 font-medium text-xs w-16" data-i18n-text="settings.gemini">Gemini</span>
             <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
                class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
-              aistudio.google.com/app/apikey &rarr;
+              <span data-i18n-text="settings.google_link">aistudio.google.com/app/apikey &rarr;</span>
             </a>
           </div>
           <div class="flex items-center gap-3">
             <span class="text-emerald-400 font-medium text-xs w-16" data-i18n-text="settings.openai">OpenAI</span>
             <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener"
                class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
-              platform.openai.com/api-keys &rarr;
+              <span data-i18n-text="settings.openai_link">platform.openai.com/api-keys &rarr;</span>
             </a>
           </div>
         </div>

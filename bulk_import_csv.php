@@ -241,7 +241,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
   <?php if ($step === 'upload'): ?>
   <div class="card">
     <h2 data-i18n-text="bulk_import_csv.upload_your_spreadsheet">Upload your spreadsheet</h2>
-    <p>Accepts <strong>.csv</strong>, <strong>.tsv</strong>, or any plain-text delimited file. The first row must be column headers. Commas, tabs, semicolons, and pipe <code>|</code> delimiters are all auto-detected.</p>
+    <p>Accepts <strong>.csv</strong>, <strong>.tsv</strong>, or any plain-text delimited file. The first row must be column headers. Commas, tabs, semicolons, and pipe <code>|</code> delimiters are all auto-detected.</span></p>
 
     <div class="info-box">
       💡 <strong>Tip:</strong> Export from Google Sheets → File → Download → CSV. From Excel → Save As → CSV UTF-8.
@@ -286,7 +286,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
   ?>
   <div class="card">
     <h2 data-i18n-text="bulk_import_csv.map_columns_inventory_fields">Map columns → inventory fields</h2>
-    <p>Auto-mapped columns are pre-selected (shown in green below the header). Adjust any that were not recognised. Columns left as <em>— skip —</em> will be ignored.</p>
+    <p><span data-i18n-text="bulk_import_csv.auto_mapped">Auto-mapped columns are pre-selected (shown in green below the header). Adjust any that were not recognised. Columns left as <em>— skip —</em> will be ignored.</p>
 
     <!-- Column mapping UI -->
     <form method="post" id="import-form">
@@ -310,7 +310,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
       </div>
 
       <!-- Data preview table -->
-      <h3 style="font-size:.85rem;color:var(--muted);margin:20px 0 10px;">Preview (first <?= count($preview) ?> rows of data)</h3>
+      <h3 style="font-size:.85rem;color:var(--muted);margin:20px 0 10px;">Preview (first <?= count($preview) ?> <span data-i18n-text="bulk_import_csv.rows_of_data">rows of data)</span></h3>
       <div class="preview-wrap">
         <table class="preview">
           <thead><tr>
@@ -342,7 +342,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
             <?= !$has_url_col ? 'disabled' : '' ?>>
           <div>
             <div style="font-size:.875rem;font-weight:600;color:<?= $has_url_col?'#67e8f9':'var(--muted)'?>;">
-              🔗 Auto-enrich via Product URL after import
+              <span data-i18n-text="bulk_import_csv.auto_enrich"><span data-i18n-text="bulk_import_csv.auto_enrich">🔗 Auto-enrich via Product URL after import</span></span>
             </div>
             <div style="font-size:.78rem;color:var(--muted);margin-top:3px;">
               <?= $has_url_col
@@ -385,7 +385,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
       <?php endforeach; ?>
     </div>
     <?php if ($enrich_queued): ?>
-    <div id="enrich-status" style="font-size:.82rem;color:#67e8f9;margin-bottom:16px;">🔗 Running enrichment for <?= count($enrich_queued) ?> items…</div>
+    <div id="enrich-status" style="font-size:.82rem;color:#67e8f9;margin-bottom:16px;"><span data-i18n-text="bulk_import_csv.running_enrichment">🔗 Running enrichment for </span><?= count($enrich_queued) ?> items…</div>
     <?php endif; ?>
     <div style="display:flex;gap:12px;">
       <a href="dashboard.php" class="btn btn-primary" data-i18n-text="bulk_import_csv.view_inventory">View Inventory →</a>

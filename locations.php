@@ -112,12 +112,12 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
         </div>
         <div class="loc-actions">
           <a href="container_manifest.php?loc=<?= urlencode($loc['location']) ?>"
-             class="loc-action-btn purple">📋 Manifest</a>
+             class="loc-action-btn purple" data-i18n-text="locations.manifest">📋 Manifest</a>
           <button class="loc-action-btn cyan" onclick="toggleQR(<?= $idx ?>, '<?= addslashes(htmlspecialchars($loc['location'])) ?>', <?= (int)$loc['item_types'] ?>, <?= (int)$loc['total_qty'] ?>)">
             📄 Container QR
           </button>
           <a href="print_labels.php?loc=<?= urlencode($loc['location']) ?>" target="_blank"
-             class="loc-action-btn emerald">🏷️ Item Labels</a>
+             class="loc-action-btn emerald" data-i18n-text="locations.item_labels">🏷️ Item Labels</a>
         </div>
         <!-- Inline QR popup -->
         <div class="qr-popup" id="qr-popup-<?= $idx ?>">

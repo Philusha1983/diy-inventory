@@ -30,7 +30,8 @@
         "success": "Saved successfully",
         "close": "Close",
         "print": "Print",
-        "export": "Export"
+        "export": "Export",
+        "qty": "Qty:"
     },
     "login": {
         "title": "DIY Lab",
@@ -102,7 +103,9 @@
         "image_upload_specs": "JPEG · PNG · WebP · GIF — max 5 MB — auto-cropped to square",
         "or_paste_an_image_url": "Or paste an image URL instead",
         "leave_blank_for_system_default": "Leave blank for system default",
-        "key_saved_reenter": "[Placeholder]"
+        "key_saved_reenter": "[Placeholder]",
+        "google_link": "aistudio.google.com/app/apikey →",
+        "openai_link": "platform.openai.com/api-keys →"
     },
     "dashboard": {
         "title": "Inventory Dashboard",
@@ -151,7 +154,13 @@
         "units": "units",
         "showing": "Showing",
         "of": "of",
-        "components_word": "components"
+        "components_word": "components",
+        "table_name": "Name",
+        "table_model": "Model",
+        "table_category": "Category",
+        "table_qty": "Qty",
+        "table_status": "Status",
+        "table_location": "Location"
     },
     "inventory": {
         "coordinate": "Storage Coordinate",
@@ -206,7 +215,7 @@
         "click_below_to_let_ai": "Click below to let AI suggest creative projects.",
         "project_ideas": "project ideas",
         "cached": "(cached)",
-        "generated": "generated",
+        "generated": "Generated",
         "powered_by": "Powered by",
         "components_from_your_lab": "Components from your lab",
         "parts_to_acquire": "Parts to acquire",
@@ -222,7 +231,8 @@
         "week": "week",
         "complexity_beginner": "Beginner",
         "complexity_intermediate": "Intermediate",
-        "complexity_expert": "Expert"
+        "complexity_expert": "Expert",
+        "takes_seconds": "Takes 15–40 seconds"
     },
     "chat": {
         "title": "Lab Assistant",
@@ -246,7 +256,7 @@
     "locations": {
         "title": "Location Manager",
         "subtitle": "All components grouped by storage location",
-        "manifest": "Manifest",
+        "manifest": "📋 Manifest",
         "qr_sticker": "QR Sticker",
         "print_manifest": "Print Manifest",
         "items": "items",
@@ -262,12 +272,13 @@
         "types": "types",
         "no_location_set": "components have no location set.",
         "filter_locations": "🔍 Filter locations…",
-        "print_sticker": "🖨️ Print Sticker"
+        "print_sticker": "🖨️ Print Sticker",
+        "item_labels": "🏷️ Item Labels"
     },
     "bulk_import": {
         "title": "Bulk Import Hub",
         "subtitle": "Import multiple components at once",
-        "csv_title": "CSV \/ Spreadsheet",
+        "csv_title": "CSV / Spreadsheet",
         "zip_title": "ZIP Upload",
         "wizard_title": "Image Group Wizard",
         "drag_photos_directly_into_your": "Drag photos directly into your browser and group them by component.\n        No folder structure needed — just drop your photos and let AI do the rest.\n        Best for ad-hoc imports straight from a camera roll.",
@@ -281,10 +292,11 @@
         "zip_of_photo_folders": "ZIP of Photo Folders",
         "image_group_wizard": "Image Group Wizard",
         "start_ai_import": "Start AI Import →",
-        "csv_spreadsheet": "CSV \/ Spreadsheet",
+        "csv_spreadsheet": "CSV / Spreadsheet",
         "medium_uses_ai": "Medium · Uses AI",
         "bulk_import": "📦 Bulk Import",
-        "dashboard": "← Dashboard"
+        "dashboard": "← Dashboard",
+        "skipped": "Skipped:"
     },
     "item_details": {
         "back": "Back to Dashboard",
@@ -352,20 +364,20 @@
         "recognised_column_names_auto_m": "Recognised column names (auto-mapped):",
         "map_columns_inventory_fields": "Map columns → inventory fields",
         "upload_your_spreadsheet": "Upload your spreadsheet",
-        "location_bin_shelf": "location \/ bin \/ shelf",
-        "specs_specifications": "specs \/ specifications",
+        "location_bin_shelf": "location / bin / shelf",
+        "specs_specifications": "specs / specifications",
         "import_to_inventory": "✅ Import to Inventory",
-        "model_part_number": "model \/ part number",
-        "notes_description": "notes \/ description",
+        "model_part_number": "model / part number",
+        "notes_description": "notes / description",
         "import_another_file": "Import another file",
-        "product_url_link": "product url \/ link",
+        "product_url_link": "product url / link",
         "import_complete": "✅ Import complete",
         "view_inventory": "View Inventory →",
-        "category_type": "category \/ type",
-        "datasheet_pdf": "datasheet \/ pdf",
-        "quantity_qty": "quantity \/ qty",
+        "category_type": "category / type",
+        "datasheet_pdf": "datasheet / pdf",
+        "quantity_qty": "quantity / qty",
         "csv_import": "📊 CSV Import",
-        "price_cost": "price \/ cost",
+        "price_cost": "price / cost",
         "enriching": "⏳ enriching…",
         "import_hub": "← Import Hub",
         "start_over": "← Start over",
@@ -373,7 +385,11 @@
         "status": "status",
         "step_1_upload": "1 Upload",
         "step_2_preview_map": "2 Preview & Map",
-        "step_3_done": "3 Done"
+        "step_3_done": "3 Done",
+        "auto_mapped": "Auto-mapped columns are pre-selected",
+        "rows_of_data": "rows of data)",
+        "auto_enrich": "🔗 Auto-enrich via Product URL after import",
+        "running_enrichment": "🔗 Running enrichment for "
     },
     "bulk_import_folder": {
         "delay_between_calls": "Delay between calls:",
@@ -387,7 +403,8 @@
         "pause": "⏸ Pause",
         "skipped": "Skipped",
         "failed": "Failed",
-        "total": "Total"
+        "total": "Total",
+        "pending": "pending"
     },
     "bulk_import_wizard": {
         "each_batch_you_drop_becomes_a_": "Each batch you drop becomes a new component group. Drop multiple batches for multiple components.",
@@ -409,9 +426,12 @@
         "uploading_and_extracting": "Uploading and extracting…",
         "zip_import": "📦 ZIP Import",
         "import_hub": "← Import Hub",
-        "sg90_servo": "SG90 Servo\/",
+        "sg90_servo": "SG90 Servo/",
         "optional": "← optional",
-        "esp32_c3": "ESP32-C3\/"
+        "esp32_c3": "ESP32-C3/",
+        "pro_tip": "Flat ZIP tip",
+        "my_parts": "my-parts.zip",
+        "my_sensor": "my-sensor.zip"
     },
     "container_manifest": {
         "no_components_at_this_location": "No components at this location",
@@ -433,7 +453,15 @@
         "verify_item_is_in_container": "☐ = verify item is in container &nbsp;|&nbsp; Generated by DIY Lab Inventory System",
         "print_item_labels": "🏷️ Print Item Labels",
         "component_types_word": "component types",
-        "total_units_word": "total units"
+        "total_units_word": "total units",
+        "qr_desc_2": "Print it, laminate it, and stick it on the container.",
+        "items_with_loc": "Items with location",
+        "will_appear": "will appear here.",
+        "print_labels_instead": "🏷️ Print Item Labels Instead",
+        "units": "units",
+        "printed": "Printed:",
+        "container_qr": "📄 Container QR Sticker",
+        "qr_links": "This QR code links to the live manifest for"
     },
     "bug_reporter": {
         "a_screenshot_helps_us_understa": "A screenshot helps us understand the issue better.",
@@ -463,7 +491,7 @@
         "ai_generated_blueprint": "AI-Generated Blueprint",
         "loading_blueprint": "Loading blueprint…",
         "back_to_projects": "← Back to Projects",
-        "print_save_pdf": "Print \/ Save PDF"
+        "print_save_pdf": "Print / Save PDF"
     },
     "<?= $edit_id ? 'add_item": {
         "save_changes' : 'add_item.add_to_inventory' ?>": "<!--?= $edit_id ? '💾 Save Changes' : '➕ Add to Inventory' ?-->"
