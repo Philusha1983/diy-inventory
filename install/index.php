@@ -375,6 +375,131 @@ $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $uri = $_SERVER['REQUEST_URI'] ?? '';
 $base_uri = preg_replace('/\/install\/(index\.php)?$/i', '', $uri);
 $detected_site_url = $protocol . '://' . $host . $base_uri;
+
+// Dynamic environment detection helper
+function detect_hosting_environment() {
+    $software = $_SERVER['SERVER_SOFTWARE'] ?? '';
+    $doc_root = $_SERVER['DOCUMENT_ROOT'] ?? '';
+    $host_name = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+
+    // 1. Localhost detection
+    if (in_array(strtolower($host_name), ['localhost', '127.0.0.1', '::1']) 
+        || strpos($host_name, '.local') !== false 
+        || strpos($host_name, '.test') !== false 
+        || php_sapi_name() === 'cli-server'
+    ) {
+        if (strpos(strtolower($software), 'apache') !== false && (strpos($doc_root, '/Applications/MAMP/') === 0 || strpos($doc_root, '/MAMP/') !== false)) {
+            return 'mamp';
+        }
+        if (strpos(strtolower($software), 'apache') !== false && (strpos($doc_root, 'C:/xampp') === 0 || strpos($doc_root, '/xampp/') !== false)) {
+            return 'xampp';
+        }
+        return 'localhost';
+    }
+
+    // 2. cPanel detection
+    if (preg_match('#^/home/[^/]+/public_html#', $doc_root)) {
+        return 'cpanel';
+    }
+
+    // 3. DirectAdmin detection
+    if (preg_match('#^/home/[^/]+/domains/[^/]+/public_html#', $doc_root)) {
+        return 'directadmin';
+    }
+
+    // 4. Plesk detection
+    if (strpos($doc_root, '/vhosts/') !== false && strpos($doc_root, '/httpdocs') !== false) {
+        return 'plesk';
+    }
+
+    // 5. Generic Shared Hosting
+    if (strpos($doc_root, '/home') === 0) {
+        return 'generic_shared';
+    }
+
+    // 6. VPS/Custom Server
+    return 'vps';
+}
+
+function get_hosting_label($profile) {
+    switch ($profile) {
+        case 'mamp': return 'MAMP';
+        case 'xampp': return 'XAMPP';
+        case 'localhost': return 'Localhost';
+        case 'cpanel': return 'cPanel Shared Hosting';
+        case 'directadmin': return 'DirectAdmin Shared Hosting';
+        case 'plesk': return 'Plesk Shared Hosting';
+        case 'generic_shared': return 'Shared Hosting';
+        case 'vps': return 'VPS/Dedicated Server';
+        default: return 'Server Environment';
+    }
+}
+
+function get_hosting_title($profile) {
+    return get_hosting_label($profile);
+}
+
+function get_hosting_steps_html($profile) {
+    switch ($profile) {
+        case 'cpanel':
+            return '<li>Log in to your <strong>cPanel Dashboard</strong> (usually via <code>yourdomain.com:2083</code>).</li>
+                    <li>Locate the <strong>Databases</strong> section and click on <strong>MySQL® Database Wizard</strong>.</li>
+                    <li><strong>Step 1: Create a Database</strong> — Enter a name (e.g. <code>inventory</code>) and click <em>Next Step</em>.</li>
+                    <li><strong>Step 2: Create a User</strong> — Enter a username (e.g. <code>dbuser</code>), generate a strong password, and click <em>Create User</em>. <strong style="color:var(--accent);">Copy the password for later!</strong></li>
+                    <li><strong>Step 3: Add User to Database</strong> — Check <strong>ALL PRIVILEGES</strong>, then click <em>Next Step</em> to finalize.</li>
+                    <li>Copy the <strong>Full Database Name</strong> and <strong>Full Database User</strong> (which will include your prefix, e.g. <code>username_inventory</code>) and paste them below.</li>';
+
+        case 'directadmin':
+            return '<li>Log in to your <strong>DirectAdmin Control Panel</strong> (usually via <code>yourdomain.com:2222</code>).</li>
+                    <li>Under the <strong>Account Manager</strong> category, click on <strong>MySQL Management</strong>.</li>
+                    <li>Click <strong>Create New Database</strong> in the top-right corner.</li>
+                    <li>Enter a database name and user suffix (e.g. <code>inventory</code> / <code>dbuser</code>).</li>
+                    <li>Generate a strong password, <strong style="color:var(--accent);">copy it</strong>, and click <strong>Create Database</strong>.</li>
+                    <li>Copy the full database name and user (e.g. <code>dauser_inventory</code>) shown on the confirmation screen and paste them below.</li>';
+
+        case 'plesk':
+            return '<li>Log in to your <strong>Plesk Control Panel</strong>.</li>
+                    <li>Select the domain/subscription and click on <strong>Databases</strong> in the side menu.</li>
+                    <li>Click the <strong>Add Database</strong> button.</li>
+                    <li>Enter a database name (e.g. <code>diy_inventory</code>).</li>
+                    <li>Under "Users", check <strong>Create a database user</strong>. Enter a database username and secure password.</li>
+                    <li>Click <strong>OK</strong>. Paste the generated database name, username, and password below.</li>';
+
+        case 'mamp':
+            return '<li>Open the <strong>MAMP Start Page</strong> in your browser (usually <code>http://localhost:8888/MAMP/</code>).</li>
+                    <li>Navigate to <strong>Tools &rarr; phpMyAdmin</strong> in the top navigation bar.</li>
+                    <li>Click the <strong>Databases</strong> tab.</li>
+                    <li>Under "Create database", enter <code>diy_lab_db</code> and click <strong>Create</strong>.</li>
+                    <li>In the fields below, use: Host: <code>localhost</code>, User: <code>root</code>, Password: <code>root</code>.</li>';
+
+        case 'xampp':
+            return '<li>Open your browser and navigate to <strong>phpMyAdmin</strong> (usually <code>http://localhost/phpmyadmin/</code>).</li>
+                    <li>Click on the <strong>Databases</strong> tab in the top menu.</li>
+                    <li>Under "Create database", type <code>diy_lab_db</code> and click the <strong>Create</strong> button.</li>
+                    <li>In the fields below, use: Host: <code>localhost</code>, User: <code>root</code>, and leave the Password field <strong style="color:var(--accent);">blank</strong>.</li>';
+
+        case 'generic_shared':
+            return '<li>Log in to your hosting provider\'s control panel (cPanel, DirectAdmin, Plesk, etc.).</li>
+                    <li>Locate the <strong>MySQL Databases</strong> or <strong>Database Manager</strong> tool.</li>
+                    <li>Create a <strong>new database</strong> (take note of the prefix, e.g. <code>myusername_db</code>).</li>
+                    <li>Create a <strong>new database user</strong> with a strong password.</li>
+                    <li>Locate <strong>Add User to Database</strong>, select both, check the <strong>ALL PRIVILEGES</strong> box, and click <strong>Save/Add</strong>.</li>
+                    <li>Copy the full database name, database user, and password into the wizard fields below.</li>';
+
+        case 'vps':
+            return '<li>Connect to your VPS/Server via SSH.</li>
+                    <li>Log in to MySQL command line: <code>sudo mysql -u root</code></li>
+                    <li>Execute the following SQL queries to create a database and low-privilege user:
+                      <pre style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; font-size: 0.75rem; margin-top: 5px; overflow-x: auto; color: var(--accent);">CREATE DATABASE diy_lab_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER \'diy_user\'@\'localhost\' IDENTIFIED BY \'YOUR_SECURE_PASSWORD\';
+GRANT ALL PRIVILEGES ON diy_lab_db.* TO \'diy_user\'@\'localhost\';
+FLUSH PRIVILEGES;</pre>
+                    </li>
+                    <li>Enter <code>diy_lab_db</code> as Database Name, <code>diy_user</code> as Database User, and your chosen password below.</li>';
+    }
+}
+
+$env_profile = detect_hosting_environment();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -870,6 +995,85 @@ $detected_site_url = $protocol . '://' . $host . $base_uri;
       text-align: center;
     }
 
+    /* Database Help Section */
+    .db-help-container {
+      margin-bottom: 1.5rem;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.01);
+      transition: all 0.3s ease;
+    }
+
+    .db-help-container:hover {
+      border-color: rgba(124, 58, 237, 0.3);
+      background: rgba(124, 58, 237, 0.02);
+    }
+
+    .btn-db-help-toggle {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: none;
+      border: none;
+      color: var(--accent);
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      outline: none;
+      transition: color 0.2s ease;
+    }
+
+    .btn-db-help-toggle:hover {
+      color: #38bdf8;
+    }
+
+    .btn-db-help-toggle::after {
+      content: '▼';
+      font-size: 0.65rem;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-db-help-toggle.active::after {
+      transform: rotate(180deg);
+    }
+
+    .db-help-content {
+      padding: 0 1rem 1rem 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.825rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .help-section h4 {
+      color: var(--text-main);
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .help-steps {
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .help-steps li {
+      margin-bottom: 0.4rem;
+    }
+
+    .help-steps code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #f43f5e;
+    }
+
     .footer {
       text-align: center;
       margin-top: 2rem;
@@ -987,17 +1191,41 @@ $detected_site_url = $protocol . '://' . $host . $base_uri;
         </div>
 
         <form id="db-form" onsubmit="event.preventDefault();">
+          <!-- Collapsible Database Setup Instructions -->
+          <div class="db-help-container">
+            <button type="button" class="btn-db-help-toggle" onclick="toggleDbHelp()">
+              <span style="display: flex; align-items: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                </svg>
+                Need help creating a database? (<?= htmlspecialchars(get_hosting_label($env_profile)) ?> detected)
+              </span>
+            </button>
+            <div id="db-help-content" class="db-help-content" style="display: none;">
+              <div class="help-section">
+                <h4><?= htmlspecialchars(get_hosting_title($env_profile)) ?> Database Setup Guide</h4>
+                <ol class="help-steps">
+                  <?= get_hosting_steps_html($env_profile) ?>
+                </ol>
+                <div style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted);">
+                  * Create the database in your host's control panel, then enter the generated credentials below.
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="db_host">Database Host</label>
             <input type="text" id="db_host" name="db_host" class="form-control" placeholder="localhost" value="localhost" required>
           </div>
           <div class="form-group">
             <label for="db_name">Database Name</label>
-            <input type="text" id="db_name" name="db_name" class="form-control" placeholder="diy_lab_db" value="diy_lab_db" required>
+            <input type="text" id="db_name" name="db_name" class="form-control" placeholder="diy_lab_db" value="<?= in_array($env_profile, ['cpanel', 'directadmin', 'plesk', 'generic_shared']) ? '' : 'diy_lab_db' ?>" required>
           </div>
           <div class="form-group">
             <label for="db_user">Database User</label>
-            <input type="text" id="db_user" name="db_user" class="form-control" placeholder="root" value="root" required>
+            <input type="text" id="db_user" name="db_user" class="form-control" placeholder="root" value="<?= in_array($env_profile, ['cpanel', 'directadmin', 'plesk', 'generic_shared']) ? '' : 'root' ?>" required>
           </div>
           <div class="form-group">
             <label for="db_pass">Database Password</label>
@@ -1174,6 +1402,19 @@ $detected_site_url = $protocol . '://' . $host . $base_uri;
       }
     }
 
+    // Toggle database help widget
+    function toggleDbHelp() {
+      const btn = document.querySelector('.btn-db-help-toggle');
+      const content = document.getElementById('db-help-content');
+      if (content.style.display === 'none' || !content.style.display) {
+        content.style.display = 'block';
+        btn.classList.add('active');
+      } else {
+        content.style.display = 'none';
+        btn.classList.remove('active');
+      }
+    }
+
     // Toggle logs visibility
     function toggleLogs(logContainerId) {
       const container = document.getElementById(logContainerId);
@@ -1256,6 +1497,14 @@ $detected_site_url = $protocol . '://' . $host . $base_uri;
           errorDiv.style.display = 'block';
           errorDiv.querySelector('.error-msg').innerHTML = `<strong>Connection Failed:</strong> ${res.error}`;
           document.getElementById('step-2-log-text').value = res.log || res.error;
+          
+          // Automatically expand the database helper container to guide the user
+          const helpContent = document.getElementById('db-help-content');
+          const helpBtn = document.querySelector('.btn-db-help-toggle');
+          if (helpContent && helpContent.style.display === 'none') {
+            helpContent.style.display = 'block';
+            if (helpBtn) helpBtn.classList.add('active');
+          }
         }
       });
     }
