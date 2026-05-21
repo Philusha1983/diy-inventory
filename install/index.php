@@ -4,39 +4,65 @@
  * Matches DIY Lab design aesthetics.
  */
 
+session_start();
+
 // 1. Security Check: If config.php exists, check if the installer should be blocked.
 $config_file = __DIR__ . '/../config.php';
+
+// If config.php doesn't exist, we start/mark active installation session
+if (!file_exists($config_file)) {
+    $_SESSION['install_in_progress'] = true;
+}
+
 if (file_exists($config_file)) {
-    try {
-        // Load the config file silently
-        $old_err = error_reporting(0);
-        include $config_file;
-        error_reporting($old_err);
-        
-        if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER') && defined('DB_PASS')) {
-            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
-            $options = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_TIMEOUT => 2
-            ];
-            $pdo_check = new PDO($dsn, DB_USER, DB_PASS, $options);
+    // Only block if we are NOT in the middle of an active installation session
+    if (empty($_SESSION['install_in_progress'])) {
+        try {
+            // Load the config file silently
+            $old_err = error_reporting(0);
+            include $config_file;
+            error_reporting($old_err);
             
-            // Check if admin_username exists in settings table
-            $stmt = $pdo_check->prepare("SELECT setting_value FROM settings WHERE setting_key = 'admin_username'");
-            $stmt->execute();
-            $admin_exists = $stmt->fetchColumn();
-            
-            if ($admin_exists !== false && !empty($admin_exists)) {
-                // Application is already fully installed and configured, block access.
-                header('Location: ../index.php');
-                exit;
+            if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER') && defined('DB_PASS')) {
+                $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+                $options = [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_TIMEOUT => 2
+                ];
+                $pdo_check = new PDO($dsn, DB_USER, DB_PASS, $options);
+                
+                // Check if admin_username exists in settings table
+                $stmt = $pdo_check->prepare("SELECT setting_value FROM settings WHERE setting_key = 'admin_username'");
+                $stmt->execute();
+                $admin_exists = $stmt->fetchColumn();
+                
+                if ($admin_exists !== false && !empty($admin_exists)) {
+                    // Application is already fully installed and configured, block access.
+                    $is_ajax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+                        || (strpos($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json') !== false)
+                        || ($_SERVER['REQUEST_METHOD'] === 'POST');
+                    
+                    if ($is_ajax) {
+                        header('Content-Type: application/json');
+                        echo json_encode(['success' => false, 'error' => 'Application is already fully installed.']);
+                        exit;
+                    } else {
+                        header('Location: ../index.php');
+                        exit;
+                    }
+                }
             }
+        } catch (Throwable $e) {
+            // Connection failed or settings table not populated.
+            // This means the setup is incomplete or needs reconfiguration, so we allow access.
         }
-    } catch (Throwable $e) {
-        // Connection failed or settings table not populated.
-        // This means the setup is incomplete or needs reconfiguration, so we allow access.
     }
 }
+
+// If we reach this point, the user is allowed to access the installer, so mark it active.
+$_SESSION['install_in_progress'] = true;
+
+
 
 // 2. Isolated Error Logging and Debugging Utility
 function write_install_log($step, $error_msg, $extra_data = []) {
@@ -269,6 +295,8 @@ EOT;
                     $cleanup_message = 'Could not automatically rename the "install/" folder. Please manually delete or rename it on your server.';
                 }
 
+                unset($_SESSION['install_in_progress']);
+
                 echo json_encode([
                     'success' => true,
                     'cleanup' => [
@@ -287,6 +315,7 @@ EOT;
             exit;
 
         case 'cleanup':
+            unset($_SESSION['install_in_progress']);
             // Try to automatically rename/disable the install/ folder
             $install_dir = __DIR__;
             $parent_dir = dirname($install_dir);
