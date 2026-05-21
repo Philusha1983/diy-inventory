@@ -344,22 +344,35 @@
       <div class="container">
         <div class="teaser-section">
           <div class="teaser-glow" aria-hidden="true"></div>
-          <h2>Prefer a turnkey solution?</h2>
-          <p>
-            We are working on **DIY Inventory Cloud**—the exact same database, hosted and managed entirely by us. No servers, no setup, no terminal commands. You get instant SSL, high-performance database backups, and automatic version updates for a simple, predictable annual subscription.
-          </p>
-          <form class="waitlist-form" id="cloud-waitlist-form" action="#" method="POST" novalidate>
-            <input type="email" class="waitlist-input" id="waitlist-email" placeholder="Enter your email address" required aria-label="Email address for cloud waitlist">
-            <button type="submit" class="btn btn-primary" id="waitlist-submit">
-              Join the Cloud Waitlist
-            </button>
-          </form>
-          <p class="teaser-microcopy" id="waitlist-status">
-            *We value your privacy. We'll only email you about the cloud launch. No spam, ever.
-          </p>
+
+          <!-- Left: copy + form -->
+          <div class="teaser-content">
+            <h2>Prefer a turnkey solution?</h2>
+            <p>
+              We are working on <strong>DIY Inventory Cloud</strong> — the exact same database, hosted and managed entirely by us. No servers, no setup, no terminal commands. You get instant SSL, high-performance database backups, and automatic version updates for a simple, predictable annual subscription.
+            </p>
+            <form class="waitlist-form" id="cloud-waitlist-form" action="#" method="POST" novalidate>
+              <input type="email" class="waitlist-input" id="waitlist-email" placeholder="Enter your email address" required aria-label="Email address for cloud waitlist">
+              <button type="submit" class="btn btn-primary" id="waitlist-submit">
+                Join the Cloud Waitlist
+              </button>
+            </form>
+            <p class="teaser-microcopy" id="waitlist-status">
+              *We value your privacy. We'll only email you about the cloud launch. No spam, ever.
+            </p>
+          </div>
+
+          <!-- Right: visual -->
+          <div class="teaser-visual" aria-hidden="true">
+            <div class="teaser-img-wrapper">
+              <img src="images/cloud_teaser.png" alt="DIY Inventory Cloud dashboard showing 99.99% uptime, SSL status and database backup metrics" class="teaser-img">
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
+
 
     <!-- Privacy & Ownership Badge (Premium High-Fidelity Badge) -->
     <section class="section scroll-reveal" id="privacy">
