@@ -385,10 +385,8 @@ img {
 .hero-title {
   margin-block-start: 1rem;
   line-height: 1.15;
-  background: linear-gradient(135deg, #ffffff 40%, #a1a1aa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.5));
+  color: var(--text-light);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 
 .hero-subtitle {
