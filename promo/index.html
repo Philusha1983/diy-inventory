@@ -102,12 +102,16 @@
     <!-- Core Value Prop (The Spreadsheet Killer) -->
     <section class="section scroll-reveal" id="features">
       <div class="container">
+        
+        <div class="section-header">
+          <h2 id="spreadsheet-killer-title">The "Spreadsheet Killer" for Physical Spaces</h2>
+          <p>
+            Flat spreadsheets are built for financial columns, not your physical environment. If your parts, components, and tools are nested inside rooms, racks, shelves, and boxes, you need an inventory system that understands hierarchy.
+          </p>
+        </div>
+
         <div class="spreadsheet-killer grid-2">
           <div class="val-prop-content">
-            <h2 id="spreadsheet-killer-title">The "Spreadsheet Killer" for Physical Spaces</h2>
-            <p style="margin-block-end: 2rem; font-size: 1.1rem;">
-              Flat spreadsheets are built for financial columns, not your physical environment. If your parts, components, and tools are nested inside rooms, racks, shelves, and boxes, you need an inventory system that understands hierarchy.
-            </p>
             <div class="val-prop-points">
               <div class="val-point">
                 <div class="val-point-icon" aria-hidden="true">
@@ -145,7 +149,7 @@
             </div>
           </div>
           
-          <!-- Glowing Modern App UI Split-Screen Mockup -->
+          <!-- Glowing Modern App UI Mockup -->
           <div class="nesting-visualizer-container">
             <h3 style="color: var(--text-light); margin-block-end: 1rem; font-family: var(--font-display);">Virtual Nested Storage Tree</h3>
             <div class="terminal-mockup">
@@ -165,78 +169,46 @@
                 </div>
               </div>
               
-              <!-- Split Workspace -->
-              <div class="terminal-workspace">
-                <!-- Left Pane: Location tree -->
-                <div class="nesting-visualizer" role="img" aria-label="Hierarchical location mapping code representation">
-                  <div class="tree-node root">
+              <!-- Location tree (Expanded to full width) -->
+              <div class="nesting-visualizer" role="img" aria-label="Hierarchical location mapping code representation">
+                <div class="tree-node root">
+                  <span class="tree-arrow">▼</span>
+                  <span class="tree-icon">🏠</span>
+                  <span class="node-text">Workshop / Garage</span>
+                </div>
+                
+                <div class="tree-branch">
+                  <div class="tree-node parent">
                     <span class="tree-arrow">▼</span>
-                    <span class="tree-icon">🏠</span>
-                    <span class="node-text">Workshop / Garage</span>
+                    <span class="tree-icon">🪵</span>
+                    <span class="node-text">Rack Alpha (Metal Frame)</span>
                   </div>
                   
                   <div class="tree-branch">
                     <div class="tree-node parent">
                       <span class="tree-arrow">▼</span>
-                      <span class="tree-icon">🪵</span>
-                      <span class="node-text">Rack Alpha (Metal Frame)</span>
+                      <span class="tree-icon">📦</span>
+                      <span class="node-text">Shelf 3 (Middle Rack)</span>
                     </div>
                     
                     <div class="tree-branch">
                       <div class="tree-node parent">
                         <span class="tree-arrow">▼</span>
-                        <span class="tree-icon">📦</span>
-                        <span class="node-text">Shelf 3 (Middle Rack)</span>
+                        <span class="tree-icon">📥</span>
+                        <span class="node-text">Drawer Cabinet #4</span>
                       </div>
                       
-                      <div class="tree-branch">
-                        <div class="tree-node parent">
-                          <span class="tree-arrow">▼</span>
-                          <span class="tree-icon">📥</span>
-                          <span class="node-text">Drawer Cabinet #4</span>
+                      <div class="tree-branch leaf-branch">
+                        <div class="tree-node item active">
+                          <span class="tree-bullet">├─</span>
+                          <span class="tree-icon">🏷️</span>
+                          <span class="node-text">Slot A: 5x ESP32 Microchips</span>
+                          <span class="badge badge-mini">Active</span>
                         </div>
-                        
-                        <div class="tree-branch leaf-branch">
-                          <div class="tree-node item active">
-                            <span class="tree-bullet">├─</span>
-                            <span class="tree-icon">🏷️</span>
-                            <span class="node-text">Slot A: 5x ESP32 Microchips</span>
-                            <span class="badge badge-mini">Active</span>
-                          </div>
-                          <div class="tree-node item">
-                            <span class="tree-bullet">└─</span>
-                            <span class="tree-icon">🏷️</span>
-                            <span class="node-text">Slot B: 12x HC-SR04 Sensors</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Right Pane: Glass Preview Details -->
-                <div class="item-preview-pane">
-                  <div class="preview-card-glass">
-                    <div class="preview-img-container">
-                      <img src="images/maker_card.png" alt="ESP32 Component Preview">
-                      <div class="preview-badge-status">GEMINI VERIFIED</div>
-                    </div>
-                    <div class="preview-details">
-                      <h4 class="preview-item-title">ESP32-WROOM-32</h4>
-                      <p class="preview-item-type">Microcontroller / IoT Board</p>
-                      
-                      <div class="preview-specs">
-                        <div class="spec-row">
-                          <span class="spec-label">Quantity:</span>
-                          <span class="spec-value highlight">5 units</span>
-                        </div>
-                        <div class="spec-row">
-                          <span class="spec-label">Location:</span>
-                          <span class="spec-value">Drawer 4 › Slot A</span>
-                        </div>
-                        <div class="spec-row">
-                          <span class="spec-label">Processor:</span>
-                          <span class="spec-value">Dual-Core Tensilica</span>
+                        <div class="tree-node item">
+                          <span class="tree-bullet">└─</span>
+                          <span class="tree-icon">🏷️</span>
+                          <span class="node-text">Slot B: 12x HC-SR04 Sensors</span>
                         </div>
                       </div>
                     </div>

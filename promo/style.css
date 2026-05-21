@@ -641,19 +641,7 @@ img {
   text-align: left;
 }
 
-.terminal-workspace {
-  display: flex;
-  flex-direction: column;
-}
-
-@media (min-width: 768px) {
-  .terminal-workspace {
-    flex-direction: row;
-  }
-}
-
 .nesting-visualizer {
-  flex: 1;
   padding: 2.25rem;
   color: #a1a1aa;
   font-family: var(--font-mono);
@@ -661,7 +649,6 @@ img {
   line-height: 1.8;
   overflow-x: auto;
   position: relative;
-  border-right: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /* Subtle scanlines effect inside console */
@@ -756,113 +743,7 @@ img {
   text-transform: uppercase;
 }
 
-/* Right Pane: Glass Preview Details */
-.item-preview-pane {
-  width: 100%;
-  padding: 2.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.01), transparent);
-}
 
-@media (min-width: 768px) {
-  .item-preview-pane {
-    width: 45%;
-  }
-}
-
-.preview-card-glass {
-  width: 100%;
-  max-width: 280px;
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-md);
-  padding: 1.15rem;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  transition: all var(--transition-normal);
-}
-
-.preview-card-glass:hover {
-  transform: translateY(-4px);
-  border-color: rgba(34, 197, 94, 0.15);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 15px rgba(34, 197, 94, 0.05);
-}
-
-.preview-img-container {
-  position: relative;
-  height: 120px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.preview-img-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.preview-badge-status {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 0.55rem;
-  background-color: var(--forest-neon);
-  color: #020617;
-  font-weight: 800;
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
-  letter-spacing: 0.05em;
-}
-
-.preview-details {
-  margin-top: 1rem;
-}
-
-.preview-item-title {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text-light);
-}
-
-.preview-item-type {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.1rem;
-}
-
-.preview-specs {
-  margin-top: 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 0.75rem;
-}
-
-.spec-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-}
-
-.spec-label {
-  color: var(--text-muted);
-}
-
-.spec-value {
-  color: var(--text-secondary);
-}
-
-.spec-value.highlight {
-  color: var(--forest-neon);
-  font-weight: 700;
-  text-shadow: 0 0 4px var(--forest-neon-glow);
-}
 
 /* --- 8. Audience Spotlight (Use Cases) --- */
 .section-header {
