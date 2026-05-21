@@ -350,9 +350,11 @@ php -c php.ini -S 0.0.0.0:8080
 
 Open your browser at: **`http://localhost:8080`**
 
-**Default password:** `1234`
+**Administrator Password:**
+- If you used the **Setup Wizard**, log in with the custom password you created during the admin configuration step.
+- If you performed a **Manual Installation**, the default password is **`1234`**.
 
-> To change the password, go to **User Settings → Change Lab Password**. Enter the current password and choose a new one (minimum 6 characters). The new password is stored as a **bcrypt hash** in the database — no file editing required.
+> 🔒 **Security Recommendation:** If you used the manual installation fallback, immediately change the default password in the web UI via **User Settings → Change Lab Password**. The password will be updated to a secure bcrypt hash in your database.
 
 ### Access from a phone or tablet (same Wi-Fi)
 
@@ -539,13 +541,31 @@ Deploy on a regular hosting account — no root access, everything via panel UI 
 
 ---
 
+## 📦 Production Packaging
+
+To prepare a production package of the application, run the packaging utility script from your terminal:
+
+```bash
+php package.php
+```
+
+The script will scan the codebase and create a clean `diy-inventory.zip` in the root folder, automatically excluding:
+- Sensitive configurations (`config.php`, `db.php`)
+- Development databases and log files (`inventory.db`, `*.log`)
+- Internal developer documentation and git repositories (`.git`, `.github`)
+- Test suites (`tests/`, `node_modules/`, `package-lock.json`)
+
+It explicitly preserves the directory structure for empty folders `uploads/` and `uploads/logo/`, ensuring they exist in the production package so permission diagnostics can run immediately.
+
+---
+
 ## 🔒 Security Notes
 
 | Risk | Mitigation |
 |------|-----------|
-| Weak password | Change the default `1234` via **User Settings → Change Lab Password** — no file editing needed |
+| Weak password | Set a strong password during installation, or change it via **User Settings → Change Lab Password** — no file editing needed |
 | Password storage | Passwords are hashed with **`PASSWORD_BCRYPT`** via PHP's `password_hash()` and verified with `password_verify()` — never stored as plaintext |
-| API key exposure | Keys are stored in the DB, not in files. Never commit `db.php` with credentials to a public repo. |
+| API key exposure | Keys are stored in the DB, not in files. Never commit `db.php` or `config.php` with credentials to a public repo. |
 | File upload abuse | Image MIME types verified; all uploads are re-encoded through PHP GD, stripping any embedded malicious data. |
 | SQL injection | All database queries use **PDO prepared statements** throughout. |
 | Session hijacking | Sessions are PHP-native. Use HTTPS in production to prevent interception. |

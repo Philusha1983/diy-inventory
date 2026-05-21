@@ -140,65 +140,34 @@ rsync -avz --exclude 'uploads/*' --exclude '.git' \
 
 ---
 
-### Step 7 — Configure `db.php`
+### Step 7 — Set Correct File Permissions
 
-On the **server**, edit the database credentials:
-```bash
-nano /var/www/html/diy-lab/db.php
-```
-
-Update to match your server setup:
-```php
-<?php
-$host = '127.0.0.1';
-$db   = 'diy_lab_db';
-$user = 'diylab_user';         // the user you created in Step 5
-$pass = 'STRONG_PASSWORD_HERE'; // your chosen password
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$pdo = new PDO($dsn, $user, $pass, [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-]);
-```
-
----
-
-### Step 8 — Import the Database Schema
+Before running the installation wizard, ensure Apache has ownership of the application directory and write permissions are set so the configuration file can be generated:
 
 ```bash
-mysql -u diylab_user -p diy_lab_db < /var/www/html/diy-lab/schema.sql
-```
-
----
-
-### Step 9 — Set Correct File Permissions
-
-```bash
-# Give Apache ownership
+# Give Apache ownership of the directory
 chown -R www-data:www-data /var/www/html/diy-lab
 
-# Directories need execute permission
+# Set standard directory permissions
 find /var/www/html/diy-lab -type d -exec chmod 755 {} \;
 
-# Files need read permission
+# Set standard file permissions
 find /var/www/html/diy-lab -type f -exec chmod 644 {} \;
 
-# uploads/ needs to be writable by Apache
+# Ensure uploads directories are writeable by the web server
 chmod 775 /var/www/html/diy-lab/uploads
 ```
 
 ---
 
-### Step 10 — Configure Apache Virtual Host
+### Step 8 — Configure Apache Virtual Host
 
 Create a new site configuration:
 ```bash
 nano /etc/apache2/sites-available/diy-lab.conf
 ```
 
-Paste the following (replace `yourdomain.com` with your actual domain or server IP):
+Paste the following configuration (replace `yourdomain.com` with your domain name or server IP):
 ```apache
 <VirtualHost *:80>
     ServerName yourdomain.com
@@ -211,7 +180,7 @@ Paste the following (replace `yourdomain.com` with your actual domain or server 
     </Directory>
 
     # Block direct access to sensitive helper files
-    <FilesMatch "^(db|ai_helper|chat_api|identify_api|delete_item)\.php$">
+    <FilesMatch "^(config|db|ai_helper|chat_api|identify_api|delete_item)\.php$">
         Require all denied
     </FilesMatch>
 
@@ -220,7 +189,7 @@ Paste the following (replace `yourdomain.com` with your actual domain or server 
 </VirtualHost>
 ```
 
-Enable the site and disable the default:
+Enable the site and reload Apache:
 ```bash
 a2ensite diy-lab.conf
 a2dissite 000-default.conf
@@ -229,9 +198,9 @@ systemctl reload apache2
 
 ---
 
-### Step 11 — Enable HTTPS with Let's Encrypt (Free SSL)
+### Step 9 — Enable HTTPS with Let's Encrypt (Free SSL)
 
-> ⚠️ HTTPS is **mandatory** for a public server — it protects your API key and session cookie in transit.
+> ⚠️ HTTPS is **highly recommended** before running the setup wizard to ensure database credentials and admin passwords are encrypted in transit.
 
 ```bash
 # Install Certbot
@@ -241,27 +210,18 @@ apt install -y certbot python3-certbot-apache
 certbot --apache -d yourdomain.com -d www.yourdomain.com
 ```
 
-Follow the prompts. Certbot will:
-- Verify domain ownership automatically
-- Install the certificate
-- Configure Apache to redirect HTTP → HTTPS
-- Set up auto-renewal (via systemd timer)
-
-Test auto-renewal:
-```bash
-certbot renew --dry-run
-```
+Follow the prompts to obtain and configure the certificate. Certbot will handle HTTP-to-HTTPS redirects automatically.
 
 ---
 
-### Step 12 — Raise PHP Upload Limits for Apache
+### Step 10 — Raise PHP Upload Limits for Apache
 
-Edit the PHP configuration:
+Edit your global php.ini:
 ```bash
 nano /etc/php/8.2/apache2/php.ini   # Adjust version number if needed
 ```
 
-Find and update these values:
+Verify or update the following parameters:
 ```ini
 upload_max_filesize = 25M
 post_max_size = 30M
@@ -269,23 +229,25 @@ memory_limit = 256M
 max_execution_time = 120
 ```
 
-Restart Apache to apply:
+Restart Apache to apply changes:
 ```bash
 systemctl restart apache2
 ```
 
 ---
 
-### Step 13 — Configure Your API Key
+### Step 11 — Run the Setup Wizard in your Browser
 
-Open the app in your browser:
-```
-https://yourdomain.com/settings.php
-```
+Now, open your web browser and navigate to:
+👉 **`https://yourdomain.com`** (or `https://YOUR_SERVER_IP` if setup without a domain name).
 
-1. Select **Gemini** or **OpenAI**
-2. Paste your API key
-3. Click **Save Configuration**
+Because the application is not yet configured, you will be automatically redirected to the Setup Wizard at `/install/index.php`. The wizard will:
+1. Run pre-flight environment checks (PHP version, loaded extensions, folder permissions).
+2. Prompt for the MySQL database name, user, host, and password.
+3. Verify the database credentials using an interactive test-connection tool.
+4. Create the database, run the `schema.sql` seed script, and write `config.php`.
+5. Guide you through creating the administrator account and custom branding.
+6. Automatically rename the `install/` directory for security and redirect you to the login screen.
 
 ---
 
@@ -293,17 +255,16 @@ https://yourdomain.com/settings.php
 
 - [ ] Server created and SSH accessible
 - [ ] Apache, MySQL, PHP installed
-- [ ] Database and app user created
-- [ ] App files uploaded
-- [ ] `db.php` updated with correct credentials
-- [ ] Schema imported
-- [ ] File permissions set
-- [ ] Virtual host configured and enabled
-- [ ] HTTPS certificate installed
-- [ ] PHP upload limits raised
-- [ ] API key saved via UI
-- [ ] Login with password `1234` works
-- [ ] **Change the default password** in `index.php`
+- [ ] Database and dedicated MySQL app user created (Step 5)
+- [ ] App files uploaded to `/var/www/html/diy-lab`
+- [ ] File permissions corrected (Apache owns directory)
+- [ ] Apache Virtual Host configured and enabled
+- [ ] HTTPS certificate installed via Certbot
+- [ ] PHP upload limits raised in `php.ini`
+- [ ] Setup Wizard completed in the web browser
+- [ ] Admin account created
+- [ ] `install/` directory automatically renamed (or manually deleted)
+- [ ] App settings and API keys configured via User Settings UI
 
 ---
 
@@ -481,15 +442,16 @@ In DirectAdmin:
 
 ---
 
-### Step 3 — Import the Database Schema via phpMyAdmin
+### Step 3 — Import Database Backup (Migration Only)
 
+> ℹ️ **Fresh Install?** Skip this step. The Setup Wizard will automatically initialize the database tables for you in a later step.
+
+If migrating an existing local instance with data:
 1. In DirectAdmin, click **"phpMyAdmin"** (under Extra Features)
 2. Select your newly created database from the left sidebar
 3. Click the **"Import"** tab at the top
-4. Click **"Choose File"** and select `schema.sql` from the project folder
+4. Click **"Choose File"** and select your compressed `diy_lab_backup.sql.gz` file
 5. Click **"Go"** — you should see a success message
-
-If migrating from your local instance (with existing data), use your exported `diy_lab_backup.sql` instead of `schema.sql`.
 
 ---
 
@@ -518,26 +480,22 @@ If migrating from your local instance (with existing data), use your exported `d
 
 ---
 
-### Step 5 — Update `db.php` with Hosting Credentials
+### Step 5 — Run the Installation Wizard or Configure Credentials
 
-Edit `db.php` **before** uploading (on your local machine), or edit it via DirectAdmin’s **File Manager** after upload:
+#### Path A: Fresh Install (Setup Wizard)
+Open your browser and navigate to your site (e.g. `https://yourdomain.com` or `https://yourdomain.com/diy-lab/`).
+You will be automatically redirected to the Setup Wizard. Provide your database credentials (using the prefixed database name and database username from Step 2) and follow the prompts to automatically install the database schema, write the config file, and create your administrator login.
+
+#### Path B: Migration (Manual Config)
+If you are migrating an existing local database and chose not to run the setup wizard, create a file named `config.php` in the application's root directory:
 
 ```php
 <?php
-$host = 'localhost';              // Almost always 'localhost' on shared hosting
-$db   = 'username_diy_lab_db';   // Full DB name with hosting prefix
-$user = 'username_diy_user';     // Full DB username with hosting prefix
-$pass = 'YOUR_DB_PASSWORD';      // The password you set in Step 2
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$pdo = new PDO($dsn, $user, $pass, [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-]);
+define('DB_HOST', 'localhost'); // Almost always 'localhost' on shared hosting
+define('DB_NAME', 'username_diy_lab_db'); // Full database name with prefix
+define('DB_USER', 'username_diy_user');   // Full database user with prefix
+define('DB_PASS', 'YOUR_DB_PASSWORD');   // The password set in Step 2
 ```
-
-> **Important:** On shared hosting, DirectAdmin/cPanel **automatically prefixes** both the database name and the username with your account name. Always copy the exact values shown in the panel — don’t guess.
 
 ---
 
@@ -644,16 +602,16 @@ mysqldump -u root diy_lab_db > ~/Desktop/diy_lab_backup.sql
 
 - [ ] PHP version set to 8.1 or 8.2 in panel
 - [ ] MySQL database and user created
-- [ ] Schema (or backup) imported via phpMyAdmin
-- [ ] App files uploaded via FTP (excluding local `php.ini`)
-- [ ] `db.php` updated with correct hosting credentials (with prefix)
+- [ ] App files uploaded via FTP (excluding local `php.ini` and `config.php` for fresh setup)
+- [ ] Database backup imported (Migration only)
+- [ ] Run the Setup Wizard in your browser to configure the app (Fresh Install only)
+- [ ] Config file `config.php` created/updated with correct credentials
 - [ ] `.htaccess` includes PHP upload limit overrides
-- [ ] `uploads/` folder permission set to 755
+- [ ] `uploads/` and `uploads/logo/` folder permissions set to 755
 - [ ] SSL certificate issued and HTTPS redirect active
-- [ ] API key saved via `settings.php`
+- [ ] `install/` directory automatically renamed (or manually deleted)
+- [ ] API key and branding settings saved via User Settings UI
 - [ ] Login works at `https://yourdomain.com`
-- [ ] All 4 AI workflows tested
-- [ ] Default password `1234` changed
 
 ---
 
@@ -673,24 +631,13 @@ mysqldump -u root diy_lab_db > ~/Desktop/diy_lab_backup.sql
 
 After going live, apply these additional protections:
 
-### 1. Change the Default Password
+### 1. Change the Administrator Password
 
-Edit `index.php` on the server and replace the hardcoded password check:
-```bash
-nano /var/www/html/diy-lab/index.php
-```
-
-Find the line:
-```php
-if ($_POST['password'] === '1234') {
-```
-
-Replace with a hashed password:
-```php
-// Generate this hash once on your machine: php -r "echo password_hash('YOUR_NEW_PASSWORD', PASSWORD_DEFAULT);"
-$stored_hash = '$2y$10$REPLACE_WITH_YOUR_GENERATED_HASH';
-if (password_verify($_POST['password'], $stored_hash)) {
-```
+You can change your administrator password at any time via the web interface:
+1. Go to **User Settings** (the gear icon or `/settings.php`) in the sidebar.
+2. Navigate to the **Change Lab Password** section.
+3. Enter your current password, your new password, and click **Change Password**.
+The system hashes new passwords securely using BCRYPT.
 
 ### 2. Protect `db.php` from Direct Web Access
 

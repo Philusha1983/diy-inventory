@@ -36,3 +36,6 @@ error_log
 
 # ── Internal dev / AI agent files (not needed by end users) ─────────────────
 AI Agent Onboarding & File Map.md
+
+# ── Distribution archives ───────────────────────────────────────────────────
+diy-inventory.zip

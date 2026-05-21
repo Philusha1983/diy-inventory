@@ -53,6 +53,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.2.0] — 2026-05-21
+
+### Added — Setup Wizard (`install/index.php`)
+- **Web-Based Installer**: A WordPress-like multi-step setup wizard that runs environment checks, tests database connections via AJAX, automatically imports the schema, generates `config.php`, and configures the administrator credentials.
+- **Access Control Guard**: Prevents accessing the installer if `config.php` exists and the database has an established administrator username.
+- **Sensitive Value Masking**: Automatically scrubs sensitive passwords from diagnostic log files (`install/install_debug.log`) and tracebacks.
+- **Auto-Disable Mechanism**: Automatically renames the `install/` directory to a randomized folder name (e.g. `install_disabled_[hex]`) upon successful completion.
+
+### Added — Boot Logic Updates (`db.php`)
+- **Auto-Redirect Hook**: Automatically redirects requests to the setup wizard if `config.php` is missing.
+- **AJAX/API Isolation**: Returns a `503 Service Unavailable` JSON response for AJAX and API requests when the database is not configured, avoiding broken page-redirection loops.
+
+### Added — Production Packaging Suite (`package.php`)
+- **Automated Zipping**: Recreates the production distribution ZIP (`diy-inventory.zip`).
+- **Clean Exclusions**: Excludes development-only tools, node modules, VCS directories, test files, local config files (`config.php`, `db.php`), and developer log files.
+- **Structure Preservation**: Explicitly preserves empty folders (`uploads/` and `uploads/logo/`) in the zip package to allow immediate write-permission diagnostics.
+
+### Added — Installer Test Suite (`tests/install_validation_test.php`)
+- **Pre-Flight Validation**: 15 automated CLI assertions covering PHP version requirements, config file generation, diagnostic log password masking, and DB error handling.
+
+---
+
 ## [1.1.0] — 2026-05-21
 
 ### Added — Internationalization (i18n)
