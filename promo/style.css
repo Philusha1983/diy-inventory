@@ -927,6 +927,34 @@ img {
   box-shadow: 0 6px 20px rgba(34, 197, 94, 0.6);
 }
 
+.timeline-step-img-container {
+  margin-block-start: auto;
+  padding-block-start: 1.5rem;
+  width: 100%;
+}
+
+.timeline-step-img-wrapper {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--card-shadow-lg);
+  aspect-ratio: 1024 / 857;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.timeline-step-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-normal) ease;
+}
+
+.timeline-step:hover .timeline-step-img {
+  transform: scale(1.04);
+}
+
+
 /* --- 10. Turnkey Cloud Teaser --- */
 .teaser-section {
   position: relative;
