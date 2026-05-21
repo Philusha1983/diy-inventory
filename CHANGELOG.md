@@ -53,7 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Unreleased]
+## [1.1.0] — 2026-05-21
 
 ### Added — Internationalization (i18n)
 - **3-language support**: English (default), Hebrew (RTL), Spanish (LTR)
