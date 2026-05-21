@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>DIY Inventory — The Self-Hosted, AI-Powered Physical Inventory System</title>
+  <meta name="title" content="DIY Inventory — The Self-Hosted, AI-Powered Physical Inventory System">
+  <meta name="description" content="Track your hardware components, tools, collections, and wine aging profiles. Complete data ownership, nested location tracking, and AI-enabled specs generator.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/Philusha1983/diy-inventory">
+  <meta property="og:title" content="DIY Inventory — The Self-Hosted, AI-Powered Physical Inventory System">
+  <meta property="og:description" content="Track your hardware components, tools, collections, and wine aging profiles. Complete data ownership, nested location tracking, and AI-enabled specs generator.">
+  <meta property="og:image" content="images/workbench_poster.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="DIY Inventory — The Self-Hosted, AI-Powered Physical Inventory System">
+  <meta property="twitter:description" content="Track your hardware components, tools, collections, and wine aging profiles. Complete data ownership, nested location tracking, and AI-enabled specs generator.">
+  <meta property="twitter:image" content="images/workbench_poster.png">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Ambient Glow Orbs -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo" id="nav-logo">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        <span>DIY Inventory</span>
+      </a>
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="#features" class="nav-link">Why DIY Inventory</a>
+        <a href="#usecases" class="nav-link">Use Cases</a>
+        <a href="#setup" class="nav-link">5-Min Setup</a>
+        <a href="#waitlist" class="nav-link">Cloud Version</a>
+        <a href="https://github.com/Philusha1983/diy-inventory" class="btn btn-secondary" id="github-nav-btn" target="_blank" rel="noopener">
+          View on GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    
+    <!-- Hero Section -->
+    <section class="hero section" id="hero">
+      
+      <!-- Hyper-realistic Ambient Workbench Background Video -->
+      <div class="video-background-container" aria-hidden="true">
+        <div class="video-overlay-gradient"></div>
+        <video autoplay loop muted playsinline poster="images/workbench_poster.png" id="hero-video">
+          <source src="images/workbench_backdrop.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="container grid-2 hero-inner">
+        <div class="hero-content">
+          <div class="hero-badges">
+            <span class="badge badge-forest">🌱 MIT Open Source</span>
+            <span class="badge badge-amber">🛡️ 100% Privacy Focused</span>
+          </div>
+          <h1 class="hero-title">Track what you have.<br>Know exactly where it is.</h1>
+          <p class="hero-subtitle">
+            A lightweight, self-hosted, AI-powered inventory system designed for makers, hobbyists, and collectors. Manage parts, tools, and collections on your own terms—without cloud subscriptions or data locks.
+          </p>
+          <div class="btn-group">
+            <a href="https://github.com/Philusha1983/diy-inventory/releases/latest" class="btn btn-primary" id="primary-download-btn">
+              Download Latest Release (ZIP)
+            </a>
+            <a href="https://github.com/Philusha1983/diy-inventory" class="btn btn-secondary" id="secondary-github-btn" target="_blank" rel="noopener">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="margin-right:0.25rem;">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+        </div>
+        <div class="hero-image-wrapper">
+          <img src="images/workbench_poster.png" alt="Moody photo of a dimly lit maker workbench with soldering iron, components, and tools" id="hero-img">
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Value Prop (The Spreadsheet Killer) -->
+    <section class="section scroll-reveal" id="features">
+      <div class="container">
+        <div class="spreadsheet-killer grid-2">
+          <div class="val-prop-content">
+            <h2 id="spreadsheet-killer-title">The "Spreadsheet Killer" for Physical Spaces</h2>
+            <p style="margin-block-end: 2rem; font-size: 1.1rem;">
+              Flat spreadsheets are built for financial columns, not your physical environment. If your parts, components, and tools are nested inside rooms, racks, shelves, and boxes, you need an inventory system that understands hierarchy.
+            </p>
+            <div class="val-prop-points">
+              <div class="val-point">
+                <div class="val-point-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                  </svg>
+                </div>
+                <div class="val-point-content">
+                  <h3>Deeply Nested Locations</h3>
+                  <p>Map items precisely down to the Room → Rack → Shelf → Bin → Drawer → Compartment.</p>
+                </div>
+              </div>
+              <div class="val-point">
+                <div class="val-point-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <div class="val-point-content">
+                  <h3>AI Auto-Identification</h3>
+                  <p>Upload a component photo. The built-in Google Gemini or OpenAI vision engine recognizes the part, categorizes it, and registers its specifications instantly.</p>
+                </div>
+              </div>
+              <div class="val-point">
+                <div class="val-point-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                  </svg>
+                </div>
+                <div class="val-point-content">
+                  <h3>QR Code Label Systems</h3>
+                  <p>Generate, lay out, and print standard PDF label sticker sheets to attach to storage bins for rapid scanning and item lookups.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Glowing Modern Code Terminal Mockup -->
+          <div class="nesting-visualizer-container">
+            <h3 style="color: var(--text-light); margin-block-end: 1rem; font-family: var(--font-display);">Virtual Nested Storage Tree</h3>
+            <div class="terminal-mockup">
+              <div class="terminal-titlebar">
+                <span class="terminal-dot close"></span>
+                <span class="terminal-dot minimize"></span>
+                <span class="terminal-dot maximize"></span>
+                <span class="terminal-title">location_map.sh</span>
+              </div>
+              <div class="nesting-visualizer" role="img" aria-label="Hierarchical location mapping code representation">
+                <div class="tree-node root">
+                  <span class="tree-icon">🏠</span> Workshop / Garage
+                </div>
+                <div class="tree-node">
+                  <span class="tree-icon">🪵</span> Rack Alpha (Metal Frame)
+                </div>
+                <div class="tree-node" style="margin-left: 3rem;">
+                  <span class="tree-icon">📦</span> Shelf 3 (Middle Rack)
+                </div>
+                <div class="tree-node" style="margin-left: 4.5rem;">
+                  <span class="tree-icon">📥</span> Drawer Cabinet #4
+                </div>
+                <div class="tree-node item" style="margin-left: 6rem;">
+                  <span class="tree-icon">🏷️</span> Slot A: 5x ESP32 Microchips
+                </div>
+                <div class="tree-node item" style="margin-left: 6rem;">
+                  <span class="tree-icon">🏷️</span> Slot B: 12x HC-SR04 Sensors
+                </div>
+              </div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-block-start: 1rem; font-style: italic; text-align: center;">
+              Say goodbye to searching. Know exactly which bin contains your parts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Audience Spotlight (Use Cases with High-Fidelity Cards) -->
+    <section class="section scroll-reveal" id="usecases">
+      <div class="container">
+        <div class="section-header">
+          <h2>Designed for Every Kind of Organizer</h2>
+          <p>Whether you're cataloging thousands of resistors, storing vintage bottles of wine, or labeling comic bins, DIY Inventory provides a structured, searchable dashboard.</p>
+        </div>
+        <div class="grid-3">
+          
+          <!-- Card 1: Maker -->
+          <article class="card-use-case">
+            <div class="card-use-case-img">
+              <img src="images/maker_card.png" alt="Macro close-up photo of an electronic circuit board with glowing neon green LEDs and golden traces">
+            </div>
+            <div class="card-use-case-body">
+              <div class="card-use-case-top">
+                <h3>Makers &amp; IoT Enthusiasts</h3>
+                <p>Keep track of microchips, resistors, wiring, and breakout boards. Features a **Creative AI Engine** that scans what you have in stock to suggest functional buildable projects, alongside wiring blueprints and clean code guides.</p>
+              </div>
+              <div class="use-case-tags">
+                <span class="use-case-tag">Electronics</span>
+                <span class="use-case-tag">Project Blueprints</span>
+                <span class="use-case-tag">Parts Specs</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Connoisseur -->
+          <article class="card-use-case">
+            <div class="card-use-case-img">
+              <img src="images/connoisseur_card.png" alt="Rustic wooden wine rack in a dimly lit cellar filled with dusty vintage bottles">
+            </div>
+            <div class="card-use-case-body">
+              <div class="card-use-case-top">
+                <h3>Connoisseurs &amp; Brewers</h3>
+                <p>Perfect for logging wine racks, aging craft beer barrels, specialty coffees, or artisanal ingredients. Catalog vintage production dates, aging durations, and bottle logs. Write custom tasting notes and review metrics.</p>
+              </div>
+              <div class="use-case-tags">
+                <span class="use-case-tag">Wine Aging</span>
+                <span class="use-case-tag">Batch Tracking</span>
+                <span class="use-case-tag">Tasting Notes</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Collector -->
+          <article class="card-use-case">
+            <div class="card-use-case-img">
+              <img src="images/collector_card.png" alt="Polished high-end professional tools neatly organized inside a dark metal drawer">
+            </div>
+            <div class="card-use-case-body">
+              <div class="card-use-case-top">
+                <h3>Collectors &amp; Tool Curators</h3>
+                <p>Ideal for retro games, rare board games, books, comic storage bins, or expensive workshop tools. Snap QR codes to update borrower logs, catalog the aesthetic condition, and avoid re-buying items you already own.</p>
+              </div>
+              <div class="use-case-tags">
+                <span class="use-case-tag">Collectibles</span>
+                <span class="use-case-tag">QR Code Labels</span>
+                <span class="use-case-tag">Lending History</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- The 3-Step Setup (WordPress Easy Setup) -->
+    <section class="section scroll-reveal" id="setup">
+      <div class="container">
+        <div class="section-header">
+          <h2>"WordPress-Easy" Installation</h2>
+          <p>You don't need a degree in server administration to self-host. DIY Inventory was built to be extracted and set up in less than 5 minutes.</p>
+        </div>
+        
+        <div class="timeline">
+          <!-- Step 1 -->
+          <div class="timeline-step">
+            <div class="timeline-step-number" aria-hidden="true">1</div>
+            <h3>Download ZIP</h3>
+            <p>Grab the latest pre-compiled, production-ready release ZIP containing the optimized application build directly from GitHub.</p>
+            <div class="timeline-step-code">
+              $ wget [Dynamic Release URL]
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="timeline-step">
+            <div class="timeline-step-number" aria-hidden="true">2</div>
+            <h3>Upload &amp; Extract</h3>
+            <p>Upload the ZIP archive to your web host server folder (e.g., standard Apache, Nginx, Raspberry Pi, cPanel, or local XAMPP).</p>
+            <div class="timeline-step-code">
+              $ unzip diy-inventory.zip
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="timeline-step">
+            <div class="timeline-step-number" aria-hidden="true">3</div>
+            <h3>Run Web Setup</h3>
+            <p>Open your browser and load the URL. The automated 5-minute setup wizard takes over, validates server packages, links MySQL, and secures your password.</p>
+            <div style="margin-block-start: 1.5rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: var(--card-shadow-lg);">
+              <img src="images/09_setup_wizard.png" alt="Screenshot of the DIY Inventory automated setup wizard running in a web browser" style="width: 100%;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Future Turnkey Cloud Teaser -->
+    <section class="section scroll-reveal" id="waitlist">
+      <div class="container">
+        <div class="teaser-section">
+          <div class="teaser-glow" aria-hidden="true"></div>
+          <h2>Prefer a turnkey solution?</h2>
+          <p>
+            We are working on **DIY Inventory Cloud**—the exact same database, hosted and managed entirely by us. No servers, no setup, no terminal commands. You get instant SSL, high-performance database backups, and automatic version updates for a simple, predictable annual subscription.
+          </p>
+          <form class="waitlist-form" id="cloud-waitlist-form" action="#" method="POST" novalidate>
+            <input type="email" class="waitlist-input" id="waitlist-email" placeholder="Enter your email address" required aria-label="Email address for cloud waitlist">
+            <button type="submit" class="btn btn-primary" id="waitlist-submit">
+              Join the Cloud Waitlist
+            </button>
+          </form>
+          <p class="teaser-microcopy" id="waitlist-status">
+            *We value your privacy. We'll only email you about the cloud launch. No spam, ever.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy & Ownership Badge (Premium High-Fidelity Badge) -->
+    <section class="section scroll-reveal" id="privacy">
+      <div class="container privacy-badge-section">
+        <div class="privacy-card">
+          <div class="privacy-badge-img-premium">
+            <img src="images/privacy_badge_premium.png" alt="Brushed steel shield badge with glowing green neon lock icon on a server rack">
+          </div>
+          <div class="privacy-card-content">
+            <h3>100% Owned by You. Zero Tracking.</h3>
+            <p>
+              When self-hosting DIY Inventory, your data belongs to you. There are no tracking scripts, no third-party telemetry, and no telemetry logs sent back to us. All component logs, images, and API keys reside directly on your local database. Completely private. Completely open source.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="logo" style="justify-content: center; margin-block-end: 1rem;">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        <span>DIY Inventory</span>
+      </div>
+      <p>Self-hosted physical inventory system for makers, curators, and collectors.</p>
+      <nav class="footer-links" aria-label="Footer Navigation">
+        <a href="https://github.com/Philusha1983/diy-inventory" class="footer-link" target="_blank" rel="noopener">GitHub Repository</a>
+        <a href="https://github.com/Philusha1983/diy-inventory/issues" class="footer-link" target="_blank" rel="noopener">Report an Issue</a>
+        <a href="https://github.com/Philusha1983/diy-inventory/blob/main/LICENSE" class="footer-link" target="_blank" rel="noopener">MIT License</a>
+      </nav>
+      <p class="footer-text">
+        © 2026 DIY Inventory Project. Built for makers, by makers.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // 1. Dynamic GitHub Release Fetching
+    async function fetchLatestRelease() {
+      const fallbackUrl = 'https://github.com/Philusha1983/diy-inventory/releases/latest';
+      const downloadBtn = document.getElementById('primary-download-btn');
+      
+      try {
+        const response = await fetch('https://api.github.com/repos/Philusha1983/diy-inventory/releases/latest');
+        if (response.ok) {
+          const data = await response.json();
+          // Find package zip asset if it exists, otherwise fall back to git zipball
+          const zipAsset = data.assets.find(asset => asset.name.endsWith('.zip'));
+          const downloadUrl = zipAsset ? zipAsset.browser_download_url : data.zipball_url;
+          
+          downloadBtn.href = downloadUrl;
+          downloadBtn.innerHTML = `Download Release ${data.tag_name} (ZIP)`;
+        }
+      } catch (error) {
+        console.warn('GitHub API rate limited or offline. Using default release page fallback.', error);
+        downloadBtn.href = fallbackUrl;
+      }
+    }
+    
+    // Run on load
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchLatestRelease();
+    });
+
+    // 2. Waitlist Form Interactive Handler
+    const form = document.getElementById('cloud-waitlist-form');
+    const emailInput = document.getElementById('waitlist-email');
+    const statusText = document.getElementById('waitlist-status');
+    const submitBtn = document.getElementById('waitlist-submit');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      // Disable inputs during submission
+      emailInput.disabled = true;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Signing up...';
+
+      // Simulate API submit
+      setTimeout(() => {
+        statusText.style.color = '#22c55e';
+        statusText.innerHTML = '🎉 Success! You\'ve been added to the early bird waitlist.';
+        emailInput.value = '';
+        submitBtn.innerHTML = 'Added!';
+      }, 1200);
+    });
+
+    // 3. Scroll Reveal Fallback (IntersectionObserver for unsupported browsers)
+    if (!CSS.supports('(animation-timeline: view()) and (animation-range: entry)')) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target); // Reveal once
+          }
+        });
+      }, {
+        threshold: 0.15
+      });
+
+      document.querySelectorAll('.scroll-reveal').forEach(el => {
+        el.classList.add('scroll-reveal-fallback');
+        observer.observe(el);
+      });
+    }
+  </script>
+</body>
+</html>
