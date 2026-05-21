@@ -67,15 +67,16 @@
       <div class="video-background-container" aria-hidden="true">
         <div class="video-overlay-gradient"></div>
         <!--
-          PLACEHOLDER VIDEO — replace the src below with your own video URL.
-          A free ambient workbench-style loop is used here for layout preview.
+          Drop your video file into promo/video/ and update the src below.
           Recommended format: MP4 H.264, 1920×1080, 30fps, ~5–20 MB.
+          The poster image (workbench_poster.png) is shown while the video loads
+          or on devices where autoplay is restricted.
         -->
         <video autoplay loop muted playsinline
                poster="images/workbench_poster.png"
                id="hero-video"
                preload="none">
-          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          <source src="video/hero_background.mp4" type="video/mp4">
           <!-- Fallback: poster image is always shown if video can't play -->
         </video>
       </div>
