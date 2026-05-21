@@ -151,13 +151,14 @@ $total = count($folders);
                      font-weight: 600; transition: transform .2s; }
     .summary a.cta:hover { transform: translateY(-1px); }
   </style>
+  <script src="assets/i18n.js"></script>
 </head>
 <body>
 
 <!-- ── Top bar ──────────────────────────────────────────────────────────────── -->
 <div class="top-bar">
-  <a href="dashboard.php">← Dashboard</a>
-  <h1>📦 Bulk Import</h1>
+  <a href="dashboard.php" data-i18n-text="bulk_import_folder.dashboard">← Dashboard</a>
+  <h1 data-i18n-text="bulk_import_folder.bulk_import">📦 Bulk Import</h1>
   <span class="badge"><?= $total ?> items</span>
 </div>
 
@@ -167,19 +168,19 @@ $total = count($folders);
   <div class="stats">
     <div class="stat">
       <div class="stat-num" id="s-total"><?= $total ?></div>
-      <div class="stat-label">Total</div>
+      <div class="stat-label" data-i18n-text="bulk_import_folder.total">Total</div>
     </div>
     <div class="stat done">
       <div class="stat-num" id="s-done">0</div>
-      <div class="stat-label">Imported</div>
+      <div class="stat-label" data-i18n-text="bulk_import_folder.imported">Imported</div>
     </div>
     <div class="stat skip">
       <div class="stat-num" id="s-skip">0</div>
-      <div class="stat-label">Skipped</div>
+      <div class="stat-label" data-i18n-text="bulk_import_folder.skipped">Skipped</div>
     </div>
     <div class="stat failed">
       <div class="stat-num" id="s-fail">0</div>
-      <div class="stat-label">Failed</div>
+      <div class="stat-label" data-i18n-text="bulk_import_folder.failed">Failed</div>
     </div>
   </div>
 
@@ -190,23 +191,23 @@ $total = count($folders);
 
   <!-- ── Controls ── -->
   <div class="controls">
-    <button class="btn btn-start" id="btn-start" onclick="startImport()">▶ Start Import</button>
-    <button class="btn btn-pause" id="btn-pause" onclick="pauseImport()" style="display:none">⏸ Pause</button>
+    <button class="btn btn-start" id="btn-start" onclick="startImport()" data-i18n-text="bulk_import_folder.start_import">▶ Start Import</button>
+    <button class="btn btn-pause" id="btn-pause" onclick="pauseImport()" style="display:none" data-i18n-text="bulk_import_folder.pause">⏸ Pause</button>
     <div class="status-text" id="status-text">Ready — <?= $total ?> items queued</div>
     <div style="flex:1"></div>
     <div class="rate-info">
-      <label>Delay between calls:</label>
+      <label data-i18n-text="bulk_import_folder.delay_between_calls">Delay between calls:</label>
       <input type="range" id="delay-slider" min="1" max="10" value="4" oninput="document.getElementById('delay-val').textContent=this.value+'s'">
       <span class="rate-val" id="delay-val">4s</span>
-      <span style="color:var(--muted);font-size:.72rem">(≤15 RPM free tier)</span>
+      <span style="color:var(--muted);font-size:.72rem" data-i18n-text="bulk_import_folder.15_rpm_free_tier">(≤15 RPM free tier)</span>
     </div>
   </div>
 
   <!-- ── Summary (shown after completion) ── -->
   <div class="summary" id="summary">
-    <h2>🎉 Import complete!</h2>
+    <h2 data-i18n-text="bulk_import_folder.import_complete">🎉 Import complete!</h2>
     <p id="summary-text"></p>
-    <a href="dashboard.php" class="cta">View Inventory →</a>
+    <a href="dashboard.php" class="cta" data-i18n-text="bulk_import_folder.view_inventory">View Inventory →</a>
   </div>
 
   <!-- ── Item list ── -->
@@ -385,5 +386,6 @@ function finishImport() {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 </script>
+  <script>localizationController.init();</script>
 </body>
 </html>

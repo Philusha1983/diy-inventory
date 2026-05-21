@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
       <form method="POST" action="" novalidate>
         <div class="mb-6">
-          <label for="pass" class="block text-sm font-medium text-slate-300 mb-2">
+          <label for="pass" class="block text-sm font-medium text-slate-300 mb-2" data-i18n-text="index.lab_password">
             Lab Password
           </label>
           <div class="relative">
@@ -151,8 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
           name="login"
           id="btn-enter"
           class="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-[1.02] active:scale-[.98] shadow-lg shadow-purple-900/40"
-        >
-          Enter Lab
+         data-i18n-text="index.enter_lab">
+          <span data-i18n-text="index.enter_lab">Enter Lab</span>
         </button>
       </form>
 

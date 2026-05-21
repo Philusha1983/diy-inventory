@@ -12,13 +12,25 @@
     "validate:i18n": "node -e \"const en=require('./assets/locales/en.json');const langs=['he','es'];let ok=true;function keys(o,p=''){return Object.entries(o).flatMap(([k,v])=>typeof v==='object'?keys(v,p?p+'.'+k:k):[p?p+'.'+k:k]);}const enKeys=keys(en);langs.forEach(l=>{try{const t=require('./assets/locales/'+l+'.json');const miss=enKeys.filter(k=>keys(t).indexOf(k)<0);if(miss.length){console.error('\\u274c '+l+'.json missing '+miss.length+' keys:\\n  '+miss.join('\\n  '));ok=false;}else console.log('\\u2705 '+l+'.json: '+enKeys.length+'/'+enKeys.length+' keys (100%)');}catch(e){console.error('\\u274c Cannot load '+l+'.json: '+e.message);ok=false;}});if(!ok)process.exit(1);\""
   },
   "keywords": [
-    "diy", "inventory", "makers", "self-hosted", "php",
-    "gemini", "openai", "ai", "electronics", "components",
-    "qr-code", "lab-management", "raspberry-pi", "arduino"
+    "diy",
+    "inventory",
+    "makers",
+    "self-hosted",
+    "php",
+    "gemini",
+    "openai",
+    "ai",
+    "electronics",
+    "components",
+    "qr-code",
+    "lab-management",
+    "raspberry-pi",
+    "arduino"
   ],
   "author": "Philip Sandler <https://github.com/Philusha1983>",
   "license": "MIT",
   "devDependencies": {
+    "cheerio": "^1.2.0",
     "tailwindcss": "^3.4.19"
   }
 }

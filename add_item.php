@@ -148,6 +148,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     .drop-zone.drag-over { border-color:#7c3aed; background: rgba(124,58,237,.08); }
     .preview-img { width:80px; height:80px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,.1); }
+    @media (min-width: 1024px) {
+      /* .bottom-bar-offset { padding-left: 16rem; } */
+    }
   </style>
 </head>
 <body class="bg-grid min-h-screen text-slate-200">
@@ -176,14 +179,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <!-- AI Auto-Identify Section -->
       <div class="glass rounded-2xl p-6 mb-6">
         <h2 class="font-semibold text-white mb-1 flex items-center gap-2">
-          <span class="text-xl">✨</span> AI Auto-Identify
+          <span class="text-xl">✨</span> <span data-i18n-text="add_item.ai_auto_identify">AI Auto-Identify</span>
         </h2>
-        <p class="text-xs text-slate-500 mb-4">Upload component photos and let AI fill in the details automatically.</p>
+        <p class="text-xs text-slate-500 mb-4" data-i18n-text="add_item.upload_component_photos_and_le">Upload component photos and let AI fill in the details automatically.</p>
 
         <div id="drop-zone" class="drop-zone" onclick="document.getElementById('ai-file-input').click()">
           <svg class="w-8 h-8 text-purple-500/50 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          <p class="text-sm text-slate-400">Drop photos here or <span class="text-purple-400">browse</span></p>
-          <p class="text-xs text-slate-600 mt-1">Multiple angles = better accuracy (top, labels, packaging)</p>
+          <p class="text-sm text-slate-400"><span data-i18n-text="add_item.drop_photos_here_or">Drop photos here or </span><span class="text-purple-400" data-i18n-text="add_item.browse">browse</span></p>
+          <p class="text-xs text-slate-600 mt-1" data-i18n-text="add_item.multiple_angles_better_accurac">Multiple angles = better accuracy (top, labels, packaging)</p>
         </div>
         <input type="file" id="ai-file-input" multiple accept="image/*" class="hidden">
 
@@ -199,8 +202,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
+      <!-- Hidden form for deleting images without nesting forms -->
+      <form id="delete-image-form" method="POST" class="hidden">
+        <input type="hidden" name="delete_image" id="delete-image-path">
+        <?php if ($edit_id): ?>
+          <input type="hidden" name="edit_id" value="<?= $edit_id ?>">
+        <?php endif; ?>
+      </form>
+
       <!-- Main Form -->
-      <form id="add-item-form" method="POST" enctype="multipart/form-data" class="glass rounded-2xl p-6 space-y-5">
+      <form id="add-item-form" method="POST" enctype="multipart/form-data" class="glass rounded-2xl p-6 space-y-5 mb-24">
         <?php if ($edit_id): ?>
           <input type="hidden" name="edit_id" value="<?= $edit_id ?>">
         <?php endif; ?>
@@ -264,10 +275,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- ── Product Details (enrichment fields) ──────────────── -->
         <div class="border-t border-white/5 pt-5">
           <h3 class="text-sm font-semibold text-slate-300 mb-1 flex items-center gap-2">
-            <span class="text-base">🔗</span> Product Details
-            <span class="text-xs font-normal text-slate-500 ml-1">— optional, used to enrich AI context</span>
+            <span class="text-base">🔗</span> <span data-i18n-text="add_item.product_details">Product Details</span>
+            <span class="text-xs font-normal text-slate-500 ml-1" data-i18n-text="add_item.optional_used_to_enrich_ai_con">— optional, used to enrich AI context</span>
           </h3>
-          <p class="text-xs text-slate-600 mb-4">Add URLs and the AI will fetch additional specs, pinouts, and code examples automatically.</p>
+          <p class="text-xs text-slate-600 mb-4" data-i18n-text="add_item.add_urls_and_the_ai_will_fetch">Add URLs and the AI will fetch additional specs, pinouts, and code examples automatically.</p>
 
           <div class="space-y-4">
             <div>
@@ -302,35 +313,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Additional images to store -->
         <div>
-          <label class="form-label">Upload Component Photos</label>
+          <label class="form-label" data-i18n-text="add_item.upload_component_photos">Upload Component Photos</label>
           <?php if (!empty($existing_images)): ?>
           <div class="flex flex-wrap gap-3 mb-3">
             <?php foreach ($existing_images as $img_path): ?>
             <div class="relative group">
               <img src="<?= htmlspecialchars($img_path) ?>" alt="" class="preview-img">
-              <form method="POST" class="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <input type="hidden" name="delete_image" value="<?= htmlspecialchars($img_path) ?>">
-                <button type="submit" onclick="return confirm('Remove this image?')"
+              <div class="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button type="button" onclick="if(confirm('Remove this image?')){ document.getElementById('delete-image-path').value='<?= htmlspecialchars($img_path) ?>'; document.getElementById('delete-image-form').submit(); }"
                   class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-400">✕</button>
-              </form>
+              </div>
             </div>
             <?php endforeach; ?>
           </div>
           <?php endif; ?>
           <input type="file" name="images[]" id="form-images" multiple accept="image/*"
             class="input-field w-full rounded-xl px-4 py-2.5 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-600/20 file:text-purple-300 hover:file:bg-purple-600/30">
-          <p class="text-xs text-slate-600 mt-1.5">Upload the photos from AI identification to save them with this item.</p>
+          <p class="text-xs text-slate-600 mt-1.5" data-i18n-text="add_item.upload_the_photos_from_ai_iden">Upload the photos from AI identification to save them with this item.</p>
         </div>
-
-        <div class="flex items-center gap-3 pt-2">
-          <button type="submit" class="btn-primary flex-1 py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
-            <?= $edit_id ? '💾 Save Changes' : '➕ Add to Inventory' ?>
-          </button>
-          <a href="dashboard.php" class="px-5 py-3 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 hover:text-white transition-all">
-            Cancel
-          </a>
         </div>
       </form>
+    </div>
+
+    <!-- Fixed Bottom Bar -->
+    <div class="glass border-t border-white/5 p-4 flex justify-center bottom-bar-offset" style="position: sticky; bottom: 0; left: 0; right: 0; z-index: 40;">
+      <div class="flex items-center gap-3 w-full max-w-2xl px-4 lg:px-8">
+        <button type="submit" form="add-item-form" class="btn-primary flex-1 py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
+          <span data-i18n-text="<?= $edit_id ? 'add_item.save_changes' : 'add_item.add_to_inventory' ?>"><?= $edit_id ? '💾 Save Changes' : '➕ Add to Inventory' ?></span>
+        </button>
+        <a href="dashboard.php" class="px-5 py-3 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 hover:text-white transition-all" data-i18n-text="add_item.cancel">
+          Cancel
+        </a>
+      </div>
     </div>
   </main>
 
@@ -395,13 +409,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // ── AI Identification ─────────────────────────────────────────────────
   document.getElementById('btn-ai-identify').addEventListener('click', async function () {
     if (aiFiles.length === 0) {
-      alert('Please select or drop at least one component photo first.');
+      alert(localizationController.t('add_item.please_select_photo') || 'Please select or drop at least one component photo first.');
       return;
     }
 
     const status = document.getElementById('ai-status');
     this.disabled = true;
-    status.textContent = '🔍 Analysing images… please wait.';
+    status.textContent = '🔍 ' + (localizationController.t('add_item.analysing_images') || 'Analysing images… please wait.');
     status.style.color = '#94a3b8';
 
     const formData = new FormData();
@@ -431,12 +445,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       aiFiles.forEach(f => dt.items.add(f));
       document.getElementById('form-images').files = dt.files;
 
-      status.textContent = '✅ Identification complete! Review the fields below and click Save.';
+      status.textContent = '✅ ' + (localizationController.t('add_item.identification_complete') || 'Identification complete! Review the fields below and click Save.');
       status.style.cssText = 'color:#4ade80; display:block; margin-top:8px; font-size:.85rem;';
     } catch (err) {
       // Show error as a styled readable block
-      const msg = err.message || 'Identification failed. Please try again.';
-      status.innerHTML = '<span style="color:#f87171;font-weight:600;">❌ Auto-Identify failed</span><br>' +
+      const msg = err.message || (localizationController.t('add_item.identification_failed') || 'Identification failed. Please try again.');
+      status.innerHTML = '<span style="color:#f87171;font-weight:600;" data-i18n-text="add_item.auto_identify_failed">❌ Auto-Identify failed</span><br>' +
         '<span style="color:#fca5a5;font-size:.82rem;line-height:1.5;">' + msg.replace(/\n/g,'<br>') + '</span>';
       status.style.cssText = 'display:block; margin-top:8px; padding:10px 14px; background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.2); border-radius:10px; max-width:480px;';
       console.error('AI Identify error:', err);
@@ -453,10 +467,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   document.getElementById('add-item-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const btn = this.querySelector('button[type="submit"]');
+    const btn = document.querySelector('button[form="add-item-form"]') || this.querySelector('button[type="submit"]');
     const origLabel = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<span style="opacity:.7">⏳ Saving…</span>';
+    btn.innerHTML = '<span style="opacity:.7" data-i18n-text="add_item.saving">⏳ Saving…</span>';
 
     // Build FormData from all typed fields
     const fd = new FormData(this);
@@ -471,7 +485,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     fileSources.forEach(f => fd.append('images[]', f));
 
     try {
-      const res = await fetch('add_item.php', { method: 'POST', body: fd });
+      const res = await fetch(window.location.href, { method: 'POST', body: fd });
 
       // Success: server redirected to dashboard
       if (res.redirected || res.url.includes('dashboard.php')) {
@@ -496,7 +510,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     } catch(err) {
-      alert('Save failed: ' + err.message);
+      alert((localizationController.t('add_item.save_failed') || 'Save failed: ') + err.message);
     } finally {
       btn.disabled = false;
       btn.innerHTML = origLabel;

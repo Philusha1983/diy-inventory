@@ -67,22 +67,23 @@ unset($_SESSION['zip_import_skipped']);
     .tips li  { font-size:.82rem; color:var(--muted); display:flex; gap:10px; }
     .tips li::before { content:'→'; color:var(--purple); flex-shrink:0; }
   </style>
+  <script src="assets/i18n.js"></script>
 </head>
 <body>
 <div class="top-bar">
-  <a href="dashboard.php">← Dashboard</a>
-  <h1>📦 Bulk Import</h1>
+  <a href="dashboard.php" data-i18n-text="bulk_import.dashboard">← Dashboard</a>
+  <h1 data-i18n-text="bulk_import.bulk_import">📦 Bulk Import</h1>
 </div>
 <div class="container">
 
-  <div class="page-title">Choose Import Method</div>
-  <div class="page-sub">Three ways to add multiple components at once. Pick the one that fits your data.</div>
+  <div class="page-title" data-i18n-text="bulk_import.choose_import_method">Choose Import Method</div>
+  <div class="page-sub" data-i18n-text="bulk_import.three_ways_to_add_multiple_com">Three ways to add multiple components at once. Pick the one that fits your data.</div>
 
   <?php if ($zip_added): ?>
   <div class="flash-ok">
     ✅ ZIP extracted — <strong><?= $zip_added ?> folder<?= $zip_added!==1?'s':'' ?></strong> added to the import queue.
     <?php if ($zip_skipped): ?> Skipped: <?= implode(', ', array_map('htmlspecialchars', $zip_skipped)) ?>.<?php endif; ?>
-    <a href="bulk_import_folder.php" style="color:#4ade80;font-weight:700;margin-left:8px;">Start AI Import →</a>
+    <a href="bulk_import_folder.php" style="color:#4ade80;font-weight:700;margin-left:8px;" data-i18n-text="bulk_import.start_ai_import">Start AI Import →</a>
   </div>
   <?php endif; ?>
 
@@ -91,45 +92,45 @@ unset($_SESSION['zip_import_skipped']);
     <!-- CSV -->
     <a href="bulk_import_csv.php" class="option-card card-green">
       <div class="card-icon">📊</div>
-      <div class="card-title">CSV / Spreadsheet</div>
-      <div class="card-desc">
+      <div class="card-title" data-i18n-text="bulk_import.csv_spreadsheet">CSV / Spreadsheet</div>
+      <div class="card-desc" data-i18n-text="bulk_import.upload_a_csv_or_tsv_file_from_">
         Upload a CSV or TSV file from Excel, Google Sheets, Notion, or any inventory tool.
         Column names are auto-detected. No AI required — fastest import method.
       </div>
-      <span class="card-badge badge-easy">Easiest · No AI cost</span>
+      <span class="card-badge badge-easy" data-i18n-text="bulk_import.easiest_no_ai_cost">Easiest · No AI cost</span>
       <div class="card-arrow">→</div>
     </a>
 
     <!-- ZIP -->
     <a href="bulk_import_zip.php" class="option-card card-cyan">
       <div class="card-icon">🗜️</div>
-      <div class="card-title">ZIP of Photo Folders</div>
-      <div class="card-desc">
+      <div class="card-title" data-i18n-text="bulk_import.zip_of_photo_folders">ZIP of Photo Folders</div>
+      <div class="card-desc" data-i18n-text="bulk_import.create_a_zip_where_each_subfol">
         Create a ZIP where each subfolder contains photos of one component.
         Upload it here — the AI identifies each component from its photos.
         Matches the existing folder-import workflow.
       </div>
-      <span class="card-badge badge-med">Medium · Uses AI</span>
+      <span class="card-badge badge-med" data-i18n-text="bulk_import.medium_uses_ai">Medium · Uses AI</span>
       <div class="card-arrow">→</div>
     </a>
 
     <!-- Wizard -->
     <a href="bulk_import_wizard.php" class="option-card card-purple">
       <div class="card-icon">🧙</div>
-      <div class="card-title">Image Group Wizard</div>
-      <div class="card-desc">
+      <div class="card-title" data-i18n-text="bulk_import.image_group_wizard">Image Group Wizard</div>
+      <div class="card-desc" data-i18n-text="bulk_import.drag_photos_directly_into_your">
         Drag photos directly into your browser and group them by component.
         No folder structure needed — just drop your photos and let AI do the rest.
         Best for ad-hoc imports straight from a camera roll.
       </div>
-      <span class="card-badge badge-adv">Most flexible · Uses AI</span>
+      <span class="card-badge badge-adv" data-i18n-text="bulk_import.most_flexible_uses_ai">Most flexible · Uses AI</span>
       <div class="card-arrow">→</div>
     </a>
 
   </div>
 
   <div class="tips">
-    <h3>Which method should I use?</h3>
+    <h3 data-i18n-text="bulk_import.which_method_should_i_use">Which method should I use?</h3>
     <ul>
       <li>You have a spreadsheet of parts — <strong>CSV Import</strong></li>
       <li>You have photos organised in folders on your computer — <strong>ZIP Import</strong></li>
@@ -138,5 +139,6 @@ unset($_SESSION['zip_import_skipped']);
   </div>
 
 </div>
+  <script>localizationController.init();</script>
 </body>
 </html>

@@ -215,21 +215,22 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
     .step.done   { background:rgba(34,197,94,.1);   border-color:rgba(34,197,94,.3);   color:#4ade80; }
     .arrow { color:var(--muted); }
   </style>
+  <script src="assets/i18n.js"></script>
 </head>
 <body>
 <div class="top-bar">
-  <a href="bulk_import.php">← Import Hub</a>
-  <h1>📊 CSV Import</h1>
+  <a href="bulk_import.php" data-i18n-text="bulk_import_csv.import_hub">← Import Hub</a>
+  <h1 data-i18n-text="bulk_import_csv.csv_import">📊 CSV Import</h1>
 </div>
 <div class="container">
 
   <!-- Steps indicator -->
   <div class="steps">
-    <div class="step <?= $step==='upload'?'active':($step!=='upload'?'done':'') ?>">1 Upload</div>
+    <div class="step <?= $step==='upload'?'active':($step!=='upload'?'done':'') ?>"><span data-i18n-text="bulk_import_csv.step_1_upload">1 Upload</span></div>
     <span class="arrow">→</span>
-    <div class="step <?= $step==='preview'?'active':($step==='done'?'done':'') ?>">2 Preview & Map</div>
+    <div class="step <?= $step==='preview'?'active':($step==='done'?'done':'') ?>"><span data-i18n-text="bulk_import_csv.step_2_preview_map">2 Preview & Map</span></div>
     <span class="arrow">→</span>
-    <div class="step <?= $step==='done'?'active':'' ?>">3 Done</div>
+    <div class="step <?= $step==='done'?'active':'' ?>"><span data-i18n-text="bulk_import_csv.step_3_done">3 Done</span></div>
   </div>
 
   <?php if ($error): ?>
@@ -239,35 +240,35 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
   <!-- ── Step 1: Upload ──────────────────────────────────────────────────────── -->
   <?php if ($step === 'upload'): ?>
   <div class="card">
-    <h2>Upload your spreadsheet</h2>
+    <h2 data-i18n-text="bulk_import_csv.upload_your_spreadsheet">Upload your spreadsheet</h2>
     <p>Accepts <strong>.csv</strong>, <strong>.tsv</strong>, or any plain-text delimited file. The first row must be column headers. Commas, tabs, semicolons, and pipe <code>|</code> delimiters are all auto-detected.</p>
 
     <div class="info-box">
       💡 <strong>Tip:</strong> Export from Google Sheets → File → Download → CSV. From Excel → Save As → CSV UTF-8.
     </div>
 
-    <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">Recognised column names (auto-mapped):</p>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:8px;" data-i18n-text="bulk_import_csv.recognised_column_names_auto_m">Recognised column names (auto-mapped):</p>
     <div class="col-grid">
-      <span class="col-tag required">name ✦</span>
-      <span class="col-tag">model / part number</span>
-      <span class="col-tag">category / type</span>
-      <span class="col-tag">quantity / qty</span>
-      <span class="col-tag">location / bin / shelf</span>
-      <span class="col-tag">status</span>
-      <span class="col-tag">notes / description</span>
-      <span class="col-tag">price / cost</span>
-      <span class="col-tag">product url / link</span>
-      <span class="col-tag">datasheet / pdf</span>
-      <span class="col-tag">specs / specifications</span>
+      <span class="col-tag required" data-i18n-text="bulk_import_csv.name">name ✦</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.model_part_number">model / part number</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.category_type">category / type</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.quantity_qty">quantity / qty</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.location_bin_shelf">location / bin / shelf</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.status">status</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.notes_description">notes / description</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.price_cost">price / cost</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.product_url_link">product url / link</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.datasheet_pdf">datasheet / pdf</span>
+      <span class="col-tag" data-i18n-text="bulk_import_csv.specs_specifications">specs / specifications</span>
     </div>
-    <p style="font-size:.72rem;color:var(--muted);margin-bottom:20px;">✦ Required. Unrecognised columns can be manually mapped in step 2.</p>
+    <p style="font-size:.72rem;color:var(--muted);margin-bottom:20px;" data-i18n-text="bulk_import_csv.required_unrecognised_columns_">✦ Required. Unrecognised columns can be manually mapped in step 2.</p>
 
     <form method="post" enctype="multipart/form-data" id="upload-form">
       <input type="hidden" name="step" value="preview">
       <div class="upload-zone" id="drop-zone" onclick="document.getElementById('csv-file-input').click()">
         <div class="icon">📄</div>
-        <div style="font-weight:600;">Click to select file or drag & drop here</div>
-        <div class="hint">CSV, TSV, or any delimited text file · max 10 MB</div>
+        <div style="font-weight:600;" data-i18n-text="bulk_import_csv.click_to_select_file_or_drag_d">Click to select file or drag & drop here</div>
+        <div class="hint" data-i18n-text="bulk_import_csv.csv_tsv_or_any_delimited_text_">CSV, TSV, or any delimited text file · max 10 MB</div>
         <input type="file" name="csv_file" id="csv-file-input" accept=".csv,.tsv,.txt" onchange="autoSubmit(this)">
       </div>
     </form>
@@ -284,7 +285,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
     $delim_escape = addslashes($delim_char);
   ?>
   <div class="card">
-    <h2>Map columns → inventory fields</h2>
+    <h2 data-i18n-text="bulk_import_csv.map_columns_inventory_fields">Map columns → inventory fields</h2>
     <p>Auto-mapped columns are pre-selected (shown in green below the header). Adjust any that were not recognised. Columns left as <em>— skip —</em> will be ignored.</p>
 
     <!-- Column mapping UI -->
@@ -353,8 +354,8 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
       </div>
 
       <div style="display:flex;gap:12px;margin-top:16px;">
-        <button type="submit" class="btn btn-primary" onclick="buildMapping()">✅ Import to Inventory</button>
-        <a href="bulk_import_csv.php" class="btn btn-secondary">← Start over</a>
+        <button type="submit" class="btn btn-primary" onclick="buildMapping()" data-i18n-text="bulk_import_csv.import_to_inventory">✅ Import to Inventory</button>
+        <a href="bulk_import_csv.php" class="btn btn-secondary" data-i18n-text="bulk_import_csv.start_over">← Start over</a>
       </div>
     </form>
   </div>
@@ -362,7 +363,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
   <?php elseif ($step === 'done'): ?>
   <!-- ── Step 3: Results ────────────────────────────────────────────────────── -->
   <div class="card">
-    <h2>✅ Import complete</h2>
+    <h2 data-i18n-text="bulk_import_csv.import_complete">✅ Import complete</h2>
     <p>
       <strong style="color:var(--green)"><?= $done ?> items imported</strong>
       <?php if ($skipped): ?> · <span style="color:var(--yellow)"><?= $skipped ?> skipped</span><?php endif; ?>
@@ -375,7 +376,7 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
         <span class="result-icon"><?= $r[0]==='ok'?'✅':($r[0]==='skip'?'⏭':'❌') ?></span>
         <span><?php if ($r[0]==='ok'): ?>
           <a href="item_details.php?id=<?= $r[2] ?>" style="color:#c4b5fd;text-decoration:none;"><?= htmlspecialchars($r[1]) ?></a>
-          <?php if (!empty($r[3])): ?><span style="font-size:.72rem;color:#67e8f9;margin-left:6px;">⏳ enriching…</span><?php endif; ?>
+          <?php if (!empty($r[3])): ?><span style="font-size:.72rem;color:#67e8f9;margin-left:6px;" data-i18n-text="bulk_import_csv.enriching">⏳ enriching…</span><?php endif; ?>
         <?php elseif ($r[0]==='skip'): ?><span style="color:var(--muted)"><?= htmlspecialchars($r[1]) ?></span>
         <?php else: ?><span style="color:var(--red)"><?= htmlspecialchars($r[1]) ?></span>
           <span style="color:var(--muted);font-size:.72rem;"><?= htmlspecialchars($r[2]) ?></span>
@@ -387,8 +388,8 @@ if ($step === 'import' && isset($_POST['raw_csv'])) {
     <div id="enrich-status" style="font-size:.82rem;color:#67e8f9;margin-bottom:16px;">🔗 Running enrichment for <?= count($enrich_queued) ?> items…</div>
     <?php endif; ?>
     <div style="display:flex;gap:12px;">
-      <a href="dashboard.php" class="btn btn-primary">View Inventory →</a>
-      <a href="bulk_import_csv.php" class="btn btn-secondary">Import another file</a>
+      <a href="dashboard.php" class="btn btn-primary" data-i18n-text="bulk_import_csv.view_inventory">View Inventory →</a>
+      <a href="bulk_import_csv.php" class="btn btn-secondary" data-i18n-text="bulk_import_csv.import_another_file">Import another file</a>
     </div>
   </div>
   <?php if ($enrich_queued): ?>
@@ -457,5 +458,6 @@ function buildMapping() {
   });
 }
 </script>
+  <script>localizationController.init();</script>
 </body>
 </html>

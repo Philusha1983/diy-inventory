@@ -14,7 +14,7 @@ const localizationController = (() => {
   const STORAGE_KEY = 'diy_inventory_lang';
   const LOCALES_PATH = '/assets/locales/';
   const RTL_LANGS   = ['he', 'ar', 'fa', 'ur'];
-  const SUPPORTED   = ['en', 'he', 'es'];
+  const SUPPORTED   = ['en', 'he', 'es', 'uk'];
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -35,7 +35,7 @@ const localizationController = (() => {
   /** Fetch a locale JSON file. Returns parsed object or {} on failure. */
   async function _fetchLocale(langCode) {
     try {
-      const res = await fetch(`${LOCALES_PATH}${langCode}.json?v=1`);
+      const res = await fetch(`${LOCALES_PATH}${langCode}.json?v=2`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } catch (e) {

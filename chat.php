@@ -110,7 +110,7 @@ require_once 'site_config.php';
         </div>
         <div>
           <p class="font-semibold text-white text-sm" data-i18n-text="chat.title">Lab Planning Assistant</p>
-          <p class="text-xs text-emerald-400"><span data-i18n-text="chat.online">Online</span> · Inventory-aware</p>
+          <p class="text-xs text-emerald-400"><span data-i18n-text="chat.online">Online</span> <span data-i18n-text="chat.inventory_aware">· Inventory-aware</span></p>
         </div>
       </div>
         <button onclick="clearChat()" class="text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg" data-i18n-text="chat.clear">Clear Chat</button>
@@ -118,19 +118,19 @@ require_once 'site_config.php';
 
     <!-- Messages -->
     <div id="chat-window">
-      <div class="msg-system">Start of conversation</div>
+      <div class="msg-system" data-i18n-text="chat.start_of_conversation">Start of conversation</div>
       <div class="msg-ai">
-        👋 Hey! I'm your DIY Lab Planning Assistant.<br><br>
-        I have full access to your current inventory. Ask me anything — project ideas, component questions, wiring help, code snippets, or troubleshooting!
+        <span data-i18n-text="chat.welcome_hey">👋 Hey! I'm your DIY Lab Planning Assistant.</span><br><br>
+        <span data-i18n-text="chat.ai_welcome_message">I have full access to your current inventory. Ask me anything — project ideas, component questions, wiring help, code snippets, or troubleshooting!</span>
       </div>
 
       <!-- Suggestion chips -->
       <div class="flex flex-wrap gap-2 pl-1 mt-1">
-        <button class="chip" onclick="sendChip(this)">What can I build with ESP32?</button>
-        <button class="chip" onclick="sendChip(this)">Suggest a beginner IoT project</button>
-        <button class="chip" onclick="sendChip(this)">What's the best sensor for temperature?</button>
-        <button class="chip" onclick="sendChip(this)">Show me all my microcontrollers</button>
-        <button class="chip" onclick="sendChip(this)">What components am I missing for a robot?</button>
+        <button class="chip" onclick="sendChip(this)" data-i18n-text="chat.what_can_i_build_with_esp32">What can I build with ESP32?</button>
+        <button class="chip" onclick="sendChip(this)" data-i18n-text="chat.suggest_a_beginner_iot_project">Suggest a beginner IoT project</button>
+        <button class="chip" onclick="sendChip(this)" data-i18n-text="chat.what_s_the_best_sensor_for_tem">What's the best sensor for temperature?</button>
+        <button class="chip" onclick="sendChip(this)" data-i18n-text="chat.show_me_all_my_microcontroller">Show me all my microcontrollers</button>
+        <button class="chip" onclick="sendChip(this)" data-i18n-text="chat.what_components_am_i_missing_f">What components am I missing for a robot?</button>
       </div>
     </div>
 
@@ -139,7 +139,7 @@ require_once 'site_config.php';
       <div class="flex gap-3 items-end">
         <textarea
           id="user-input"
-          placeholder="Ask anything about your lab inventory…"
+          placeholder="Ask anything about your lab inventory…" data-i18n-placeholder="chat.ask_anything_placeholder"
           rows="1"
           class="input-field flex-1 rounded-2xl px-4 py-3 text-sm"
           onkeydown="handleKey(event)"
@@ -149,7 +149,7 @@ require_once 'site_config.php';
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
         </button>
       </div>
-      <p class="text-xs text-slate-600 mt-2 text-center">Shift+Enter for new line · Enter to send</p>
+      <p class="text-xs text-slate-600 mt-2 text-center" data-i18n-text="chat.shift_enter_for_new_line_enter">Shift+Enter for new line · Enter to send</p>
     </div>
   </div>
 

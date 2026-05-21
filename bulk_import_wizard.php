@@ -88,19 +88,20 @@ if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
     /* Hidden file input */
     #file-input { display:none; }
   </style>
+  <script src="assets/i18n.js"></script>
 </head>
 <body>
 <div class="top-bar">
-  <a href="bulk_import.php">← Import Hub</a>
-  <h1>🧙 Image Group Wizard</h1>
+  <a href="bulk_import.php" data-i18n-text="bulk_import_wizard.import_hub">← Import Hub</a>
+  <h1 data-i18n-text="bulk_import_wizard.image_group_wizard">🧙 Image Group Wizard</h1>
 </div>
 <div class="container">
 
   <!-- Drop zone -->
   <div class="drop-zone" id="main-drop" onclick="triggerAdd()">
     <div class="icon">🖼️</div>
-    <p style="font-weight:600;font-size:1rem;color:var(--text);margin-bottom:6px;">Drop photos here or click to select</p>
-    <p>Each batch you drop becomes a new component group. Drop multiple batches for multiple components.</p>
+    <p style="font-weight:600;font-size:1rem;color:var(--text);margin-bottom:6px;" data-i18n-text="bulk_import_wizard.drop_photos_here_or_click_to_s">Drop photos here or click to select</p>
+    <p data-i18n-text="bulk_import_wizard.each_batch_you_drop_becomes_a_">Each batch you drop becomes a new component group. Drop multiple batches for multiple components.</p>
   </div>
 
   <input type="file" id="file-input" multiple accept="image/*">
@@ -110,7 +111,7 @@ if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 
   <!-- Add group manually -->
   <div style="margin-top:16px;" id="add-group-btn-wrap">
-    <button class="btn btn-secondary" onclick="addGroup([], 'Component ' + (groups.length+1))">
+    <button class="btn btn-secondary" onclick="addGroup([], 'Component ' + (groups.length+1))" data-i18n-text="bulk_import_wizard.add_another_component_group">
       + Add another component group
     </button>
   </div>
@@ -121,8 +122,8 @@ if (!isset($_SESSION['authenticated'])) { header('Location: index.php'); exit; }
 <div class="action-bar" id="action-bar" style="display:none;">
   <div class="summary" id="bar-summary"></div>
   <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
-  <button class="btn btn-primary" id="btn-run" onclick="runImport()">🤖 Import All via AI</button>
-  <button class="btn btn-secondary" onclick="clearAll()">✕ Clear</button>
+  <button class="btn btn-primary" id="btn-run" onclick="runImport()" data-i18n-text="bulk_import_wizard.import_all_via_ai">🤖 Import All via AI</button>
+  <button class="btn btn-secondary" onclick="clearAll()" data-i18n-text="bulk_import_wizard.clear">✕ Clear</button>
 </div>
 
 <script>
@@ -364,5 +365,6 @@ function escHtml(s) {
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 </script>
+  <script>localizationController.init();</script>
 </body>
 </html>

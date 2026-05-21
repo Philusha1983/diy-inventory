@@ -182,11 +182,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
     .progress-bar-wrap { background:rgba(255,255,255,.06); border-radius:99px; height:8px; overflow:hidden; }
     .progress-bar-fill { height:100%; background:linear-gradient(90deg,#7c3aed,#a78bfa); width:0; transition:width .3s; }
   </style>
+  <script src="assets/i18n.js"></script>
 </head>
 <body>
 <div class="top-bar">
-  <a href="bulk_import.php">← Import Hub</a>
-  <h1>📦 ZIP Import</h1>
+  <a href="bulk_import.php" data-i18n-text="bulk_import_zip.import_hub">← Import Hub</a>
+  <h1 data-i18n-text="bulk_import_zip.zip_import">📦 ZIP Import</h1>
 </div>
 <div class="container">
 
@@ -195,30 +196,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
   <?php endif; ?>
 
   <div class="card">
-    <h2>Upload a ZIP of component folders</h2>
-    <p>Each subfolder in the ZIP becomes one inventory item. The AI analyses the photos and description (if present) to identify the component — the same pipeline as the existing folder import.</p>
+    <h2 data-i18n-text="bulk_import_zip.upload_a_zip_of_component_fold">Upload a ZIP of component folders</h2>
+    <p data-i18n-text="bulk_import_zip.each_subfolder_in_the_zip_beco">Each subfolder in the ZIP becomes one inventory item. The AI analyses the photos and description (if present) to identify the component — the same pipeline as the existing folder import.</p>
 
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px;">Supported ZIP structures:</p>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px;" data-i18n-text="bulk_import_zip.supported_zip_structures">Supported ZIP structures:</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
       <div>
-        <div style="font-size:.72rem;color:#67e8f9;font-weight:600;margin-bottom:6px;">📁 Subfolder mode (multiple components)</div>
+        <div style="font-size:.72rem;color:#67e8f9;font-weight:600;margin-bottom:6px;" data-i18n-text="bulk_import_zip.subfolder_mode_multiple_compon">📁 Subfolder mode (multiple components)</div>
         <div class="structure-box" style="font-size:.75rem;">
           my-parts.zip<br>
-          ├── <span style="color:#4ade80;">ESP32-C3/</span><br>
+          ├── <span style="color:#4ade80;" data-i18n-text="bulk_import_zip.esp32_c3">ESP32-C3/</span><br>
           │   ├── image_01.jpg<br>
           │   └── description.txt<br>
-          └── <span style="color:#4ade80;">SG90 Servo/</span><br>
+          └── <span style="color:#4ade80;" data-i18n-text="bulk_import_zip.sg90_servo">SG90 Servo/</span><br>
           &nbsp;&nbsp;&nbsp;&nbsp;└── image_01.jpg
         </div>
       </div>
       <div>
-        <div style="font-size:.72rem;color:#a78bfa;font-weight:600;margin-bottom:6px;">🖼️ Flat mode (single component)</div>
+        <div style="font-size:.72rem;color:#a78bfa;font-weight:600;margin-bottom:6px;" data-i18n-text="bulk_import_zip.flat_mode_single_component">🖼️ Flat mode (single component)</div>
         <div class="structure-box" style="font-size:.75rem;">
           my-sensor.zip<br>
           ├── photo1.jpg<br>
           ├── photo2.jpg<br>
           ├── photo3.jpg<br>
-          └── description.txt <span class="comment">← optional</span>
+          └── description.txt <span class="comment" data-i18n-text="bulk_import_zip.optional">← optional</span>
         </div>
       </div>
     </div>
@@ -231,12 +232,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['zip_file'])) {
     <form method="post" enctype="multipart/form-data" id="zip-form">
       <div class="upload-zone" id="drop-zone" onclick="document.getElementById('zip-input').click()">
         <div class="icon">🗜️</div>
-        <div style="font-weight:600;">Click to select ZIP or drag & drop here</div>
-        <div class="hint">Max size depends on your PHP upload_max_filesize setting</div>
+        <div style="font-weight:600;" data-i18n-text="bulk_import_zip.click_to_select_zip_or_drag_dr">Click to select ZIP or drag & drop here</div>
+        <div class="hint" data-i18n-text="bulk_import_zip.max_size_depends_on_your_php_u">Max size depends on your PHP upload_max_filesize setting</div>
         <input type="file" name="zip_file" id="zip-input" accept=".zip" onchange="submitForm()">
       </div>
       <div id="progress">
-        <p style="font-size:.85rem;color:var(--muted);margin-bottom:8px;">Uploading and extracting…</p>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:8px;" data-i18n-text="bulk_import_zip.uploading_and_extracting">Uploading and extracting…</p>
         <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill"></div></div>
       </div>
     </form>
@@ -266,5 +267,6 @@ function submitForm() {
   document.getElementById('zip-form').submit();
 }
 </script>
+  <script>localizationController.init();</script>
 </body>
 </html>

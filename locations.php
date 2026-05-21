@@ -80,10 +80,10 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
       </button>
       <div>
         <h1 class="text-lg lg:text-xl font-bold text-white" data-i18n-text="locations.title">📍 Locations</h1>
-        <p class="text-xs text-slate-500 mt-0.5"><?= count($locs) ?> storage location<?= count($locs)!==1?'s':'' ?> · Generate QR stickers for containers</p>
+        <p class="text-xs text-slate-500 mt-0.5"><?= count($locs) ?> <span data-i18n-text="locations.storage_locations">storage locations</span> &middot; <span data-i18n-text="locations.generate_qr_stickers">Generate QR stickers for containers</span></p>
       </div>
     </div>
-    <input type="text" id="loc-search" class="search-input" placeholder="🔍 Filter locations…" oninput="filterLocs(this.value)">
+    <input type="text" id="loc-search" class="search-input" placeholder="🔍 Filter locations…" data-i18n-placeholder="locations.filter_locations" oninput="filterLocs(this.value)">
   </header>
 
   <div class="p-4 lg:p-8">
@@ -91,9 +91,9 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
     <?php if (empty($locs)): ?>
     <div class="text-center py-16 text-slate-500">
       <p class="text-4xl mb-3">📭</p>
-      <p class="font-semibold text-lg">No locations set yet</p>
-      <p class="text-sm mt-1">Add a location when editing any component to see it here.</p>
-      <a href="add_item.php" class="mt-4 inline-block btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-white">+ Add Component</a>
+      <p class="font-semibold text-lg" data-i18n-text="locations.no_locations_set_yet">No locations set yet</p>
+      <p class="text-sm mt-1" data-i18n-text="locations.add_a_location_when_editing_an">Add a location when editing any component to see it here.</p>
+      <a href="add_item.php" class="mt-4 inline-block btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-white" data-i18n-text="locations.add_component">+ Add Component</a>
     </div>
     <?php else: ?>
 
@@ -107,7 +107,7 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
           </div>
           <div class="flex-shrink-0 text-right">
             <p class="text-lg font-bold text-emerald-400"><?= (int)$loc['total_qty'] ?></p>
-            <p class="text-xs text-slate-600"><?= (int)$loc['item_types'] ?> types</p>
+            <p class="text-xs text-slate-600"><?= (int)$loc['item_types'] ?> <span data-i18n-text="locations.types">types</span></p>
           </div>
         </div>
         <div class="loc-actions">
@@ -125,14 +125,14 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
             <div id="qr-<?= $idx ?>"></div>
             <div>
               <div class="qs-title">📦 <?= htmlspecialchars($loc['location']) ?></div>
-              <div class="qs-sub"><?= (int)$loc['item_types'] ?> types · <?= (int)$loc['total_qty'] ?> units</div>
-              <div class="qs-link">Scan for live manifest →</div>
+              <div class="qs-sub"><?= (int)$loc['item_types'] ?> <span data-i18n-text="locations.types">types</span> &middot; <?= (int)$loc['total_qty'] ?> <span data-i18n-text="locations.units">units</span></div>
+              <div class="qs-link" data-i18n-text="locations.scan_for_live_manifest">Scan for live manifest →</div>
             </div>
           </div>
           <div>
-            <p class="text-xs text-slate-400 mb-2 max-w-xs">Print this sticker and stick it on the container. Scanning opens the live manifest.</p>
+            <p class="text-xs text-slate-400 mb-2 max-w-xs" data-i18n-text="locations.print_this_sticker_and_stick_i">Print this sticker and stick it on the container. Scanning opens the live manifest.</p>
             <button onclick="printContainerQR('<?= addslashes(htmlspecialchars($loc['location'])) ?>', <?= (int)$loc['item_types'] ?>, <?= (int)$loc['total_qty'] ?>, '<?= addslashes(urlencode($loc['location'])) ?>')"
-              class="loc-action-btn cyan">🖨️ Print Sticker</button>
+              class="loc-action-btn cyan" data-i18n-text="locations.print_sticker">🖨️ Print Sticker</button>
           </div>
         </div>
       </div>
@@ -141,8 +141,8 @@ $no_loc_count = (int)$pdo->query("SELECT COUNT(*) FROM inventory WHERE location 
 
     <?php if ($no_loc_count > 0): ?>
     <div class="mt-6 px-4 py-3 rounded-xl bg-amber-500/8 border border-amber-500/20 text-sm text-amber-400 flex items-center justify-between gap-3">
-      <span>⚠️ <strong><?= $no_loc_count ?></strong> component<?= $no_loc_count!==1?'s':'' ?> have no location set.</span>
-      <a href="dashboard.php?filter_loc=unset" class="text-xs border border-amber-500/30 px-3 py-1 rounded-lg hover:bg-amber-500/10 transition-all">View →</a>
+      <span>⚠️ <strong><?= $no_loc_count ?></strong> <span data-i18n-text="locations.no_location_set">components have no location set.</span></span>
+      <a href="dashboard.php?filter_loc=unset" class="text-xs border border-amber-500/30 px-3 py-1 rounded-lg hover:bg-amber-500/10 transition-all" data-i18n-text="locations.view">View →</a>
     </div>
     <?php endif; ?>
 

@@ -232,7 +232,7 @@ ob_end_flush();
   <div class="spinner-ring"></div>
   <div>
     <p class="text-white font-semibold text-center mb-1" data-i18n-text="projects.loading">Analysing your inventory…</p>
-    <p class="text-slate-400 text-sm text-center">This takes 15–40 seconds</p>
+    <p class="text-slate-400 text-sm text-center" data-i18n-text="projects.this_takes_15_40_seconds">This takes 15–40 seconds</p>
   </div>
   <div class="loading-dots"><span></span><span></span><span></span></div>
 </div>
@@ -258,7 +258,7 @@ ob_end_flush();
       <button id="discover-btn" onclick="brainstorm()"
         class="btn-primary flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        <span class="hidden sm:inline"><?= $has_cache ? 'Regenerate' : 'Brainstorm Projects' ?></span>
+        <span class="hidden sm:inline"><?= $has_cache ? '<span data-i18n-text="projects.regenerate_btn">Regenerate</span>' : '<span data-i18n-text="projects.brainstorm_projects">Brainstorm Projects</span>' ?></span>
         <span class="sm:hidden"><?= $has_cache ? '↺' : 'Go' ?></span>
       </button>
     </div>
@@ -272,21 +272,21 @@ ob_end_flush();
     <div id="results-area">
       <?php if ($item_count === 0): ?>
       <div class="big-cta text-center">
-        <p class="text-slate-300 font-semibold mb-2">No inventory yet</p>
-        <p class="text-slate-500 text-sm mb-4">Add components first, then come back to discover projects.</p>
-        <a href="add_item.php" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm">+ Add Components</a>
+        <p class="text-slate-300 font-semibold mb-2" data-i18n-text="projects.no_inventory_yet">No inventory yet</p>
+        <p class="text-slate-500 text-sm mb-4" data-i18n-text="projects.add_components_first_then_come">Add components first, then come back to discover projects.</p>
+        <a href="add_item.php" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm" data-i18n-text="projects.add_components">+ Add Components</a>
       </div>
       <?php elseif ($has_cache): ?>
       <div class="flex items-center justify-between mb-6 px-4 py-3 rounded-xl bg-purple-500/5 border border-purple-500/20">
-        <p class="text-sm text-slate-400">Showing results from <span class="text-purple-300 font-medium"><?= htmlspecialchars($cache_age) ?></span>. Regenerate any time for fresh ideas.</p>
-        <button onclick="brainstorm()" class="flex-shrink-0 ml-4 text-xs text-purple-300 border border-purple-500/30 px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all">↺ Regenerate</button>
+        <p class="text-sm text-slate-400"><span data-i18n-text="projects.showing_results_from">Showing results from</span> <span class="text-purple-300 font-medium"><?= htmlspecialchars($cache_age) ?></span>. <span data-i18n-text="projects.regenerate_any_time">Regenerate any time for fresh ideas.</span></p>
+        <button onclick="brainstorm()" class="flex-shrink-0 ml-4 text-xs text-purple-300 border border-purple-500/30 px-3 py-1.5 rounded-lg hover:bg-purple-500/10 transition-all" data-i18n-text="projects.regenerate">↺ Regenerate</button>
       </div>
       <?php else: ?>
       <div class="big-cta cursor-pointer" onclick="brainstorm()">
         <div class="text-5xl mb-4">🚀</div>
-        <p class="text-white font-bold text-xl mb-2">Ready to Discover</p>
-        <p class="text-slate-400 text-sm mb-6"><?= $item_count ?> components in your lab.<br>Click below to let AI suggest creative projects.</p>
-        <div class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white btn-primary shadow-lg shadow-purple-900/30 text-sm">✨ Generate Project Ideas</div>
+        <p class="text-white font-bold text-xl mb-2" data-i18n-text="projects.ready_to_discover">Ready to Discover</p>
+        <p class="text-slate-400 text-sm mb-6"><?= $item_count ?> <span data-i18n-text="projects.components_in_your_lab">components in your lab.</span><br><span data-i18n-text="projects.click_below_to_let_ai">Click below to let AI suggest creative projects.</span></p>
+        <div class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white btn-primary shadow-lg shadow-purple-900/30 text-sm" data-i18n-text="projects.generate_project_ideas">✨ Generate Project Ideas</div>
         <p class="text-xs text-slate-600 mt-4">Takes 15–40 seconds · Uses <?= ucfirst($provider) ?></p>
       </div>
       <?php endif; ?>
@@ -353,6 +353,19 @@ function complexityClass(c) {
   return 'complexity-beginner';
 }
 
+
+function formatDuration(d) {
+  if (!d) return '';
+  return d.replace(/hours/gi, '<span data-i18n-text="projects.hours">hours</span>')
+          .replace(/hour/gi, '<span data-i18n-text="projects.hour">hour</span>')
+          .replace(/days/gi, '<span data-i18n-text="projects.days">days</span>')
+          .replace(/day/gi, '<span data-i18n-text="projects.day">day</span>')
+          .replace(/minutes/gi, '<span data-i18n-text="projects.minutes">minutes</span>')
+          .replace(/minute/gi, '<span data-i18n-text="projects.minute">minute</span>')
+          .replace(/weeks/gi, '<span data-i18n-text="projects.weeks">weeks</span>')
+          .replace(/week/gi, '<span data-i18n-text="projects.week">week</span>');
+}
+
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -365,8 +378,8 @@ function renderProjects(projects, provider, fromCache = false) {
   }
 
   let html = `<div class="mb-4 flex items-center justify-between">
-    <p class="text-sm text-slate-500">${projects.length} project ideas${fromCache ? ' (cached)' : ' generated'}</p>
-    <span class="text-xs text-purple-400 bg-purple-500/10 border border-purple-500/20 px-3 py-1 rounded-full">Powered by ${esc(provider)}</span>
+    <p class="text-sm text-slate-500">${projects.length} <span data-i18n-text="projects.project_ideas">project ideas</span>${fromCache ? ' <span data-i18n-text="projects.cached">(cached)</span>' : ' <span data-i18n-text="projects.generated">generated</span>'}</p>
+    <span class="text-xs text-purple-400 bg-purple-500/10 border border-purple-500/20 px-3 py-1 rounded-full"><span data-i18n-text="projects.powered_by">Powered by</span> ${esc(provider)}</span>
   </div><div class="space-y-5">`;
 
   projects.forEach((p, idx) => {
@@ -386,22 +399,26 @@ function renderProjects(projects, provider, fromCache = false) {
     <div class="project-card" style="animation-delay:${idx*0.08}s">
       <div class="flex items-start justify-between gap-4 mb-3">
         <h2 class="text-lg font-bold text-white">${esc(p.title)}</h2>
-        <span class="${complexityClass(p.complexity)} text-xs px-3 py-1 rounded-full font-medium flex-shrink-0">${esc(p.complexity)}</span>
+        <span class="${complexityClass(p.complexity)} text-xs px-3 py-1 rounded-full font-medium flex-shrink-0">
+          ${['beginner','intermediate','expert'].includes((p.complexity||'').toLowerCase()) ? 
+            `<span data-i18n-text="projects.complexity_${(p.complexity||'').toLowerCase()}">${esc(p.complexity)}</span>` : 
+            esc(p.complexity)}
+        </span>
       </div>
       ${p.description ? `<p class="text-sm text-slate-400 mb-4">${esc(p.description)}</p>` : ''}
       <div class="flex flex-wrap gap-2 mb-4">
-        ${p.duration     ? `<span class="tag">⏱ ${esc(p.duration)}</span>` : ''}
+        ${p.duration     ? `<span class="tag">⏱ ${formatDuration(esc(p.duration))}</span>` : ''}
         ${p.skill_domain ? `<span class="tag">🔧 ${esc(p.skill_domain)}</span>` : ''}
         ${hasSafe        ? `<span class="tag" style="color:#f97316;border-color:rgba(249,115,22,.3)">⚡ ${esc(p.safety)}</span>` : ''}
       </div>
-      ${stock ? `<div class="mb-4"><p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Components from your lab</p><div class="flex flex-wrap gap-1.5">${stock}</div></div>` : ''}
-      ${missing ? `<div class="mb-5"><p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Parts to acquire</p><div class="space-y-2">${missing}</div></div>` : ''}
+      ${stock ? `<div class="mb-4"><p class="text-xs text-slate-500 uppercase tracking-wider mb-2" data-i18n-text="projects.components_from_your_lab">Components from your lab</p><div class="flex flex-wrap gap-1.5">${stock}</div></div>` : ''}
+      ${missing ? `<div class="mb-5"><p class="text-xs text-slate-500 uppercase tracking-wider mb-2" data-i18n-text="projects.parts_to_acquire">Parts to acquire</p><div class="space-y-2">${missing}</div></div>` : ''}
       <form action="project_blueprint.php" method="POST">
         <input type="hidden" name="title"       value="${esc(p.title)}">
         <input type="hidden" name="stock"       value="${esc(JSON.stringify(p.stock||[]))}">
         <input type="hidden" name="description" value="${esc(p.description||'')}">
         <button type="submit" class="w-full mt-1 py-2.5 rounded-xl text-sm font-semibold text-white btn-primary shadow-md shadow-purple-900/20">
-          📐 Generate Full Blueprint &amp; Code
+          📐 <span data-i18n-text="projects.generate_full_blueprint">Generate Full Blueprint &amp; Code</span>
         </button>
       </form>
     </div>`;
@@ -409,6 +426,7 @@ function renderProjects(projects, provider, fromCache = false) {
 
   html += '</div>';
   document.getElementById('results-area').innerHTML = html;
+  localizationController.applyTranslations();
 }
 
 function openSidebar(){document.getElementById('sidebar').classList.remove('-translate-x-full');document.getElementById('sidebar-overlay').classList.remove('hidden');document.body.style.overflow='hidden';}

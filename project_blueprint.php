@@ -114,25 +114,25 @@ $guide_markdown = extract_ai_text($response, $provider);
         </a>
         <div class="min-w-0">
           <h1 class="text-base lg:text-lg font-bold text-white truncate">📐 <?= $project_title ?></h1>
-          <p class="text-xs text-slate-500">AI-Generated Blueprint</p>
+          <p class="text-xs text-slate-500" data-i18n-text="project_blueprint.ai_generated_blueprint">AI-Generated Blueprint</p>
         </div>
       </div>
       <button onclick="window.print()" class="btn-primary flex-shrink-0 text-sm px-3 lg:px-4 py-2 rounded-xl text-white font-medium flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-        <span class="hidden sm:inline">Print / Save PDF</span>
+        <span class="hidden sm:inline" data-i18n-text="project_blueprint.print_save_pdf">Print / Save PDF</span>
       </button>
     </header>
 
     <div class="p-4 lg:p-8 max-w-4xl">
       <div class="glass rounded-2xl p-8 markdown-body" id="blueprint-content">
-        <p class="text-slate-500 text-sm">Loading blueprint…</p>
+        <p class="text-slate-500 text-sm" data-i18n-text="project_blueprint.loading_blueprint">Loading blueprint…</p>
       </div>
 
       <div class="mt-6 flex gap-3">
-        <a href="projects.php" class="text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl transition-all">
+        <a href="projects.php" class="text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl transition-all" data-i18n-text="project_blueprint.back_to_projects">
           ← Back to Projects
         </a>
-        <a href="chat.php" class="btn-primary text-sm text-white px-4 py-2 rounded-xl font-medium">
+        <a href="chat.php" class="btn-primary text-sm text-white px-4 py-2 rounded-xl font-medium" data-i18n-text="project_blueprint.discuss_with_lab_assistant">
           💬 Discuss with Lab Assistant
         </a>
       </div>

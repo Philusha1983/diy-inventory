@@ -196,8 +196,8 @@ $has_key          = !empty($settings['api_key']);
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <div>
-          <h1 class="text-lg lg:text-xl font-bold text-white">User Settings</h1>
-          <p class="text-xs text-slate-500 mt-0.5">Manage your Lab, AI provider, and security</p>
+          <h1 class="text-lg lg:text-xl font-bold text-white" data-i18n-text="settings.user_settings">User Settings</h1>
+          <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="settings.manage_your_lab_ai_provider_an">Manage your Lab, AI provider, and security</p>
         </div>
       </div>
     </header>
@@ -221,7 +221,7 @@ $has_key          = !empty($settings['api_key']);
           </div>
           <div>
             <p class="text-sm font-semibold text-white" data-i18n-text="settings.lang_section">Language</p>
-            <p class="text-xs text-slate-500 mt-0.5">Interface language — changes apply instantly</p>
+            <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="settings.interface_language_changes_app">Interface language — changes apply instantly</p>
           </div>
         </div>
         <div class="relative">
@@ -229,6 +229,7 @@ $has_key          = !empty($settings['api_key']);
             class="input-field w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer"
             onchange="localizationController.loadLocale(this.value)">
             <option value="en">🇬🇧 English</option>
+            <option value="uk">🇺🇦 Українська (Ukrainian)</option>
             <option value="he">🇮🇱 עברית (Hebrew)</option>
             <option value="es">🇪🇸 Español (Spanish)</option>
           </select>
@@ -246,8 +247,8 @@ $has_key          = !empty($settings['api_key']);
             </svg>
           </div>
           <div>
-            <p class="text-sm font-semibold text-white">Personalization</p>
-            <p class="text-xs text-slate-500 mt-0.5">Customize your Lab's identity and branding</p>
+            <p class="text-sm font-semibold text-white" data-i18n-text="settings.personalization">Personalization</p>
+            <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="settings.customize_your_lab_s_identity_">Customize your Lab's identity and branding</p>
           </div>
         </div>
 
@@ -257,7 +258,7 @@ $has_key          = !empty($settings['api_key']);
 
           <!-- ── Logo Upload ─────────────────────────────────────────── -->
           <div>
-            <label class="form-label">Lab Logo</label>
+            <label class="form-label" data-i18n-text="settings.lab_logo">Lab Logo</label>
 
             <!-- Current logo + remove -->
             <?php $cur_logo = $settings['lab_logo_url'] ?? ''; ?>
@@ -268,12 +269,12 @@ $has_key          = !empty($settings['api_key']);
                 <?php endif; ?>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-white">Current logo</p>
+                <p class="text-sm font-medium text-white" data-i18n-text="settings.current_logo">Current logo</p>
                 <p class="text-xs text-slate-500 truncate mt-0.5"><?= htmlspecialchars(basename($cur_logo)) ?></p>
               </div>
               <button type="button" id="btn-remove-logo"
                 onclick="removeLogo()"
-                class="flex-shrink-0 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/60 px-3 py-1.5 rounded-lg transition-all">
+                class="flex-shrink-0 text-xs text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/60 px-3 py-1.5 rounded-lg transition-all" data-i18n-text="settings.remove">
                 🗑️ Remove
               </button>
             </div>
@@ -297,8 +298,8 @@ $has_key          = !empty($settings['api_key']);
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
                 </div>
-                <p class="text-sm text-slate-400">Drop an image or <span class="text-purple-400 font-medium">click to browse</span></p>
-                <p class="text-xs text-slate-600">JPEG · PNG · WebP · GIF &mdash; max 5 MB &mdash; auto-cropped to square</p>
+                <p class="text-sm text-slate-400"><span data-i18n-text="settings.drop_an_image_or">Drop an image or</span> <span class="text-purple-400 font-medium" data-i18n-text="settings.click_to_browse">click to browse</span></p>
+                <p class="text-xs text-slate-600" data-i18n-text="settings.image_upload_specs">JPEG · PNG · WebP · GIF &mdash; max 5 MB &mdash; auto-cropped to square</p>
               </div>
               <input type="file" id="lab_logo_file" name="lab_logo_file"
                 accept="image/jpeg,image/png,image/webp,image/gif"
@@ -311,7 +312,7 @@ $has_key          = !empty($settings['api_key']);
                 class="text-xs text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1"
                 onclick="toggleLogoUrl()">
                 <svg id="url-chevron" class="w-3 h-3 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                Or paste an image URL instead
+                <span data-i18n-text="settings.or_paste_an_image_url">Or paste an image URL instead</span>
               </button>
               <div id="logo-url-row" class="hidden mt-2">
                 <input type="url" id="lab_logo_url" name="lab_logo_url"
@@ -319,50 +320,50 @@ $has_key          = !empty($settings['api_key']);
                   placeholder="https://example.com/logo.png"
                   class="input-field w-full rounded-xl px-4 py-3 text-sm"
                   oninput="previewLogoUrl(this.value)">
-                <p class="text-xs text-slate-600 mt-1">Paste a direct image URL. Uploading a file above takes priority over this field.</p>
+                <p class="text-xs text-slate-600 mt-1" data-i18n-text="settings.paste_a_direct_image_url_uploa">Paste a direct image URL. Uploading a file above takes priority over this field.</p>
               </div>
             </div>
           </div>
 
           <!-- Lab Name -->
           <div>
-            <label for="lab_name" class="form-label">Lab Name</label>
+            <label for="lab_name" class="form-label" data-i18n-text="settings.lab_name">Lab Name</label>
             <input type="text" id="lab_name" name="lab_name"
               value="<?= htmlspecialchars($settings['lab_name'] ?? 'DIY Lab') ?>"
               placeholder="DIY Lab"
               maxlength="60"
               class="input-field w-full rounded-xl px-4 py-3 text-sm">
-            <p class="text-xs text-slate-600 mt-1.5">Shown in the sidebar and login screen header.</p>
+            <p class="text-xs text-slate-600 mt-1.5" data-i18n-text="settings.shown_in_the_sidebar_and_login">Shown in the sidebar and login screen header.</p>
           </div>
 
           <!-- Tag Line -->
           <div>
-            <label for="lab_tagline" class="form-label">Tag Line
-              <span class="text-slate-600 font-normal ml-1">(login screen)</span>
+            <label for="lab_tagline" class="form-label" data-i18n-text="settings.tag_line">Tag Line
+              <span class="text-slate-600 font-normal ml-1" data-i18n-text="settings.login_screen">(login screen)</span>
             </label>
             <input type="text" id="lab_tagline" name="lab_tagline"
               value="<?= htmlspecialchars($settings['lab_tagline'] ?? 'Inventory & AI Orchestrator') ?>"
               placeholder="Inventory & AI Orchestrator"
               maxlength="100"
               class="input-field w-full rounded-xl px-4 py-3 text-sm">
-            <p class="text-xs text-slate-600 mt-1.5">The subtitle shown below the Lab Name on the login screen.</p>
+            <p class="text-xs text-slate-600 mt-1.5" data-i18n-text="settings.the_subtitle_shown_below_the_l">The subtitle shown below the Lab Name on the login screen.</p>
           </div>
 
           <!-- Mini Tag Line -->
           <div>
-            <label for="lab_mini_tagline" class="form-label">Mini Tag Line
-              <span class="text-slate-600 font-normal ml-1">(sidebar)</span>
+            <label for="lab_mini_tagline" class="form-label" data-i18n-text="settings.mini_tag_line">Mini Tag Line
+              <span class="text-slate-600 font-normal ml-1" data-i18n-text="settings.sidebar">(sidebar)</span>
             </label>
             <input type="text" id="lab_mini_tagline" name="lab_mini_tagline"
               value="<?= htmlspecialchars($settings['lab_mini_tagline'] ?? 'Inventory System') ?>"
               placeholder="Inventory System"
               maxlength="60"
               class="input-field w-full rounded-xl px-4 py-3 text-sm">
-            <p class="text-xs text-slate-600 mt-1.5">Short subtitle shown under the Lab Name in the sidebar.</p>
+            <p class="text-xs text-slate-600 mt-1.5" data-i18n-text="settings.short_subtitle_shown_under_the">Short subtitle shown under the Lab Name in the sidebar.</p>
           </div>
 
           <button type="submit"
-            class="w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
+            class="w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30" data-i18n-text="settings.save_personalization">
             🎨 Save Personalization
           </button>
         </form>
@@ -379,8 +380,8 @@ $has_key          = !empty($settings['api_key']);
             </svg>
           </div>
           <div>
-            <p class="text-sm font-semibold text-white">Change Lab Password</p>
-            <p class="text-xs text-slate-500 mt-0.5">Update your login credentials</p>
+            <p class="text-sm font-semibold text-white" data-i18n-text="settings.change_lab_password">Change Lab Password</p>
+            <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="settings.update_your_login_credentials">Update your login credentials</p>
           </div>
         </div>
 
@@ -403,10 +404,10 @@ $has_key          = !empty($settings['api_key']);
 
           <!-- Current Password -->
           <div>
-            <label for="current_password" class="form-label">Current Password</label>
+            <label for="current_password" class="form-label" data-i18n-text="settings.current_password">Current Password</label>
             <div class="relative">
               <input type="password" id="current_password" name="current_password"
-                placeholder="Enter your current password"
+                placeholder="Enter your current password" data-i18n-placeholder="settings.enter_current_password"
                 autocomplete="current-password"
                 class="input-field w-full rounded-xl px-4 py-3 pr-12 text-sm">
               <button type="button" onclick="togglePwField('current_password', 'eye-current')"
@@ -422,12 +423,12 @@ $has_key          = !empty($settings['api_key']);
 
           <!-- New Password -->
           <div>
-            <label for="new_password" class="form-label">New Password
-              <span class="text-slate-600 font-normal ml-1">(min. 6 characters)</span>
+            <label for="new_password" class="form-label" data-i18n-text="settings.new_password">New Password
+              <span class="text-slate-600 font-normal ml-1" data-i18n-text="settings.min_6_characters">(min. 6 characters)</span>
             </label>
             <div class="relative">
               <input type="password" id="new_password" name="new_password"
-                placeholder="Enter your new password"
+                placeholder="Enter your new password" data-i18n-placeholder="settings.enter_new_password"
                 autocomplete="new-password"
                 class="input-field w-full rounded-xl px-4 py-3 pr-12 text-sm">
               <button type="button" onclick="togglePwField('new_password', 'eye-new')"
@@ -443,10 +444,10 @@ $has_key          = !empty($settings['api_key']);
 
           <!-- Confirm Password -->
           <div>
-            <label for="confirm_password" class="form-label">Confirm New Password</label>
+            <label for="confirm_password" class="form-label" data-i18n-text="settings.confirm_new_password">Confirm New Password</label>
             <div class="relative">
               <input type="password" id="confirm_password" name="confirm_password"
-                placeholder="Repeat your new password"
+                placeholder="Repeat your new password" data-i18n-placeholder="settings.repeat_new_password"
                 autocomplete="new-password"
                 class="input-field w-full rounded-xl px-4 py-3 pr-12 text-sm"
                 oninput="checkPasswordMatch()">
@@ -465,7 +466,7 @@ $has_key          = !empty($settings['api_key']);
           <button type="submit"
             class="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all duration-200"
             style="background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 4px 20px rgba(220,38,38,.25);"
-            onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" data-i18n-text="settings.update_password">
             🔐 Update Password
           </button>
         </form>
@@ -481,8 +482,8 @@ $has_key          = !empty($settings['api_key']);
             </svg>
           </div>
           <div>
-            <p class="text-sm font-semibold text-white">Bug Reporting & Notifications</p>
-            <p class="text-xs text-slate-500 mt-0.5">Configure where local bug reports should be sent</p>
+            <p class="text-sm font-semibold text-white" data-i18n-text="settings.bug_reporting_notifications">Bug Reporting & Notifications</p>
+            <p class="text-xs text-slate-500 mt-0.5" data-i18n-text="settings.configure_where_local_bug_repo">Configure where local bug reports should be sent</p>
           </div>
         </div>
 
@@ -490,12 +491,12 @@ $has_key          = !empty($settings['api_key']);
           <input type="hidden" name="action" value="save_integrations">
           
           <div>
-            <label class="form-label">Admin Email</label>
-            <input type="email" name="admin_email" value="<?= htmlspecialchars($settings['admin_email'] ?? '') ?>" placeholder="Leave blank for system default" class="input-field w-full rounded-xl px-4 py-3 text-sm">
-            <p class="text-xs text-slate-600 mt-1.5">When users submit a ticket via the sidebar, an email notification with the screenshot will be sent here.</p>
+            <label class="form-label" data-i18n-text="settings.admin_email">Admin Email</label>
+            <input type="email" name="admin_email" value="<?= htmlspecialchars($settings['admin_email'] ?? '') ?>" placeholder="Leave blank for system default" data-i18n-placeholder="settings.leave_blank_for_system_default" class="input-field w-full rounded-xl px-4 py-3 text-sm">
+            <p class="text-xs text-slate-600 mt-1.5" data-i18n-text="settings.when_users_submit_a_ticket_via">When users submit a ticket via the sidebar, an email notification with the screenshot will be sent here.</p>
           </div>
 
-          <button type="submit" class="w-full py-3 rounded-xl font-semibold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/10 text-sm shadow-lg shadow-emerald-900/10 mt-2 transition-colors">
+          <button type="submit" class="w-full py-3 rounded-xl font-semibold text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/10 text-sm shadow-lg shadow-emerald-900/10 mt-2 transition-colors" data-i18n-text="settings.save_notification_settings">
             🔗 Save Notification Settings
           </button>
         </form>
@@ -540,11 +541,11 @@ $has_key          = !empty($settings['api_key']);
                   <span class="text-lg">G</span>
                 </div>
                 <div>
-                  <p class="font-semibold text-white text-sm">Gemini</p>
-                  <p class="text-xs text-slate-500">Google</p>
+                  <p class="font-semibold text-white text-sm" data-i18n-text="settings.gemini">Gemini</p>
+                  <p class="text-xs text-slate-500" data-i18n-text="settings.google">Google</p>
                 </div>
               </div>
-              <p class="text-xs text-slate-500">gemini-1.5-flash — Vision + text</p>
+              <p class="text-xs text-slate-500" data-i18n-text="settings.gemini_1_5_flash_vision_text">gemini-1.5-flash — Vision + text</p>
             </label>
             <label class="provider-card <?= $current_provider === 'openai' ? 'selected' : '' ?>" data-provider="openai">
               <input type="radio" name="ai_provider" value="openai" <?= $current_provider === 'openai' ? 'checked' : '' ?> class="hidden">
@@ -553,11 +554,11 @@ $has_key          = !empty($settings['api_key']);
                   <span class="text-lg">⊕</span>
                 </div>
                 <div>
-                  <p class="font-semibold text-white text-sm">OpenAI</p>
-                  <p class="text-xs text-slate-500">GPT-4o</p>
+                  <p class="font-semibold text-white text-sm" data-i18n-text="settings.openai">OpenAI</p>
+                  <p class="text-xs text-slate-500" data-i18n-text="settings.gpt_4o">GPT-4o</p>
                 </div>
               </div>
-              <p class="text-xs text-slate-500">gpt-4o — Vision + text</p>
+              <p class="text-xs text-slate-500" data-i18n-text="settings.gpt_4o_vision_text">gpt-4o — Vision + text</p>
             </label>
           </div>
         </div>
@@ -567,14 +568,14 @@ $has_key          = !empty($settings['api_key']);
           <label for="api_key" class="form-label" data-i18n-text="settings.api_key_label">API Key</label>
           <div class="relative">
             <input type="password" id="api_key" name="api_key"
-              placeholder="<?= $has_key ? '●●●●●●●●●●●● (key saved — re-enter to change)' : 'Enter your API key…' ?>"
+              <?= $has_key ? 'placeholder="●●●●●●●●●●●● (key saved — re-enter to change)" data-i18n-placeholder="settings.key_saved_reenter"' : 'placeholder="Enter your API key…" data-i18n-placeholder="settings.enter_api_key"' ?>
               autocomplete="off"
               class="input-field w-full rounded-xl px-4 py-3 pr-12 text-sm font-mono">
             <button type="button" id="toggle-key" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors" aria-label="Toggle API key visibility">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             </button>
           </div>
-          <p class="text-xs text-slate-600 mt-1.5">Key is stored in your database, not in code. Leave blank to keep existing key.</p>
+          <p class="text-xs text-slate-600 mt-1.5" data-i18n-text="settings.key_is_stored_in_your_database">Key is stored in your database, not in code. Leave blank to keep existing key.</p>
         </div>
 
         <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-white text-sm shadow-lg shadow-purple-900/30">
@@ -588,14 +589,14 @@ $has_key          = !empty($settings['api_key']);
         <div class="mt-5 pt-5 border-t border-white/5 space-y-2">
           <p class="text-xs font-semibold text-slate-400" data-i18n-text="settings.where_to_get_key">Where to get your API key</p>
           <div class="flex items-center gap-3">
-            <span class="text-blue-400 font-medium text-xs w-16">Gemini</span>
+            <span class="text-blue-400 font-medium text-xs w-16" data-i18n-text="settings.gemini">Gemini</span>
             <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
                class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
               aistudio.google.com/app/apikey &rarr;
             </a>
           </div>
           <div class="flex items-center gap-3">
-            <span class="text-emerald-400 font-medium text-xs w-16">OpenAI</span>
+            <span class="text-emerald-400 font-medium text-xs w-16" data-i18n-text="settings.openai">OpenAI</span>
             <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener"
                class="text-cyan-400 hover:text-cyan-300 hover:underline text-xs">
               platform.openai.com/api-keys &rarr;

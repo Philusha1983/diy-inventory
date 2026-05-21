@@ -117,18 +117,18 @@ ksort($by_category);
       </a>
       <div>
         <h1 class="text-lg lg:text-xl font-bold text-white">📦 <?= htmlspecialchars($loc) ?></h1>
-        <p class="text-xs text-slate-500 mt-0.5"><?= $total_items ?> component types · <?= $total_qty ?> total units</p>
+        <p class="text-xs text-slate-500 mt-0.5"><?= $total_items ?> <span data-i18n-text="container_manifest.component_types_word">component types</span> &middot; <?= $total_qty ?> <span data-i18n-text="container_manifest.total_units_word">total units</span></p>
       </div>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
       <a href="print_labels.php?loc=<?= urlencode($loc) ?>" target="_blank"
          class="text-xs text-cyan-400 border border-cyan-500/30 px-3 py-1.5 rounded-lg hover:bg-cyan-500/10 transition-all no-print">
-        🏷️ Print Item Labels
+        <span data-i18n-text="container_manifest.print_item_labels"><span data-i18n-text="container_manifest.print_item_labels">🏷️ Print Item Labels</span></span>
       </a>
-      <button onclick="window.print()" class="text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-all no-print">
+      <button onclick="window.print()" class="text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-all no-print" data-i18n-text="container_manifest.print_manifest">
         🖨️ Print Manifest
       </button>
-      <button onclick="toggleSticker()" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold text-white no-print">
+      <button onclick="toggleSticker()" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold text-white no-print" data-i18n-text="container_manifest.container_qr_sticker_1">
         📄 Container QR Sticker
       </button>
     </div>
@@ -140,13 +140,13 @@ ksort($by_category);
       <div>
         <div style="font-size:18pt;font-weight:700;">📦 <?= htmlspecialchars($loc) ?></div>
         <div style="font-size:9pt;color:#555;margin-top:3pt;">
-          <?= $total_items ?> component types &middot; <?= $total_qty ?> total units &middot;
+          <?= $total_items ?> <span data-i18n-text="container_manifest.component_types_word">component types</span> &middot; <?= $total_qty ?> <span data-i18n-text="container_manifest.total_units_word">total units</span> &middot;
           <?= count($by_category) ?> categories
         </div>
       </div>
       <div style="text-align:right;font-size:8pt;color:#777;">
         <div>Printed: <?= date('d M Y, H:i') ?></div>
-        <div style="margin-top:2pt;">DIY Lab Inventory</div>
+        <div style="margin-top:2pt;" data-i18n-text="container_manifest.diy_lab_inventory">DIY Lab Inventory</div>
       </div>
     </div>
   </div>
@@ -163,14 +163,14 @@ ksort($by_category);
             <div class="sticker-info">
               <div class="sticker-title">📦 <?= htmlspecialchars($loc) ?></div>
               <div class="sticker-sub"><?= $total_items ?> types · <?= $total_qty ?> units</div>
-              <div class="sticker-sub" style="margin-top:4px;color:#7c3aed;font-weight:600;">Scan for live manifest →</div>
+              <div class="sticker-sub" style="margin-top:4px;color:#7c3aed;font-weight:600;" data-i18n-text="container_manifest.scan_for_live_manifest">Scan for live manifest →</div>
             </div>
           </div>
         </div>
         <div class="flex-1">
           <p class="text-xs text-slate-500 mb-3">This QR code links to the live manifest for <strong class="text-slate-300"><?= htmlspecialchars($loc) ?></strong>. Print it, laminate it, and stick it on the container. Scanning with any phone camera shows the current contents in real-time.</p>
           <div class="flex gap-2 flex-wrap">
-            <button onclick="printSticker()" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold text-white">🖨️ Print Sticker</button>
+            <button onclick="printSticker()" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold text-white" data-i18n-text="container_manifest.print_sticker">🖨️ Print Sticker</button>
             <a href="print_labels.php?loc=<?= urlencode($loc) ?>" target="_blank"
                class="px-4 py-2 rounded-lg text-sm font-semibold text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/10 transition-all">
                🏷️ Print Item Labels Instead
@@ -183,7 +183,7 @@ ksort($by_category);
     <?php if (empty($items)): ?>
     <div class="text-center py-16 text-slate-500">
       <p class="text-3xl mb-3">📭</p>
-      <p class="font-semibold">No components at this location</p>
+      <p class="font-semibold" data-i18n-text="container_manifest.no_components_at_this_location">No components at this location</p>
       <p class="text-sm mt-1">Items with location "<?= htmlspecialchars($loc) ?>" will appear here.</p>
     </div>
     <?php else: ?>
@@ -192,20 +192,20 @@ ksort($by_category);
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 no-print">
       <div class="glass rounded-xl p-4 text-center">
         <p class="text-2xl font-bold text-white"><?= $total_items ?></p>
-        <p class="text-xs text-slate-500 mt-1">Component Types</p>
+        <p class="text-xs text-slate-500 mt-1" data-i18n-text="container_manifest.component_types">Component Types</p>
       </div>
       <div class="glass rounded-xl p-4 text-center">
         <p class="text-2xl font-bold text-emerald-400"><?= $total_qty ?></p>
-        <p class="text-xs text-slate-500 mt-1">Total Units</p>
+        <p class="text-xs text-slate-500 mt-1" data-i18n-text="container_manifest.total_units">Total Units</p>
       </div>
       <div class="glass rounded-xl p-4 text-center">
         <p class="text-2xl font-bold text-purple-400"><?= count($by_category) ?></p>
-        <p class="text-xs text-slate-500 mt-1">Categories</p>
+        <p class="text-xs text-slate-500 mt-1" data-i18n-text="container_manifest.categories">Categories</p>
       </div>
       <div class="glass rounded-xl p-4 text-center">
         <a href="print_labels.php?loc=<?= urlencode($loc) ?>" target="_blank" class="block">
           <p class="text-2xl font-bold text-cyan-400">🖨️</p>
-          <p class="text-xs text-slate-500 mt-1">Print All Labels</p>
+          <p class="text-xs text-slate-500 mt-1" data-i18n-text="container_manifest.print_all_labels">Print All Labels</p>
         </a>
       </div>
     </div>
@@ -215,12 +215,12 @@ ksort($by_category);
       <table class="manifest-table">
         <thead>
           <tr>
-            <th>Component</th>
-            <th>Model</th>
-            <th class="hidden sm:table-cell">Category</th>
-            <th>Qty</th>
-            <th class="col-verify" style="width:60px;text-align:center;">Verified</th>
-            <th class="no-print">Action</th>
+            <th data-i18n-text="container_manifest.component">Component</th>
+            <th data-i18n-text="container_manifest.model">Model</th>
+            <th class="hidden sm:table-cell" data-i18n-text="container_manifest.category">Category</th>
+            <th data-i18n-text="container_manifest.qty">Qty</th>
+            <th class="col-verify" style="width:60px;text-align:center;" data-i18n-text="container_manifest.verified">Verified</th>
+            <th class="no-print" data-i18n-text="container_manifest.action">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -252,7 +252,7 @@ ksort($by_category);
     </div>
     <!-- Print footer -->
     <div class="print-header" style="padding:4mm 12mm;font-size:7pt;color:#9ca3af;border-top:1px solid #e5e7eb;margin-top:4mm;display:flex;justify-content:space-between;">
-      <span>☐ = verify item is in container &nbsp;|&nbsp; Generated by DIY Lab Inventory System</span>
+      <span><span data-i18n-text="container_manifest.verify_item_is_in_container"><span data-i18n-text="container_manifest.verify_item_is_in_container">☐ = verify item is in container &nbsp;|&nbsp; Generated by DIY Lab Inventory System</span></span></span>
       <span><?= htmlspecialchars($loc) ?> — <?= date('d M Y') ?></span>
     </div>
     <?php endif; ?>
@@ -267,7 +267,7 @@ ksort($by_category);
     <div class="sticker-info">
       <div class="sticker-title" style="font-size:16px;">📦 <?= htmlspecialchars($loc) ?></div>
       <div class="sticker-sub" style="font-size:11px;"><?= $total_items ?> types · <?= $total_qty ?> units</div>
-      <div class="sticker-sub" style="font-size:10px;color:#7c3aed;font-weight:700;margin-top:4px;">Scan for live manifest →</div>
+      <div class="sticker-sub" style="font-size:10px;color:#7c3aed;font-weight:700;margin-top:4px;" data-i18n-text="container_manifest.scan_for_live_manifest">Scan for live manifest →</div>
     </div>
   </div>
 </div>

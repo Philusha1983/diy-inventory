@@ -32,17 +32,17 @@
       <!-- Form Side -->
       <div class="flex-1 flex flex-col gap-4">
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">Description <span
+          <label class="block text-sm font-medium text-slate-300 mb-1"><span data-i18n-text="bug_reporter.description">Description</span> <span
               class="text-red-400">*</span></label>
           <textarea id="bug-desc" rows="4"
             class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
-            placeholder="What went wrong? Please be descriptive..."></textarea>
+            placeholder="What went wrong? Please be descriptive..." data-i18n-placeholder="bug_reporter.what_went_wrong"></textarea>
         </div>
 
 
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">Your Email <span
-              class="text-slate-500 font-normal">(optional)</span></label>
+          <label class="block text-sm font-medium text-slate-300 mb-1"><span data-i18n-text="bug_reporter.your_email">Your Email</span> <span
+              class="text-slate-500 font-normal" data-i18n-text="bug_reporter.optional">(optional)</span></label>
           <input type="email" id="bug-email"
             class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 outline-none"
             placeholder="you@example.com">
@@ -52,16 +52,16 @@
       <!-- Screenshot Side -->
       <div class="flex-1 flex flex-col gap-2">
         <div class="flex justify-between items-center">
-          <label class="block text-sm font-medium text-slate-300">Screenshot <span
-              class="text-slate-500 font-normal">(optional)</span></label>
+          <label class="block text-sm font-medium text-slate-300"><span data-i18n-text="bug_reporter.screenshot">Screenshot</span> <span
+              class="text-slate-500 font-normal" data-i18n-text="bug_reporter.optional">(optional)</span></label>
           <div id="screenshot-actions" class="flex gap-2 hidden">
             <button onclick="clearCanvas()"
-              class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors">Clear
+              class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-white/5 hover:bg-white/10 transition-colors" data-i18n-text="bug_reporter.clear_drawing">Clear
               Drawing</button>
             <button onclick="takeScreenshot()"
-              class="text-xs text-purple-400 hover:text-purple-300 px-2 py-1 rounded bg-purple-500/10 hover:bg-purple-500/20 transition-colors">Retake</button>
+              class="text-xs text-purple-400 hover:text-purple-300 px-2 py-1 rounded bg-purple-500/10 hover:bg-purple-500/20 transition-colors" data-i18n-text="bug_reporter.retake">Retake</button>
             <button onclick="removeScreenshot()"
-              class="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-colors">Remove</button>
+              class="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-colors" data-i18n-text="bug_reporter.remove">Remove</button>
           </div>
         </div>
         <div id="canvas-container"
@@ -75,9 +75,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <p class="text-sm text-slate-400 mb-3">A screenshot helps us understand the issue better.</p>
+            <p class="text-sm text-slate-400 mb-3" data-i18n-text="bug_reporter.a_screenshot_helps_us_understa">A screenshot helps us understand the issue better.</p>
             <button type="button" onclick="takeScreenshot()"
-              class="btn-secondary px-4 py-2 rounded-xl text-sm font-medium transition-colors border border-purple-500/30 text-purple-300 hover:bg-purple-500/10">
+              class="btn-secondary px-4 py-2 rounded-xl text-sm font-medium transition-colors border border-purple-500/30 text-purple-300 hover:bg-purple-500/10" data-i18n-text="bug_reporter.take_a_screenshot">
               📸 Take a Screenshot
             </button>
           </div>
@@ -105,9 +105,9 @@
     <!-- Footer -->
     <div class="px-6 py-4 border-t border-white/10 bg-white/5 flex justify-end gap-3">
       <button onclick="closeBugReporter()"
-        class="px-4 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+        class="px-4 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors" data-i18n-text="bug_reporter.cancel">Cancel</button>
       <button onclick="submitBugReport()" id="btn-submit-bug"
-        class="px-6 py-2 rounded-xl text-sm font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-900/30 transition-colors flex items-center gap-2">
+        class="px-6 py-2 rounded-xl text-sm font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-900/30 transition-colors flex items-center gap-2" data-i18n-text="bug_reporter.submit_report">
         Submit Report
       </button>
     </div>

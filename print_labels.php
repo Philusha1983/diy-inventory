@@ -96,17 +96,18 @@ $sz = $sizes[$label_size] ?? $sizes['medium'];
       .label-card { box-shadow:0 2px 12px rgba(0,0,0,.35); }
     }
   </style>
+  <script src="assets/i18n.js"></script>
 </head>
 <body>
 
 <div class="controls">
-  <button class="ctrl-btn primary" onclick="window.print()">🖨️ Print</button>
-  <button class="ctrl-btn" onclick="history.back()">← Back</button>
-  <span class="size-label">Label size:</span>
-  <button class="ctrl-btn" onclick="setSize('small')"  <?= $label_size==='small'  ? 'style="border-color:#7c3aed"' : '' ?>>Small (38×21)</button>
-  <button class="ctrl-btn" onclick="setSize('medium')" <?= $label_size==='medium' ? 'style="border-color:#7c3aed"' : '' ?>>Medium (63×38)</button>
-  <button class="ctrl-btn" onclick="setSize('large')"  <?= $label_size==='large'  ? 'style="border-color:#7c3aed"' : '' ?>>Large (99×57)</button>
-  <span class="size-label"><?= count($items) ?> label<?= count($items)!==1?'s':'' ?></span>
+  <button class="ctrl-btn primary" onclick="window.print()" data-i18n-text="print_labels.print">🖨️ Print</button>
+  <button class="ctrl-btn" onclick="history.back()" data-i18n-text="print_labels.back">← Back</button>
+  <span class="size-label" data-i18n-text="print_labels.label_size">Label size:</span>
+  <button class="ctrl-btn" onclick="setSize('small')"  <?= $label_size==='small'  ? 'style="border-color:#7c3aed"' : '' ?> data-i18n-text="print_labels.small">Small (38×21)</button>
+  <button class="ctrl-btn" onclick="setSize('medium')" <?= $label_size==='medium' ? 'style="border-color:#7c3aed"' : '' ?> data-i18n-text="print_labels.medium">Medium (63×38)</button>
+  <button class="ctrl-btn" onclick="setSize('large')"  <?= $label_size==='large'  ? 'style="border-color:#7c3aed"' : '' ?> data-i18n-text="print_labels.large">Large (99×57)</button>
+  <span class="size-label"><?= count($items) ?> <span data-i18n-text="print_labels.labels_count_word">labels</span></span>
 </div>
 
 <div class="label-grid" id="label-grid">
@@ -174,5 +175,6 @@ function setSize(sz) {
   window.location.href = u.toString();
 }
 </script>
+  <script>localizationController.init();</script>
 </body>
 </html>

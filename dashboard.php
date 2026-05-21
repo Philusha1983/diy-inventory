@@ -361,7 +361,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
         </button>
         <div class="min-w-0">
           <h1 class="text-lg lg:text-xl font-bold text-white truncate" data-i18n-text="dashboard.title">Inventory Dashboard</h1>
-          <p class="text-xs text-slate-500 mt-0.5"><?= $total_items ?> components &middot; <?= $total_qty ?> units</p>
+          <p class="text-xs text-slate-500 mt-0.5"><?= $total_items ?> <span data-i18n-text="dashboard.components">components</span> &middot; <?= $total_qty ?> <span data-i18n-text="dashboard.units">units</span></p>
         </div>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
@@ -448,7 +448,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
             class="btn-primary px-4 py-2.5 rounded-xl text-sm font-medium text-white" data-i18n-text="common.filter">Filter</button>
           <?php if ($search || $cat_filter): ?>
             <a href="dashboard.php"
-              class="px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all">Clear</a>
+              class="px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 transition-all" data-i18n-text="dashboard.clear">Clear</a>
           <?php endif; ?>
         </div>
       </form>
@@ -523,7 +523,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
               <th class="px-4 py-3.5 w-10">
                 <input type="checkbox" id="cb-all" class="row-cb" title="Select all">
               </th>
-              <th class="text-left px-3 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-12">Img
+              <th class="text-left px-3 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider w-12" data-i18n-text="dashboard.img">Img
               </th>
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'name' ? 'sorted' : '' ?>">
@@ -543,7 +543,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
               <th
                 class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider sortable <?= $sort_col === 'location' ? 'sorted' : '' ?>">
                 <a href="<?= $sl('location') ?>"><?= $si('location') ?> Location</a></th>
-              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider">Actions</th>
+              <th class="text-left px-5 py-3.5 text-slate-500 font-medium text-xs uppercase tracking-wider" data-i18n-text="dashboard.actions">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -629,7 +629,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
       </div>
 
       <p class="text-xs text-slate-600 mt-4">
-        Showing <?= count($items) ?> of <?= $total_items ?> components
+        <span data-i18n-text="dashboard.showing">Showing </span><?= count($items) ?> <span data-i18n-text="dashboard.of">of</span> <?= $total_items ?> <span data-i18n-text="dashboard.components_word">components</span>
         <?= $search ? '· Search: <em>' . htmlspecialchars($search) . '</em>' : '' ?>
       </p>
     </div>
@@ -640,13 +640,13 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
     <div class="bulk-select">
       <span id="bulk-count-label" class="text-xs text-slate-400 px-1"></span>
       <div class="w-px h-5 bg-white/10"></div>
-      <button class="bulk-btn purple" onclick="openModal('category')">📁 Category</button>
-      <button class="bulk-btn cyan" onclick="openModal('status')">🔖 Status</button>
-      <button class="bulk-btn emerald" onclick="openModal('location')">📍 Location</button>
-      <button class="bulk-btn cyan" onclick="printSelected()" title="Print QR labels for selected items">🏷️ Print
+      <button class="bulk-btn purple" onclick="openModal('category')" data-i18n-text="dashboard.category">📁 Category</button>
+      <button class="bulk-btn cyan" onclick="openModal('status')" data-i18n-text="dashboard.status">🔖 Status</button>
+      <button class="bulk-btn emerald" onclick="openModal('location')" data-i18n-text="dashboard.location">📍 Location</button>
+      <button class="bulk-btn cyan" onclick="printSelected()" title="Print QR labels for selected items" data-i18n-text="dashboard.print_labels">🏷️ Print
         Labels</button>
-      <button class="bulk-btn slate" onclick="submitBulk('export_csv')">⬇ Export CSV</button>
-      <button class="bulk-btn red" onclick="confirmDelete()">🗑 Delete</button>
+      <button class="bulk-btn slate" onclick="submitBulk('export_csv')" data-i18n-text="dashboard.export_csv">⬇ Export CSV</button>
+      <button class="bulk-btn red" onclick="confirmDelete()" data-i18n-text="dashboard.delete">🗑 Delete</button>
       <button class="bulk-btn slate" onclick="clearSelection()" title="Clear selection">✕</button>
     </div>
   </div>
@@ -658,7 +658,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 
       <!-- Category -->
       <div id="modal-category" class="modal-pane hidden">
-        <label class="form-label" for="val-category">New Category</label>
+        <label class="form-label" for="val-category" data-i18n-text="dashboard.new_category">New Category</label>
         <input id="val-category" list="cat-list" autocomplete="off"
           class="input-field w-full rounded-xl px-4 py-2.5 text-sm mt-1" placeholder="e.g. Microcontroller">
         <datalist id="cat-list">
@@ -669,7 +669,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 
       <!-- Status -->
       <div id="modal-status" class="modal-pane hidden">
-        <label class="form-label" for="val-status">New Status</label>
+        <label class="form-label" for="val-status" data-i18n-text="dashboard.new_status">New Status</label>
         <select id="val-status" class="input-field w-full rounded-xl px-4 py-2.5 text-sm mt-1">
           <option>New</option>
           <option>Used</option>
@@ -679,7 +679,7 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 
       <!-- Location -->
       <div id="modal-location" class="modal-pane hidden">
-        <label class="form-label" for="val-location">New Location</label>
+        <label class="form-label" for="val-location" data-i18n-text="dashboard.new_location">New Location</label>
         <input id="val-location" list="loc-list" autocomplete="off"
           class="input-field w-full rounded-xl px-4 py-2.5 text-sm mt-1" placeholder="e.g. BIN-A3">
         <datalist id="loc-list">
@@ -690,9 +690,9 @@ $total_cats = (int) $pdo->query("SELECT COUNT(DISTINCT category) FROM inventory 
 
       <div class="flex gap-3 mt-5">
         <button id="modal-ok" onclick="applyModal()"
-          class="btn-primary flex-1 py-2.5 rounded-xl font-semibold text-white text-sm">Apply</button>
+          class="btn-primary flex-1 py-2.5 rounded-xl font-semibold text-white text-sm" data-i18n-text="dashboard.apply">Apply</button>
         <button onclick="closeModal()"
-          class="flex-1 py-2.5 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 transition-all">Cancel</button>
+          class="flex-1 py-2.5 rounded-xl text-sm text-slate-400 border border-white/10 hover:border-white/20 transition-all" data-i18n-text="dashboard.cancel">Cancel</button>
       </div>
     </div>
   </div>

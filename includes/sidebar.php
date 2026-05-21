@@ -35,13 +35,13 @@ $sidebar_site_tagline = $site_mini_tagline ?? 'Inventory System';
   </div>
 
   <nav class="flex-1 p-4 space-y-1">
-    <?php foreach ($nav_items as $url => $item): 
+    <?php foreach ($nav_items as $url => $nav_item): 
       $isActive = ($current_page === $url);
       $activeClasses = $isActive ? 'active bg-purple-600/15 text-purple-300 font-medium' : 'hover:bg-white/5';
     ?>
-      <a href="<?= $url ?>" data-i18n="<?= $item['i18n'] ?>" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm <?= $activeClasses ?>">
-        <?= $item['icon'] ?>
-        <?= $item['text'] ?>
+      <a href="<?= $url ?>" data-i18n="<?= $nav_item['i18n'] ?>" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm <?= $activeClasses ?>">
+        <?= $nav_item['icon'] ?>
+        <?= $nav_item['text'] ?>
       </a>
     <?php endforeach; ?>
   </nav>
