@@ -322,46 +322,44 @@ img {
 .hero {
   position: relative;
   overflow: hidden;
-  padding-block-start: 6rem;
-  padding-block-end: 8rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  min-height: 80vh;
-}
-
-@media (min-width: 1024px) {
-  .hero {
-    padding-block-start: 8rem;
-    padding-block-end: 11rem;
-  }
+  justify-content: center;
+  min-height: 100vh;
+  padding-block-start: 8rem;
+  padding-block-end: 6rem;
+  text-align: center;
 }
 
 /* Full-bleed Atmospheric Background Video */
 .video-background-container {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
 }
 
-/* Cinematic overlays: backdrop blur + dark linear gradient to ensure contrast */
+/*
+  Cinematic overlay stack:
+  1. Bottom vignette fades video into page background
+  2. Radial darken at corners
+  3. backdrop-filter reduces noise for text legibility
+*/
 .video-overlay-gradient {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(9, 9, 11, 0.45) 0%,
-    rgba(9, 9, 11, 0.85) 60%,
-    var(--bg-primary) 100%
-  );
-  backdrop-filter: blur(5px) brightness(0.7);
-  -webkit-backdrop-filter: blur(5px) brightness(0.7);
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center top, rgba(9,9,11,0.3) 0%, rgba(9,9,11,0.0) 50%),
+    linear-gradient(
+      to bottom,
+      rgba(9, 9, 11, 0.55) 0%,
+      rgba(9, 9, 11, 0.30) 40%,
+      rgba(9, 9, 11, 0.80) 75%,
+      var(--bg-primary) 100%
+    );
+  backdrop-filter: blur(2px) brightness(0.65);
+  -webkit-backdrop-filter: blur(2px) brightness(0.65);
   z-index: 1;
 }
 
@@ -369,24 +367,32 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.05); /* slightly scale to cover edges */
-  opacity: 0.85;
+  transform: scale(1.04);
+  opacity: 0.9;
 }
 
 .hero-inner {
   position: relative;
   z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-content {
-  text-align: left;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-title {
   margin-block-start: 1rem;
-  line-height: 1.15;
+  line-height: 1.12;
   color: var(--text-light);
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0,0,0,0.7);
+  max-width: 820px;
 }
 
 .hero-subtitle {
@@ -394,9 +400,9 @@ img {
   font-weight: 400;
   line-height: 1.7;
   margin-block-start: 1.5rem;
-  max-width: 560px;
-  color: var(--text-secondary);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  max-width: 580px;
+  color: rgba(226, 232, 240, 0.88);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .hero-badges {
@@ -432,24 +438,44 @@ img {
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.1);
 }
 
-.hero-image-wrapper {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  aspect-ratio: 16/10;
+/* --- Scroll-down chevron indicator --- */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  animation: scrollBounce 2.4s ease-in-out infinite;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
-.hero-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-slow);
+.hero-scroll-indicator:hover {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.5);
+  color: var(--forest-neon);
+  animation-play-state: paused;
 }
 
-.hero-image-wrapper:hover img {
-  transform: scale(1.03);
+.hero-scroll-indicator svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.7; }
+  50%       { transform: translateX(-50%) translateY(8px); opacity: 1;   }
 }
 
 /* Ambient glow orbs in back */

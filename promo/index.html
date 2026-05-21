@@ -62,16 +62,26 @@
     
     <!-- Hero Section -->
     <section class="hero section" id="hero">
-      
-      <!-- Hyper-realistic Ambient Workbench Background Video -->
+
+      <!-- Full-screen Cinematic Background Video -->
       <div class="video-background-container" aria-hidden="true">
         <div class="video-overlay-gradient"></div>
-        <video autoplay loop muted playsinline poster="images/workbench_poster.png" id="hero-video">
-          <source src="images/workbench_backdrop.mp4" type="video/mp4">
+        <!--
+          PLACEHOLDER VIDEO — replace the src below with your own video URL.
+          A free ambient workbench-style loop is used here for layout preview.
+          Recommended format: MP4 H.264, 1920×1080, 30fps, ~5–20 MB.
+        -->
+        <video autoplay loop muted playsinline
+               poster="images/workbench_poster.png"
+               id="hero-video"
+               preload="none">
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          <!-- Fallback: poster image is always shown if video can't play -->
         </video>
       </div>
 
-      <div class="container grid-2 hero-inner">
+      <!-- Centered Hero Content -->
+      <div class="container hero-inner">
         <div class="hero-content">
           <div class="hero-badges">
             <span class="badge badge-forest">🌱 MIT Open Source</span>
@@ -93,10 +103,15 @@
             </a>
           </div>
         </div>
-        <div class="hero-image-wrapper">
-          <img src="images/workbench_poster.png" alt="Moody photo of a dimly lit maker workbench with soldering iron, components, and tools" id="hero-img">
-        </div>
       </div>
+
+      <!-- Scroll-down chevron -->
+      <a href="#features" class="hero-scroll-indicator" aria-label="Scroll to features">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </a>
+
     </section>
 
     <!-- Core Value Prop (The Spreadsheet Killer) -->
