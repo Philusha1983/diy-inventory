@@ -1,6 +1,7 @@
 # ── Sensitive / personal ────────────────────────────────────────────────────
 # Never commit DB credentials
 db.php
+config.php
 
 # ── User data ────────────────────────────────────────────────────────────────
 # Processed component images (created at runtime)
