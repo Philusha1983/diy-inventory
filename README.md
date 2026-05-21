@@ -18,16 +18,14 @@
 - [Screenshots](#-screenshots)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
-- [Installation](#-installation)
-  - [macOS (Homebrew)](#macos-homebrew)
-  - [Linux / Ubuntu](#linux--ubuntu)
-  - [Windows (XAMPP)](#windows-xampp)
-- [Database Setup](#-database-setup)
+- [Installation & Setup Wizard](#-installation--setup-wizard)
+- [Manual Database Setup (Fallback)](#-manual-database-setup-fallback)
 - [Getting API Keys](#-getting-api-keys)
 - [Running the App](#-running-the-app)
 - [Usage Guide](#-usage-guide)
 - [Mobile Support](#-mobile-support)
 - [Deployment to a Live Server](#-deployment-to-a-live-server)
+- [Production Packaging](#-production-packaging)
 - [Security Notes](#-security-notes)
 - [File Map](#-file-map)
 - [Troubleshooting](#-troubleshooting)
@@ -74,6 +72,8 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 | 🌗 **Light / Dark Theme** | Toggle between dark (default) and light mode via the sidebar switch. Preference is persisted in `localStorage` across sessions and page reloads — survives logout. All colours meet **WCAG 2.1 AA** contrast requirements in both themes. |
 | 🌍 **Multi-Language UI** | Full internationalisation (i18n) across all pages — switch between **English 🇬🇧**, **Hebrew 🇮🇱 (RTL)**, **Spanish 🇪🇸**, and **Ukrainian 🇺🇦** from the Settings page. Language persists in `localStorage`. Hebrew activates complete RTL layout mirroring (sidebar, margins, flex order, text alignment). Add new languages with a single JSON file. |
 | 📱 **Mobile Responsive** | Full hamburger-menu sidebar, card-based inventory view (with checkboxes for bulk selection), and adaptive layouts for phones and tablets. |
+| 🧙‍♂️ **Web-based Setup Wizard** | Interactive WordPress-like installation flow checking server prerequisites, testing database credentials asynchronously, auto-creating the database, importing tables, configuring `config.php`, and setting up administrator credentials securely with bcrypt. |
+| 📦 **Production Packaging** | Built-in packaging script (`package.php`) that compiles the codebase into a production-ready ZIP archive (`diy-inventory.zip`) while automatically filtering out developer files, testing suites, local configuration, and logs. |
 
 ---
 
@@ -106,6 +106,9 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 
 ### User Settings
 ![User Settings — logo upload drop zone with current logo preview, Lab Name, Tag Line, Change Password, and AI configuration sections](docs/screenshots/08_user_settings.png)
+
+### Setup Wizard
+![Setup Wizard — environment check step verifying requirements and directory write permissions](docs/screenshots/09_setup_wizard.png)
 
 ---
 
