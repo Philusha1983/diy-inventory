@@ -127,6 +127,7 @@ Everything runs locally. No cloud subscriptions, no monthly fees — just PHP, M
 
 ## 📁 Project Structure
 
+```text
 diy-inventory/
 ├── index.php                    # Login / password gate
 ├── logout.php                   # Session teardown + redirect to login
